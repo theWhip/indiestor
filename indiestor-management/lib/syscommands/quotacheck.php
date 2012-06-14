@@ -7,8 +7,6 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('ShellCommand.php');
-
 /*
 
 Build the quota files for a mountpoint. Example:

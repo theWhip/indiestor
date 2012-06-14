@@ -35,7 +35,7 @@ define('ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID',65);
 define('ERRNUM_VOLUME_CANNOT_FIND_DEVICE_NOR_UUID',66);
 define('ERRNUM_QUOTA_ALREADY_ON_FOR_DEVICE',67);
 define('ERRNUM_QUOTA_ALREADY_OFF_FOR_DEVICE',68);
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 
 class ActionEngine
 {
@@ -106,7 +106,7 @@ class ActionEngine
 		syscommand_quotaoff($mountPoint);
 	}
 
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
         static function execute()
         {
                 $className=self::actionCamelCaseName(ProgramActions::$entityType);

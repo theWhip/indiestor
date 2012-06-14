@@ -7,11 +7,10 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+<<<<<<< HEAD
 require_once('df.php');
 require_once('id.php');
-<<<<<<< HEAD
 =======
-require_once('quotaon.php');
-require_once('blkid.php');
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+require_once_folder(dirname(__FILE__));
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 

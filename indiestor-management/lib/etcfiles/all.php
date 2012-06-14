@@ -7,10 +7,10 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+<<<<<<< HEAD
 require_once('EtcGroup.php');
 require_once('EtcPasswd.php');
-<<<<<<< HEAD
 =======
-require_once('EtcFstab.php');
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+require_once_folder(dirname(__FILE__));
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 

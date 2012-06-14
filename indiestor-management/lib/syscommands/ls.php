@@ -9,14 +9,17 @@
 
 /*
 
-Touches a file. Example:
+Lists files. Example:
 
-$ touch myfile.txt
+$ ls myfile.*
+myfile.txt
+myfile.bak
 
 */
 
-function syscommand_touch($filePath)
+function syscommand_ls($filePath)
 {
-	ShellCommand::exec("touch $filePath");	
+	$output=shell_exec("ls $filePath");	
+	echo $output;
 }
 

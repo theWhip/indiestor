@@ -11,14 +11,14 @@ require_once('ShellCommand.php');
 
 /*
 
-Enables quota. Example:
+Touches a file. Example:
 
-$ quotaon -ug /
+$ touch myfile.txt
 
 */
 
-function syscommand_quotaon($mountPoint)
+function syscommand_touch($filePath)
 {
-	ShellCommand::exec("quotaon -ug $mountPoint");
+	ShellCommand::exec("touch $filePath");	
 }
 

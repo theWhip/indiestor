@@ -7,21 +7,18 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-<<<<<<< HEAD
 require_once('ShellCommand.php');
 
-=======
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 /*
 
-Adds a group to the system. Example:
+Removes files. Example:
 
-$ addgroup myfriends
+$ rm myfile.*
 
 */
 
-function syscommand_addgroup($groupName)
+function syscommand_rm($filePath)
 {
-	ShellCommand::exec("addgroup $groupName");
+	ShellCommand::exec("rm $filePath");	
 }
 

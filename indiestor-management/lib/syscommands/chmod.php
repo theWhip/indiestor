@@ -7,8 +7,6 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('ShellCommand.php');
-
 /*
 
 Changes the permissions of a filesystem object. Example:

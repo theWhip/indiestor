@@ -7,6 +7,7 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+<<<<<<< HEAD
 require_once('addgroup.php');
 require_once('delgroup.php');
 require_once('adduser.php');
@@ -16,13 +17,7 @@ require_once('pkill.php');
 require_once('chown.php');
 require_once('mv.php');
 require_once('cp.php');
-<<<<<<< HEAD
 =======
-require_once('touch.php');
-require_once('chmod.php');
-require_once('mount.php');
-require_once('quotacheck.php');
-require_once('quotaon.php');
-require_once('quotaoff.php');
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+require_once_folder(dirname(__FILE__));
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 

@@ -23,7 +23,7 @@ class ShellCommand
 		$command=$command.' 2>&1 &';
 =======
 		if(!self::$verbose) $command=$command.' 2>&1';
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 		if(!self::$simulation)
 		{
 			$output=shell_exec($command);
@@ -33,4 +33,4 @@ class ShellCommand
 <<<<<<< HEAD
 =======
 
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups

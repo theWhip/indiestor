@@ -27,6 +27,10 @@ class CommandActionDefinitions
 		
 		//volumes
 		$this->addOutputAction("volumes","show");
+<<<<<<< HEAD
+=======
+		$this->addPrimaryAction("volumes","purge-fstab-backups");
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 		$this->addExecOptionDefinitions("volumes");
 
 		//groups
@@ -42,9 +46,10 @@ class CommandActionDefinitions
 		//volume
 		$this->addPrimaryAction("volume","quota-on");
 		$this->addPrimaryAction("volume","quota-off");
+		$this->addPrimaryAction("volume","quota-remove");
 		$this->addExecOptionDefinitions("volume");
 
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 		//group
 		$this->addPrimaryAction("group","add");
 		$this->addPrimaryAction("group","delete");
@@ -72,12 +77,21 @@ class CommandActionDefinitions
                 $this->addActionDefinition($entity,$action,false,9,false);
 	}
 
+<<<<<<< HEAD
 	function addPrimaryAction($entity,$action)
 	{
                 $this->addActionDefinition($entity,$action,false,1,false);
 	}
 
 	function addSecondaryAction($entity,$action,$hasArg)
+=======
+	function addPrimaryAction($entity,$action,$hasArg=false)
+	{
+                $this->addActionDefinition($entity,$action,$hasArg,1,false);
+	}
+
+	function addSecondaryAction($entity,$action,$hasArg=false)
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 	{
                 $this->addActionDefinition($entity,$action,$hasArg,2,false);
 	}
@@ -94,7 +108,9 @@ class CommandActionDefinitions
 <<<<<<< HEAD
 =======
 		$this->addIncompatibleActionPair("volume","quota-on","quota-off");
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+		$this->addIncompatibleActionPair("volume","quota-on","quota-remove");
+		$this->addIncompatibleActionPair("volume","quota-off","quota-remove");
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 		$this->addIncompatibleActionPair('group','add','delete');
 		$this->addIncompatibleActionPair('user','add','delete');
 		$this->addIncompatibleActionPair('user','add','remove-home');

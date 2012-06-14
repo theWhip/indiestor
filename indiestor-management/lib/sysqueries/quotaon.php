@@ -7,8 +7,6 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('ShellQuery.php');
-
 /*
 
 Checks if quota are enabled on device. Example:

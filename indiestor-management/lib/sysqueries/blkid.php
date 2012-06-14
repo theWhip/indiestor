@@ -7,8 +7,6 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('ShellQuery.php');
-
 /*
 Returns the uuid for a device. Example:
 

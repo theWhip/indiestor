@@ -7,12 +7,11 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('ShellQuery.php');
 <<<<<<< HEAD
-=======
-require_once('quotaon.php');
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+require_once('ShellQuery.php');
 
+=======
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 /*
 Returns all device-hosted filesystems on the system. Example:
 
@@ -30,7 +29,7 @@ class DFFileSystem
 <<<<<<< HEAD
 =======
 	var $quotaYN=null;
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 	var $storageGB=null;
 	var $usedGB=null;
 	var $availableGB=null;
@@ -65,7 +64,7 @@ function sysquery_df()
 			if($quotaEnabled) $dfFileSystem->quotaYN='Y'; 
 			else $dfFileSystem->quotaYN='N';
 
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 			$dfFileSystems[]=$dfFileSystem;
 		}
 	}

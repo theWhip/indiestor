@@ -42,7 +42,7 @@ class CommandEntityDefinitions
 	{
 		$this->add($entityType,true,true);
 	}
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 
         function add($entityType,$hasArg,$mustHaveActions)
         {

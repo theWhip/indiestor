@@ -16,7 +16,7 @@ class ProgramOptions
 <<<<<<< HEAD
 	static $debug=false;
 =======
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 
         static function ifNull($defaultValue,$value)
         {
@@ -38,7 +38,7 @@ class ProgramOptions
 =======
                                 case 'simulate': self::$simulation=true; ShellCommand::$simulation=true; break;
                                 case 'verbose': self::$verbose=true; ShellCommand::$verbose=true; break;
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
                         }
                 }
         }
@@ -58,7 +58,7 @@ class ProgramOptions
 <<<<<<< HEAD
 		$buffer.="debug: ".self::bool2String(self::$debug)."\n";
 =======
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 		return $buffer;
         }
 }

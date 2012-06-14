@@ -7,8 +7,11 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+<<<<<<< HEAD
 require_once('ShellCommand.php');
 
+=======
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 /*
 
 Creates a directory. Example:

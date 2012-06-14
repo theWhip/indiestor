@@ -22,6 +22,72 @@ class EtcOneFileSystem
 	var $_4_fs_mntops_csv=null; //same but comma-separated
 	var $_5_fs_freq=null;
 	var $_6_fs_passno=null;
+
+	//----------------------------------------------
+	// HAS QUOTA ENABLED
+	//----------------------------------------------
+	function hasQuotaEnabled()
+	{
+		$usrQuotaEnabled=$this->hasQuotaEnabledForType('usrquota');
+		$grpQuotaEnabled=$this->hasQuotaEnabledForType('grpquota');
+		if($usrQuotaEnabled && $grpQuotaEnabled) return true;
+		return false;
+	}
+
+	//----------------------------------------------
+	// HAS QUOTA DISABLED
+	//----------------------------------------------
+	function hasQuotaDisabled()
+	{
+		$usrQuotaEnabled=$this->hasQuotaEnabledForType('usrquota');
+		$grpQuotaEnabled=$this->hasQuotaEnabledForType('grpquota');
+		if($usrQuotaEnabled || $grpQuotaEnabled) return false;
+		return true;
+	}
+
+	//----------------------------------------------
+	// HAS QUOTA ENABLED
+	//----------------------------------------------
+	function hasQuotaEnabledForType($type)
+	{
+		$quotaEnabled=false;
+		$fsOptions=$this->_4_fs_mntops;
+		foreach($fsOptions as $fsOption)
+		{
+			if($fsOption==$type) $quotaEnabled=true;
+		}
+		return $quotaEnabled;
+	}
+
+	//----------------------------------------------
+	// ENABLE QUOTA
+	//----------------------------------------------
+	function enableQuota()
+	{
+		$usrQuotaEnabled=$this->hasQuotaEnabledForType('usrquota');
+		$grpQuotaEnabled=$this->hasQuotaEnabledForType('grpquota');
+		if(!$usrQuotaEnabled) $this->_4_fs_mntops[]='usrquota';
+		if(!$grpQuotaEnabled) $this->_4_fs_mntops[]='grpquota';
+	}
+
+	//----------------------------------------------
+	// DISABLE QUOTA
+	//----------------------------------------------
+	function disableQuota()
+	{
+		$newMntOps=array();
+		foreach($this->_4_fs_mntops as $mntop)
+		{
+			switch($mntop)
+			{
+				case 'usrquota': break;
+				case 'grpquota': break;
+				default: $newMntOps[]=$mntop;
+			}
+		}
+		$this->_4_fs_mntops=$newMntOps;
+	}
+
 }
 
 class EtcFsTab
@@ -96,13 +162,13 @@ class EtcFsTab
 	}
 
 	//----------------------------------------------
-	// FIND FS TAB FILE SYSTEM FOR DEVICE
+	// FIND FILE SYSTEM FOR DEVICE OR UUID
 	//----------------------------------------------
-	function findFstabFileSystemForDevice($device)
+	function findFileSystemForDeviceOrUUID($deviceOrUUID)
 	{
 		foreach($this->fileSystems as $fileSystem)
 		{
-			if($fileSystem->_1_fs_spec==$device) return $fileSystem;
+			if($fileSystem->_1_fs_spec==$deviceOrUUID) return $fileSystem;
 		}
 		return null; //not found
 	}
@@ -112,7 +178,7 @@ class EtcFsTab
 	//----------------------------------------------
 	function findFileSystemForDevice($device)
 	{
-		$fileSystem=$this->findFstabFileSystemForDevice($device);
+		$fileSystem=$this->findFileSystemForDeviceOrUUID($device);
 		if($fileSystem==null)
 		{
 			//look up its UUID
@@ -120,7 +186,7 @@ class EtcFsTab
 			//cannot resolve UUID for this device
 			if($deviceUUID==null) return 'no-uuid';
 			$fs_spec_alt="UUID=$deviceUUID"; //alternative fs_spec
-			$fileSystem=$this->findFstabFileSystemForDevice($fs_spec_alt);
+			$fileSystem=$this->findFileSystemForDeviceOrUUID($fs_spec_alt);
 			//cannot resolve fstab filesystem for this UUID
 			if($fileSystem==null) return 'no-filesystem-for-uuid';
 		}
@@ -128,46 +194,28 @@ class EtcFsTab
 	}
 
 	//----------------------------------------------
-	// FILESYSTEM HAS ETC FSTAB QUOTA ENABLED
+	// WRITE FILE SYSTEM
 	//----------------------------------------------
-	function fileSystemHasEtcFstabQuotaEnabled($fileSystem)
+	function writeFileSystem($fileSystem)
 	{
-		$usrQuotaEnabled=$this->fileSystemHasEtcFstabTypeQuotaEnabled($fileSystem,'usrquota');
-		$grpQuotaEnabled=$this->fileSystemHasEtcFstabTypeQuotaEnabled($fileSystem,'grpquota');
-		if($usrQuotaEnabled && $grpQuotaEnabled) return true;
-		return false;
+		$this->backup();
+		$this->replaceFileSystemLine($fileSystem);
 	}
 
 	//----------------------------------------------
-	// FILESYSTEM HAS ETC FSTAB TYPE QUOTA ENABLED
+	// BACKUP
 	//----------------------------------------------
-	function fileSystemHasEtcFstabTypeQuotaEnabled($fileSystem,$type)
+	function backup()
 	{
-		$quotaEnabled=false;
-		$fsOptions=$fileSystem->_4_fs_mntops;
-		foreach($fsOptions as $fsOption)
-		{
-			if($fsOption==$type) $quotaEnabled=true;
-		}
-		return $quotaEnabled;
+		$currentDateTime=date('Y-m-d_g-i-s');
+		$backupFileName="/etc/fstab.backup.$currentDateTime";
+		copy('/etc/fstab',$backupFileName);
+		echo "created backup for /etc/fstab in $backupFileName\n";
 	}
-
 	//----------------------------------------------
-	// FILESYSTEM ENABLE ETC FSTAB QUOTA
+	// WRITE FILE SYSTEM
 	//----------------------------------------------
-	function fileSystemEnableEtcFstabQuota($fileSystem)
-	{
-		$usrQuotaEnabled=$this->fileSystemHasEtcFstabTypeQuotaEnabled($fileSystem,'usrquota');
-		$grpQuotaEnabled=$this->fileSystemHasEtcFstabTypeQuotaEnabled($fileSystem,'grpquota');
-		if(!$usrQuotaEnabled) $fileSystem->_4_fs_mntops[]='usrquota';
-		if(!$grpQuotaEnabled) $fileSystem->_4_fs_mntops[]='grpquota';
-		$this->writeEtcFstabFileSystem($fileSystem);
-	}
-
-	//----------------------------------------------
-	// WRITE ETC FSTAB FILE SYSTEM
-	//----------------------------------------------
-	function writeEtcFstabFileSystem($fileSystem)
+	function replaceFileSystemLine($fileSystem)
 	{
 		$lineNumber=$fileSystem->lineNumber;
 		$old_fs_mntops=$fileSystem->_4_fs_mntops_csv;
@@ -177,7 +225,6 @@ class EtcFsTab
 		$newLine=preg_replace($patternToReplace,$new_fs_mntops,$oldLine);
 		$this->fileReplaceLine($lineNumber,$newLine);
 	}
-
 	//----------------------------------------------
 	// FILE REPLACE LINE
 	//----------------------------------------------

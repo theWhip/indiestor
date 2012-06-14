@@ -15,10 +15,11 @@ class Volume extends EntityType
 		self::checkIfQuotaAlreadyOnForDevice($device);
 		$etcFstab=EtcFsTab::instance();
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-		self::validateFileSystem($fileSystem);
-		if(!$etcFstab->fileSystemHasEtcFstabQuotaEnabled($fileSystem))
+		self::validateFileSystem($fileSystem,$device);
+		if(!$fileSystem->hasQuotaEnabled())
 		{
-			$etcFstab->fileSystemEnableEtcFstabQuota($fileSystem);		
+			$fileSystem->enableQuota();		
+			$etcFstab->writeFileSystem($fileSystem);
 		}
 		$mountPoint=$fileSystem->_2_fs_file; //mount point
 		ActionEngine::switchOnQuotaForMountPoint($mountPoint);
@@ -30,9 +31,24 @@ class Volume extends EntityType
 		self::checkIfQuotaAlreadyOffForDevice($device);
 		$etcFstab=EtcFsTab::instance();
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-		self::validateFileSystem($fileSystem);
+		self::validateFileSystem($fileSystem,$device);
 		$mountPoint=$fileSystem->_2_fs_file; //mount point
 		ActionEngine::switchOffQuotaForMountPoint($mountPoint);
+	}
+
+	static function quotaRemove($commandAction)
+	{
+		$device=ProgramActions::$entityName;
+		$etcFstab=EtcFsTab::instance();
+		$fileSystem=$etcFstab->findFileSystemForDevice($device);
+		self::validateFileSystem($fileSystem,$device);
+		$mountPoint=$fileSystem->_2_fs_file; //mount point
+		ActionEngine::switchOffQuotaForMountPoint($mountPoint);
+		if(!$fileSystem->hasQuotaDisabled())
+		{
+			$fileSystem->disableQuota();		
+			$etcFstab->writeFileSystem($fileSystem);
+		}
 	}
 
 	static function checkIfQuotaAlreadyOnForDevice($device)
@@ -49,13 +65,13 @@ class Volume extends EntityType
 				ERRNUM_QUOTA_ALREADY_OFF_FOR_DEVICE);
 	}
 	
-	static function validateFileSystem($fileSystem)
+	static function validateFileSystem($fileSystem,$device)
 	{
 		switch($fileSystem)
 		{
 			case 'no-uuid':	
 				ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
-					"Can also not find an UUID for this device",
+					"Can also not find a UUID for this device",
 					ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID);
 					break;
 			case 'no-filesystem-for-uuid':

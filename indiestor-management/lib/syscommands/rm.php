@@ -7,18 +7,16 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('ShellCommand.php');
-
 /*
 
-Remounts a moint point. Example:
+Removes files. Example:
 
-$ mount -o remount /
+$ rm myfile.*
 
 */
 
-function syscommand_mount_remount($mountPoint)
+function syscommand_rm($filePath)
 {
-	ShellCommand::exec("mount -o remount $mountPoint");
+	ShellCommand::exec("rm $filePath");	
 }
 

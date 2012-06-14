@@ -7,8 +7,11 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+<<<<<<< HEAD
 require_once('ShellQuery.php');
 
+=======
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 /*
 
 Returns all groups in which a user is member. Example:

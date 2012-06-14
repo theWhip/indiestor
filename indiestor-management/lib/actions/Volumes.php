@@ -25,7 +25,7 @@ class Volumes extends EntityType
 		$format1="%-20s %-7s %-5s %7s %7s %10s %3s  %-s\n";
 		$format2="%-20s %-7s %-5s %7d %7d %10d %3d  %-s\n";
 		printf($format1,'device (in GB)','type','quota','total','used','avail','%','mounted on');
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 		$dfFileSystems=sysquery_df();
 		if(count($dfFileSystems>0))
 		{
@@ -36,7 +36,7 @@ class Volumes extends EntityType
 <<<<<<< HEAD
 =======
 						$dfFileSystem->quotaYN,
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 						$dfFileSystem->storageGB,
 						$dfFileSystem->usedGB,
 						$dfFileSystem->availableGB,
@@ -49,5 +49,16 @@ class Volumes extends EntityType
 			self::noVolumes();
 		}
         }
+<<<<<<< HEAD
+=======
+
+	static function purgeFstabBackups($commandAction)
+	{
+		$glob='/etc/fstab.ba*';
+		echo "purging ...\n";
+		syscommand_ls($glob);
+		syscommand_rm($glob);
+	}
+>>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
 }
 
