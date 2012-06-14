@@ -26,7 +26,7 @@ function syscommand_setquota($device,$name,$type,$blocks)
 	$block_hardlimit= floor($blocks*0.9);
 	$inode_softlimit=0; //disabled, no quota
 	$inode_hardlimit=0; //disabled, no quota
-	ShellCommand::exec("setquota $type $name $block_softlimit $block_hardlimit ".
+	ShellCommand::exec("setquota --format=vfsold $type $name $block_softlimit $block_hardlimit ".
 			"$inode_softlimit $inode_hardlimit $device");
 }
 

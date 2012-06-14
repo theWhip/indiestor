@@ -87,6 +87,15 @@ class User extends EntityType
 		}
 	}
 
+	static function checkValidCharactersInFolderName($folderName)
+	{
+		if(!ActionEngine::isValidCharactersInFolderName($folderName))
+		{
+			ActionEngine::error("'$folderName' contains invalid characters",
+						ERRNUM_FOLDERNAME_INVALID_CHARACTERS);
+		}
+	}
+
 	static function ensureIndiestorGroupExists()
 	{
                 $etcGroup=EtcGroup::instance();
@@ -142,18 +151,6 @@ class User extends EntityType
 		}
 	}
 
-	static function	checkForDuplicateUserMembership($userName)
-	{
-                $etcGroup=EtcGroup::instance();
-		$group=$etcGroup->findGroupForUserName($userName);
-		if($group!=null)
-		{
-			$groupName=$group->name;
-			ActionEngine::error("user '$userName' already member of group '$groupName'",
-						ERRNUM_DUPLICATE_MEMBERSHIP);
-		}
-	}
-
         static function delete($commandAction)
         {
 		$userName=ProgramActions::$entityName;
@@ -180,8 +177,8 @@ class User extends EntityType
 		$groupName=$commandAction->actionArg;
 		//if group does not exist, abort
 		self::checkForValidGroupName($groupName);
-		//if user already member of any group, abort
-		self::checkForDuplicateUserMembership($userName);
+		//if user already member of any group, remove him
+		self::removeFromISGroup($userName);
 		//add user to user group
 		syscommand_usermod_aG($userName,ActionEngine::sysGroupName($groupName));
 		EtcGroup::reset();
@@ -207,6 +204,19 @@ class User extends EntityType
                 return implode(',',$newGroupNamesForUserName);
 	}
 
+	static function removeFromISGroup($userName)
+	{
+                $etcGroup=EtcGroup::instance();
+		$group=$etcGroup->findGroupForUserName($userName);
+		if($group==null) return;
+		//we calculate the new collection of groups to which the user belongs
+		//by removing his existing group from the list
+		$groupNameToRemove=ActionEngine::sysGroupName($group->name);
+		$groupNames=self::newGroupNamesForUserName($userName,$groupNameToRemove);
+		syscommand_usermod_G($userName,$groupNames);
+		EtcGroup::reset();
+	}
+
 	static function unsetGroup($commandAction)
 	{
 		$userName=ProgramActions::$entityName;
@@ -220,12 +230,7 @@ class User extends EntityType
 			ActionEngine::error("user '$userName' is not member of any group",
 						ERRNUM_USER_NOT_MEMBER_OF_ANY_GROUP);
 		}
-		//we calculate the new collection of groups to which the user belongs
-		//by removing his existing group from the list
-		$groupNameToRemove=ActionEngine::sysGroupName($group->name);
-		$groupNames=self::newGroupNamesForUserName($userName,$groupNameToRemove);
-		syscommand_usermod_G($userName,$groupNames);
-		EtcGroup::reset();
+		self::removeFromISGroup($userName);
 	}
 
 	static function setPasswd($commandAction)
@@ -260,7 +265,10 @@ class User extends EntityType
 	{
 		$userName=ProgramActions::$entityName;
 		//if user does not exists, abort
-		self::checkForValidUserName($userName);	
+		self::checkForValidUserName($userName);
+		//remove the user from his indiestor group first
+		self::removeFromISGroup($userName);
+		//remove him from indiestor too
 		$groupNames=self::newGroupNamesForUserName($userName,ActionEngine::indiestorUserGroup);
 		syscommand_usermod_G($userName,$groupNames);
 		EtcGroup::reset();
@@ -274,6 +282,7 @@ class User extends EntityType
 		//if the add action is present, the set-home action has already been executed
 		if(ProgramActions::actionExists('add')) return;
 		$homeFolder=$commandAction->actionArg;
+		self::checkValidCharactersInFolderName($homeFolder);
 		self::checkHomeFolderIsAbsolutePath($homeFolder);
 		self::checkNewHomeNotOwnedAlready($userName,$homeFolder);
 		if(ProgramActions::actionExists('move-home-content'))

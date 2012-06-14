@@ -18,10 +18,9 @@ define('ERRNUM_GROUP_EXISTS_ALREADY',51);
 define('ERRNUM_GROUP_DOES_NOT_EXISTS',52);
 define('ERRNUM_USER_DOES_NOT_EXIST',53);
 define('ERRNUM_GROUP_DOES_NOT_EXIST',54);
-define('ERRNUM_DUPLICATE_MEMBERSHIP',55);
-define('ERRNUM_USER_NOT_MEMBER_OF_ANY_GROUP',56);
-define('ERRNUM_CANNOT_ADD_INDIESTOR_SYSUSER',57);
-define('ERRNUM_USERNAME_INVALID_CHARACTERS',58);
+define('ERRNUM_USER_NOT_MEMBER_OF_ANY_GROUP',55);
+define('ERRNUM_CANNOT_ADD_INDIESTOR_SYSUSER',56);
+define('ERRNUM_USERNAME_INVALID_CHARACTERS',57);
 define('ERRNUM_GROUPNAME_INVALID_CHARACTERS',58);
 define('ERRNUM_MOVE_HOME_CONTENT_WITHOUT_SET_HOME',59);
 define('ERRNUM_CANNOT_MOVE_HOME_CONTENT_TO_EXISTING_FOLDER',60);
@@ -39,6 +38,8 @@ define('ERRNUM_REMOVE_USER_QUOTA_ON_DEVICE_QUOTA_NOT_ENABLED',71);
 define('ERRNUM_QUOTA_ALREADY_REMOVED_FOR_DEVICE',72);
 define('ERRNUM_INVALID_MOUNT_POINT_FOLDER',73);
 define('ERRNUM_USER_ALREADY_LOCKED',74);
+define('ERRNUM_VOLUMENAME_INVALID_CHARACTERS',75);
+define('ERRNUM_FOLDERNAME_INVALID_CHARACTERS',76);
 
 define('USER_QUOTA_FILE','quota.user');
 
@@ -174,6 +175,18 @@ class ActionEngine
 		return preg_match('/^[a-z][-a-z0-9_]*$/',$name);
 	}
 
+	static function isValidCharactersInVolume($volume)
+	{
+		//a valid volume may only contain the following characters 
+		return preg_match('/^[-a-z0-9_\/]*$/',$volume);
+	}
+
+	static function isValidCharactersInFolderName($folder)
+	{
+		//a valid folder may only contain the following characters 
+		return preg_match('/^[-a-z0-9_\/]*$/',$folder);
+	}
+
 	static function endMountPointWithSlash($mountPoint)
 	{
 		if(strlen($mountPoint)==0)
@@ -187,6 +200,7 @@ class ActionEngine
 
 	static function switchOnQuotaForDevice($device)
 	{
+		//don't bother if the quota is already ons
 		$etcFstab=EtcFsTab::instance();
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
 		self::validateFileSystem($fileSystem,$device);

@@ -12,6 +12,7 @@ class Volume extends EntityType
 	static function quotaOn($commandAction)
 	{
 		$device=ProgramActions::$entityName;
+		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyOnForDevice($device);
 		ActionEngine::switchOnQuotaForDevice($device);
 	}
@@ -19,6 +20,7 @@ class Volume extends EntityType
 	static function quotaOff($commandAction)
 	{
 		$device=ProgramActions::$entityName;
+		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyOffForDevice($device);
 		ActionEngine::switchOffQuotaForDevice($device);
 	}
@@ -26,8 +28,18 @@ class Volume extends EntityType
 	static function quotaRemove($commandAction)
 	{
 		$device=ProgramActions::$entityName;
+		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyRemovedForDevice($device);
 		ActionEngine::removeQuotaForDevice($device);
+	}
+
+	static function checkValidCharactersInVolumeName($device)
+	{
+		if(!ActionEngine::isValidCharactersInVolume($device))
+		{
+			ActionEngine::error("'$device' contains invalid characters",
+						ERRNUM_VOLUMENAME_INVALID_CHARACTERS);
+		}
 	}
 
 	static function checkIfQuotaAlreadyOnForDevice($device)

@@ -8,30 +8,11 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-<<<<<<< HEAD
-require_once('lib/commandline/args/ProgramActions.php');
-require_once('lib/commandline/args/ProgramOptions.php');
-require_once('lib/commandline/args/CommandLineArgs.php');
-require_once('lib/commandline/ActionEngine.php');
-
-$commandLineArgs=new CommandLineArgs($argv);
-$commandLineArgs->process();
-
-ProgramOptions::extractFromProgramActions();
-
-
-=======
->>>>>>> fixes to error messages; reorganized indiestor subfolders
 //check that the user is root
 $processUser = posix_getpwuid(posix_geteuid());
 $processUserName=$processUser['name'];
 if($processUserName!='root')
 {
-<<<<<<< HEAD
-	die("Only root can run this program");
-}
-
-=======
 	die("Only root can run this program\n");
 }
 
@@ -40,10 +21,6 @@ if(false !== strpos(ini_get('disable_functions'), 'shell_exec'))
 {
 	die("The shell_exec() is has been disabled in php.ini. You cannot run this program without it.\n");
 }
-
-//user removes lots of folders from the path
-putenv('PATH=' .getenv('PATH'). ':/sbin:/usr/sbin');
-echo getenv('PATH');
 
 //check that the quota commands are installed
 $quotaCommands=array('quota','quotaon','quotacheck','quotaoff','setquota');
@@ -73,6 +50,5 @@ $argEngine->process();
 
 ProgramOptions::extractFromProgramActions();
 
->>>>>>> fixes to error messages; reorganized indiestor subfolders
 ActionEngine::execute();
 

@@ -27,7 +27,7 @@ Disk quotas for user john (uid 1011):
 function sysquery_quota_u($userName)
 {
 	$hideStdErrOutput=ProgramOptions::hideStdErrOutput();
-	$result=sysquery("quota -u $userName $hideStdErrOutput");
+	$result=sysquery("quota --format=vfsold -u $userName $hideStdErrOutput");
 	if(preg_match("/^Disk quotas for user $userName \(uid .*\)\: none$/",$result))
 	{
 	 	return null;
