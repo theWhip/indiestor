@@ -30,20 +30,22 @@ class User extends EntityType
 				$homeFolder=$commandAction->actionArg;
 				self::checkHomeFolderIsAbsolutePath($homeFolder);
 				self::checkNewHomeNotOwnedAlready($userName,$homeFolder);
-				$homeFolderOption="--home $homeFolder"; 
 			}
 			else
 			{
 				self::checkNewHomeNotOwnedAlready($userName,"/home/$userName");
-				$homeFolderOption=''; 
+				$homeFolder=null;
 			}
 			//execute
-			Shell::exec("adduser $homeFolderOption $userName");
+			syscommand_adduser($userName,$homeFolder);
+			EtcPasswd::reset();
 		}
 		//make sure indiestor user group exists
 		self::ensureIndiestorGroupExists();
 		//add user to indiestor user group
-		self::shellExecAddUserToGroup(ActionEngine::indiestorUserGroup,$userName);
+		syscommand_usermod_aG($userName,ActionEngine::indiestorUserGroup);
+		EtcPasswd::reset();
+		EtcGroup::reset();
         }
 
 	static function checkNewHomeNotOwnedAlready($userName,$homeFolder)
@@ -76,17 +78,12 @@ class User extends EntityType
 		}
 	}
 
-	static function shellExecAddUserToGroup($groupName,$userName)
-	{
-		Shell::exec("usermod -a -G $groupName $userName");
-	}
-
 	static function ensureIndiestorGroupExists()
 	{
                 $etcGroup=EtcGroup::instance();
 		if($etcGroup->indiestorGroup==null)
 		{
-	        	Shell::exec('addgroup '.ActionEngine::indiestorUserGroup);
+			syscommand_addgroup(ActionEngine::indiestorUserGroup);
 			EtcGroup::reset();
 	                $etcGroup=EtcGroup::instance();
 		}
@@ -154,16 +151,7 @@ class User extends EntityType
 		//if user does not exists, abort
 		self::checkForValidUserName($userName);	
 		//now delete the user
-		if(ProgramActions::actionExists('remove-home'))
-		{
-			$removeHomeOption='--remove-home';
-		}
-		else
-		{
-			$removeHomeOption='';
-		}
-
-		Shell::exec("deluser $removeHomeOption $userName");
+		syscommand_deluser($userName,ProgramActions::actionExists('remove-home'));
         }
 
 	static function removeHome($commandAction)
@@ -185,7 +173,7 @@ class User extends EntityType
 		//if user already member of any group, abort
 		self::checkForDuplicateUserMembership($userName);
 		//add user to user group
-		self::shellExecAddUserToGroup(ActionEngine::sysGroupName($groupName),$userName);
+		syscommand_usermod_aG($userName,ActionEngine::sysGroupName($groupName));
 	}
 
         function removeGroupNameFromGroupNames($groupNames,$groupNameToRemove)
@@ -225,7 +213,7 @@ class User extends EntityType
 		//by removing his existing group from the list
 		$groupNameToRemove=ActionEngine::sysGroupName($group->name);
 		$groupNames=self::newGroupNamesForUserName($userName,$groupNameToRemove);
-		Shell::exec("usermod $userName -G $groupNames");
+		syscommand_usermod_G($userName,$groupNames);
 	}
 
 	static function setPasswd($commandAction)
@@ -234,8 +222,7 @@ class User extends EntityType
 		//if user does not exists, abort
 		self::checkForValidUserName($userName);	
 		$passwd=$commandAction->actionArg;
-		$cryptedPwd=crypt($passwd);
-		Shell::exec("usermod --password '$cryptedPwd' $userName");
+		syscommand_usermod_password($userName,$passwd);
 	}
 
 	static function lock($commandAction)
@@ -243,7 +230,7 @@ class User extends EntityType
 		$userName=ProgramActions::$entityName;
 		//if user does not exists, abort
 		self::checkForValidUserName($userName);	
-		Shell::exec("usermod --lock $userName");
+		syscommand_usermod_lock($userName);
 	}
 
 	static function expel($commandAction)
@@ -251,7 +238,7 @@ class User extends EntityType
 		$userName=ProgramActions::$entityName;
 		//if user does not exists, abort
 		self::checkForValidUserName($userName);	
-		Shell::exec("pkill -KILL -u $userName");
+		syscommand_pkill_u($userName);
 	}
 
 	static function removeFromIndiestor($commandAction)
@@ -260,7 +247,7 @@ class User extends EntityType
 		//if user does not exists, abort
 		self::checkForValidUserName($userName);	
 		$groupNames=self::newGroupNamesForUserName($userName,ActionEngine::indiestorUserGroup);
-		Shell::exec("usermod $userName -G $groupNames");
+		syscommand_usermod_G($userName,$groupNames);
 	}
 
 	static function setHome($commandAction)
@@ -282,13 +269,13 @@ class User extends EntityType
 				$oldHomeFolder=$user->homeFolder;
 				$userShell=$user->shell;
 				//expel user
-				Shell::exec("pkill -KILL -u $userName");
+				syscommand_pkill_u($userName);
 				//prevent login
-				Shell::exec("chsh --shell /bin/false $userName");
+				syscommand_chsh($userName,'/bin/false');
 				//move the folder
-				Shell::exec("mv $oldHomeFolder $homeFolder");
+				syscommand_mv($oldHomeFolder,$homeFolder);
 				//reallow login
-				Shell::exec("chsh --shell $userShell $userName");
+				syscommand_chsh($userName,$userShell);
 			}
 			else
 			{
@@ -301,9 +288,9 @@ class User extends EntityType
 		{
 			if(!file_exists($homeFolder))
 			{
-				Shell::exec("mkdir $homeFolder");
-				Shell::exec("cp -aR /etc/skel/* $homeFolder");
-				Shell::exec("chown -R $userName.$userName $homeFolder");
+				syscommand_mkdir($homeFolder);
+				syscommand_cp_aR('/etc/skel/*',$homeFolder);
+				syscommand_chown_R($homeFolder,$userName,$userName);
 			}
 			else
 			{
@@ -315,11 +302,11 @@ class User extends EntityType
 				}
 				else
 				{
-					Shell::exec("chown -R $userName.$userName $homeFolder");
+					syscommand_chown_R($homeFolder,$userName,$userName);
 				}
 			}
 		}
-		Shell::exec("usermod --home $homeFolder $userName");
+		syscommand_usermod_home($userName,$homeFolder);
 	}
 
 	static function moveHomeContent($commandAction)

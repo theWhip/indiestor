@@ -17,7 +17,7 @@ class Group extends EntityType
 		//if group exists already, abort
 		self::checkDuplicateGroup($ISGroupName);
 		$sysGroupName=ActionEngine::sysGroupName($ISGroupName);
-        	Shell::exec("addgroup $sysGroupName");
+		syscommand_addgroup($sysGroupName);
         }
 
 	static function checkValidCharactersInGroupName($groupName)
@@ -45,7 +45,7 @@ class Group extends EntityType
 		//if group does not exists, abort
 		self::checkInvalidGroup($ISGroupName);
 		$sysGroupName=ActionEngine::sysGroupName($ISGroupName);
-		Shell::exec("delgroup $sysGroupName");
+		syscommand_delgroup($sysGroupName);
         }
 
 	static function checkInvalidGroup($ISGroupName)

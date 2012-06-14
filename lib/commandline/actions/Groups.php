@@ -12,11 +12,7 @@ class Groups extends EntityType
 
 	static function noMembers()
 	{
-<<<<<<< HEAD
 		echo "no indiestor members\n";
-=======
-		echo "no indiestor groups\n";
->>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	}
 
         static function show($commandAction)

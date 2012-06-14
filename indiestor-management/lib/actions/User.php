@@ -38,11 +38,14 @@ class User extends EntityType
 			}
 			//execute
 			syscommand_adduser($userName,$homeFolder);
+			EtcPasswd::reset();
 		}
 		//make sure indiestor user group exists
 		self::ensureIndiestorGroupExists();
 		//add user to indiestor user group
 		syscommand_usermod_aG($userName,ActionEngine::indiestorUserGroup);
+		EtcPasswd::reset();
+		EtcGroup::reset();
         }
 
 	static function checkNewHomeNotOwnedAlready($userName,$homeFolder)
@@ -149,6 +152,7 @@ class User extends EntityType
 		self::checkForValidUserName($userName);	
 		//now delete the user
 		syscommand_deluser($userName,ProgramActions::actionExists('remove-home'));
+		EtcPasswd::reset();
         }
 
 	static function removeHome($commandAction)
@@ -171,6 +175,7 @@ class User extends EntityType
 		self::checkForDuplicateUserMembership($userName);
 		//add user to user group
 		syscommand_usermod_aG($userName,ActionEngine::sysGroupName($groupName));
+		EtcGroup::reset();
 	}
 
         function removeGroupNameFromGroupNames($groupNames,$groupNameToRemove)
@@ -211,6 +216,7 @@ class User extends EntityType
 		$groupNameToRemove=ActionEngine::sysGroupName($group->name);
 		$groupNames=self::newGroupNamesForUserName($userName,$groupNameToRemove);
 		syscommand_usermod_G($userName,$groupNames);
+		EtcGroup::reset();
 	}
 
 	static function setPasswd($commandAction)
@@ -220,6 +226,7 @@ class User extends EntityType
 		self::checkForValidUserName($userName);	
 		$passwd=$commandAction->actionArg;
 		syscommand_usermod_password($userName,$passwd);
+		EtcPasswd::reset();
 	}
 
 	static function lock($commandAction)
@@ -228,6 +235,7 @@ class User extends EntityType
 		//if user does not exists, abort
 		self::checkForValidUserName($userName);	
 		syscommand_usermod_lock($userName);
+		EtcPasswd::reset();
 	}
 
 	static function expel($commandAction)
@@ -245,6 +253,7 @@ class User extends EntityType
 		self::checkForValidUserName($userName);	
 		$groupNames=self::newGroupNamesForUserName($userName,ActionEngine::indiestorUserGroup);
 		syscommand_usermod_G($userName,$groupNames);
+		EtcGroup::reset();
 	}
 
 	static function setHome($commandAction)
@@ -304,6 +313,8 @@ class User extends EntityType
 			}
 		}
 		syscommand_usermod_home($userName,$homeFolder);
+		EtcPasswd::reset();
+		EtcGroup::reset();
 	}
 
 	static function moveHomeContent($commandAction)

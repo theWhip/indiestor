@@ -15,25 +15,16 @@ class CommandActionDefinition
         var $action=null;
 	var $priority=null;
         var $hasArg=null;
-<<<<<<< HEAD
 	var $mustSave=null;
 	var $isOption=null;
 
         function __construct($entityType,$action,$hasArg,$priority,$mustSave,$isOption)
-=======
-	var $isOption=null;
-
-        function __construct($entityType,$action,$hasArg,$priority,$isOption)
->>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
         {
                 $this->entityType=$entityType;
                 $this->action=$action;
                 $this->hasArg=$hasArg;
 		$this->priority=$priority;
-<<<<<<< HEAD
 		$this->mustSave=$mustSave;
-=======
->>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 		$this->isOption=$isOption;
         }
 
@@ -44,10 +35,7 @@ class CommandActionDefinition
 			$action,
 			$actionArg,
 			$this->priority,
-<<<<<<< HEAD
 			$this->mustSave,
-=======
->>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 			$this->isOption
 		);
 		

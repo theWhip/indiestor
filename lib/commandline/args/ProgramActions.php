@@ -38,15 +38,6 @@ class ProgramActions
 		return array_key_exists($actionName,self::$actions);
 	}
 
-<<<<<<< HEAD
-=======
-	static function findByName($actionName)
-	{
-		if(!self::actionExists($actionName)) return null;
-		return self::$actions[$actionName];
-	}
-
->>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	static function actionPriorityArray()
 	{
 		$priorities=array();

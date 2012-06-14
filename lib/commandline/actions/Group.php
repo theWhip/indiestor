@@ -12,29 +12,12 @@ class Group extends EntityType
         static function add($commandAction)
         {
 		$ISGroupName=ProgramActions::$entityName;
-<<<<<<< HEAD
-=======
-		//if name contains invalid characters, abort
-		self::checkValidCharactersInGroupName($ISGroupName);
->>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 		//if group exists already, abort
 		self::checkDuplicateGroup($ISGroupName);
 		$sysGroupName=ActionEngine::sysGroupName($ISGroupName);
         	Shell::exec("addgroup $sysGroupName");
         }
 
-<<<<<<< HEAD
-=======
-	static function checkValidCharactersInGroupName($groupName)
-	{
-		if(!ActionEngine::isValidCharactersInName($groupName))
-		{
-			ActionEngine::error("'$groupName' contains invalid characters",
-						ERRNUM_GROUPNAME_INVALID_CHARACTERS);
-		}
-	}
-
->>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	static function checkDuplicateGroup($ISGroupName)
 	{
 		$etcGroup=EtcGroup::instance();

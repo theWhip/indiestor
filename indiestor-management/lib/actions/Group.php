@@ -18,6 +18,7 @@ class Group extends EntityType
 		self::checkDuplicateGroup($ISGroupName);
 		$sysGroupName=ActionEngine::sysGroupName($ISGroupName);
 		syscommand_addgroup($sysGroupName);
+		EtcGroup::reset();
         }
 
 	static function checkValidCharactersInGroupName($groupName)
@@ -46,6 +47,7 @@ class Group extends EntityType
 		self::checkInvalidGroup($ISGroupName);
 		$sysGroupName=ActionEngine::sysGroupName($ISGroupName);
 		syscommand_delgroup($sysGroupName);
+		EtcGroup::reset();
         }
 
 	static function checkInvalidGroup($ISGroupName)

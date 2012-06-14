@@ -8,16 +8,6 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-<<<<<<< HEAD
-=======
-class oneUser
-{
-	var $name=null;
-	var $homeFolder=null;
-	var $shell=null;
-}
-
->>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 class EtcPasswd
 {
 	static $instance=null;	
@@ -77,16 +67,8 @@ class EtcPasswd
 	function parseEtcPasswdFileLine($etcPasswdFileLine)
 	{
 		$etcPasswdFileLinefields=explode(':',$etcPasswdFileLine);
-<<<<<<< HEAD
 		$user=$etcPasswdFileLinefields[0];
 		$this->users[$user]=$user;
-=======
-		$user=new oneUser();
-		$user->name=$etcPasswdFileLinefields[0];
-		$user->homeFolder=$etcPasswdFileLinefields[5];
-		$user->shell=$etcPasswdFileLinefields[6];
-		$this->users[$user->name]=$user;
->>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	}
 
 	//----------------------------------------------
@@ -95,7 +77,6 @@ class EtcPasswd
 
 	function exists($userName)
 	{
-<<<<<<< HEAD
 		foreach($this->users as $user)
 		{
 			if($user==$userName)
@@ -106,40 +87,4 @@ class EtcPasswd
 		return false;
 	}
 
-=======
-		return $this->findUserByName($userName)!=null;
-	}
-
-	//----------------------------------------------
-	// FIND USER BY NAME
-	//----------------------------------------------
-
-	function findUserByName($userName)
-	{
-		foreach($this->users as $user)
-		{
-			if($user->name==$userName)
-			{
-				return $user;
-			}
-		}
-		return null;
-	}
-
-	//----------------------------------------------
-	// FIND USER BY HOME FOLDER
-	//----------------------------------------------
-
-	function findUserByHomeFolder($homeFolder)
-	{
-		foreach($this->users as $user)
-		{
-			if($user->homeFolder==$homeFolder)
-			{
-				return $user;
-			}
-		}
-		return null;
-	}
->>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 }
