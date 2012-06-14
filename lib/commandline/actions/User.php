@@ -12,10 +12,17 @@ class User extends EntityType
         static function add($commandAction)
         {
 		$userName=ProgramActions::$entityName;
+<<<<<<< HEAD
 		//if user exists already, abort
 		self::checkForDuplicateUser($userName);
 		//if indiestor user exists already, abort
 		self::checkForDuplicateIndiestorUser($userName);
+=======
+		//if indiestor user exists already, abort
+		self::checkForDuplicateIndiestorUser($userName);
+		//if user exists already, abort
+		self::checkForDuplicateUser($userName);
+>>>>>>> fixed bug in validating indiestor group membership
 		//now add the user
 		//XXX watch out home directory must be added immediately
         	Shell::exec("adduser $userName");
@@ -58,7 +65,7 @@ class User extends EntityType
 <<<<<<< HEAD
 =======
                 if($indiestorGroup==null) return;
->>>>>>> fixed bug in --user -add
+>>>>>>> fixed bug in validating indiestor group membership
 		if($indiestorGroup->findMember($userName)!=null)
 		{
 			ActionEngine::error("indiestor user '$userName' exists already",
@@ -73,7 +80,7 @@ class User extends EntityType
 <<<<<<< HEAD
 =======
                 if($indiestorGroup==null) return;
->>>>>>> fixed bug in --user -add
+>>>>>>> fixed bug in validating indiestor group membership
 		if($indiestorGroup->findMember($userName)==null)
 		{
 			ActionEngine::error("indiestor user '$userName' does not exist",
