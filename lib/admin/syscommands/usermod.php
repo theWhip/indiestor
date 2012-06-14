@@ -30,7 +30,7 @@ $ usermod -G myfriends john
 
 function syscommand_usermod_G($userName,$groupNames)
 {
-	ShellCommand::exec("usermod $userName -G $groupNames");
+	ShellCommand::exec("usermod -G $groupNames  $userName");
 }
 
 /*
