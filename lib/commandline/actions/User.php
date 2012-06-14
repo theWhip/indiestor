@@ -38,16 +38,18 @@ class User extends EntityType
 				$commandAction=ProgramActions::findByName('set-home');
 				$homeFolder=$commandAction->actionArg;
 				self::checkHomeFolderIsAbsolutePath($homeFolder);
+				self::checkNewHomeNotOwnedAlready($userName,$homeFolder);
 				$homeFolderOption="--home $homeFolder"; 
 			}
 			else
 			{
+				self::checkNewHomeNotOwnedAlready($userName,"/home/$userName");
 				$homeFolderOption=''; 
 			}
 			//execute
 			Shell::exec("adduser $homeFolderOption $userName");
 		}
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 		//make sure indiestor user group exists
 		self::ensureIndiestorGroupExists();
 		//add user to indiestor user group
@@ -56,6 +58,17 @@ class User extends EntityType
 
 <<<<<<< HEAD
 =======
+	static function checkNewHomeNotOwnedAlready($userName,$homeFolder)
+	{
+		$etcPasswd=EtcPasswd::instance();
+		$otherUser=$etcPasswd->findUserByHomeFolder($homeFolder);
+		if($otherUser==null) return; //nobody owns this folder as home folder
+		$otherUserName=$otherUser->name;
+		ActionEngine::error("home folder $homeFolder already belongs".
+			" to user $otherUserName",
+			ERRNUM_HOME_FOLDER_ALREADY_BELONGS_TO_USER);
+	}
+
 	static function checkHomeFolderIsAbsolutePath($homeFolder)
 	{
 		if(substr($homeFolder,0,1)!='/')
@@ -75,7 +88,7 @@ class User extends EntityType
 		}
 	}
 
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 	static function shellExecAddUserToGroup($groupName,$userName)
 	{
 		Shell::exec("usermod -a -G $groupName $userName");
@@ -107,7 +120,7 @@ class User extends EntityType
 		{
 			ActionEngine::error("Cannot add '$userName' system user as indiestor user",
 						ERRNUM_CANNOT_ADD_INDIESTOR_SYSUSER);
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 		}
 	}
 
@@ -118,7 +131,7 @@ class User extends EntityType
 <<<<<<< HEAD
 =======
                 if($indiestorGroup==null) return;
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 		if($indiestorGroup->findMember($userName)!=null)
 		{
 			ActionEngine::error("indiestor user '$userName' exists already",
@@ -133,7 +146,7 @@ class User extends EntityType
 <<<<<<< HEAD
 =======
                 if($indiestorGroup==null) return;
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 		if($indiestorGroup->findMember($userName)==null)
 		{
 			ActionEngine::error("indiestor user '$userName' does not exist",
@@ -196,7 +209,7 @@ class User extends EntityType
 						ERRNUM_REMOVE_HOME_CONTENT_WITHOUT_DELETE);
 	}
 
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 	static function addToGroup($commandAction)
 	{
 		$userName=ProgramActions::$entityName;
@@ -282,12 +295,12 @@ class User extends EntityType
 		Shell::exec("usermod --lock $userName");
 	}
 
-	static function unlock($commandAction)
+	static function expel($commandAction)
 	{
 		$userName=ProgramActions::$entityName;
 		//if user does not exists, abort
 		self::checkForValidUserName($userName);	
-		Shell::exec("usermod --unlock $userName");
+		Shell::exec("pkill -KILL -u $userName");
 	}
 
 	static function removeFromIndiestor($commandAction)
@@ -308,6 +321,7 @@ class User extends EntityType
 		if(ProgramActions::actionExists('add')) return;
 		$homeFolder=$commandAction->actionArg;
 		self::checkHomeFolderIsAbsolutePath($homeFolder);
+		self::checkNewHomeNotOwnedAlready($userName,$homeFolder);
 		if(ProgramActions::actionExists('move-home-content'))
 		{
 			if(!file_exists($homeFolder))
@@ -315,7 +329,15 @@ class User extends EntityType
 				$etcPasswd=EtcPasswd::instance();
 				$user=$etcPasswd->findUserByName($userName);
 				$oldHomeFolder=$user->homeFolder;
-				Shell::exec("mv $oldHomeFolder $homeFolder");			
+				$userShell=$user->shell;
+				//expel user
+				Shell::exec("pkill -KILL -u $userName");
+				//prevent login
+				Shell::exec("chsh --shell /bin/false $userName");
+				//move the folder
+				Shell::exec("mv $oldHomeFolder $homeFolder");
+				//reallow login
+				Shell::exec("chsh --shell $userShell $userName");
 			}
 			else
 			{
@@ -340,6 +362,10 @@ class User extends EntityType
 					"it is not a folder",
 					ERRNUM_CANNOT_MOVE_HOME_TO_NON_FOLDER);
 				}
+				else
+				{
+					Shell::exec("chown -R $userName.$userName $homeFolder");
+				}
 			}
 		}
 		Shell::exec("usermod --home $homeFolder $userName");
@@ -352,6 +378,6 @@ class User extends EntityType
 		ActionEngine::error("-move-home-content only possible in -set-home action",
 						ERRNUM_MOVE_HOME_CONTENT_WITHOUT_SET_HOME);
 	}
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 }
 

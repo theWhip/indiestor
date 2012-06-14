@@ -34,7 +34,8 @@ define('ERRNUM_CANNOT_MOVE_HOME_CONTENT_TO_EXISTING_FOLDER',60);
 define('ERRNUM_CANNOT_MOVE_HOME_TO_NON_FOLDER',61);
 define('ERRNUM_HOME_FOLDER_MUST_BE_ABSOLUTE_PATH',62);
 define('ERRNUM_REMOVE_HOME_CONTENT_WITHOUT_DELETE',63);
->>>>>>> added --user -set-home -move-home-content -remove-home
+define('ERRNUM_HOME_FOLDER_ALREADY_BELONGS_TO_USER',64);
+>>>>>>> added --user -expel and validation fixes
 
 class ActionEngine
 {
@@ -43,7 +44,7 @@ class ActionEngine
 <<<<<<< HEAD
 =======
 	const indiestorSysUserName='indiestor';
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 
 	static function printStdErr($msg)
 	{
@@ -79,7 +80,7 @@ class ActionEngine
 		return $userName==self::indiestorSysUserName;
 	}
 
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 	static function indiestorGroupName($sysGroupName)
 	{
 		$lenISGPrefix=strlen(self::indiestorGroupPrefix);
@@ -96,7 +97,7 @@ class ActionEngine
 		return preg_match('/^[a-z][-a-z0-9_]*$/',$name);
 	}
 
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
         static function execute()
         {
                 $className=self::actionCamelCaseName(ProgramActions::$entityType);

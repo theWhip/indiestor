@@ -16,7 +16,7 @@ class Groups extends EntityType
 		echo "no indiestor members\n";
 =======
 		echo "no indiestor groups\n";
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 	}
 
         static function show($commandAction)

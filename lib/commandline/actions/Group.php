@@ -16,7 +16,7 @@ class Group extends EntityType
 =======
 		//if name contains invalid characters, abort
 		self::checkValidCharactersInGroupName($ISGroupName);
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 		//if group exists already, abort
 		self::checkDuplicateGroup($ISGroupName);
 		$sysGroupName=ActionEngine::sysGroupName($ISGroupName);
@@ -34,7 +34,7 @@ class Group extends EntityType
 		}
 	}
 
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 	static function checkDuplicateGroup($ISGroupName)
 	{
 		$etcGroup=EtcGroup::instance();

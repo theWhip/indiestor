@@ -10,11 +10,19 @@
 
 require_once('lib/commandline/args/ProgramActions.php');
 require_once('lib/commandline/args/ProgramOptions.php');
+<<<<<<< HEAD
 require_once('lib/commandline/args/CommandLineArgs.php');
 require_once('lib/commandline/ActionEngine.php');
 
 $commandLineArgs=new CommandLineArgs($argv);
 $commandLineArgs->process();
+=======
+require_once('lib/commandline/ArgEngine.php');
+require_once('lib/commandline/ActionEngine.php');
+
+$argEngine=new ArgEngine($argv);
+$argEngine->process();
+>>>>>>> added --user -expel and validation fixes
 
 ProgramOptions::extractFromProgramActions();
 

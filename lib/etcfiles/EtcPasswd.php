@@ -14,9 +14,10 @@ class oneUser
 {
 	var $name=null;
 	var $homeFolder=null;
+	var $shell=null;
 }
 
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 class EtcPasswd
 {
 	static $instance=null;	
@@ -83,8 +84,9 @@ class EtcPasswd
 		$user=new oneUser();
 		$user->name=$etcPasswdFileLinefields[0];
 		$user->homeFolder=$etcPasswdFileLinefields[5];
+		$user->shell=$etcPasswdFileLinefields[6];
 		$this->users[$user->name]=$user;
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 	}
 
 	//----------------------------------------------
@@ -102,6 +104,8 @@ class EtcPasswd
 			}
 		}
 		return false;
+	}
+
 =======
 		return $this->findUserByName($userName)!=null;
 	}
@@ -120,7 +124,22 @@ class EtcPasswd
 			}
 		}
 		return null;
->>>>>>> added --user -set-home -move-home-content -remove-home
 	}
 
+	//----------------------------------------------
+	// FIND USER BY HOME FOLDER
+	//----------------------------------------------
+
+	function findUserByHomeFolder($homeFolder)
+	{
+		foreach($this->users as $user)
+		{
+			if($user->homeFolder==$homeFolder)
+			{
+				return $user;
+			}
+		}
+		return null;
+	}
+>>>>>>> added --user -expel and validation fixes
 }

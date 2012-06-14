@@ -10,12 +10,18 @@
 
 require_once('lib/JSONFile.php');
 require_once('lib/groupdefinitions/GroupDefinitions.php');
+<<<<<<< HEAD
 require_once('indiestor-cl-args.php');
 
 processCommandLineArgs();
 
 $groups=JSONFile::load(ProgramOptions::$groupsFilePath);
 $memberFolders=JSONFile::load(ProgramOptions::$memberFoldersFilePath);
+=======
+
+$groups=JSONFile::load('etc/groups.json');
+$memberFolders=JSONFile::load('etc/member-folders.json');
+>>>>>>> added --user -expel and validation fixes
 $groupDefinitions=new GroupDefinitions($groups,$memberFolders);
 $groupDefinitions->FSPaths->dump();
 

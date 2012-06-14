@@ -15,16 +15,25 @@ class CommandActionDefinition
         var $action=null;
 	var $priority=null;
         var $hasArg=null;
+<<<<<<< HEAD
 	var $mustSave=null;
 	var $isOption=null;
 
         function __construct($entityType,$action,$hasArg,$priority,$mustSave,$isOption)
+=======
+	var $isOption=null;
+
+        function __construct($entityType,$action,$hasArg,$priority,$isOption)
+>>>>>>> added --user -expel and validation fixes
         {
                 $this->entityType=$entityType;
                 $this->action=$action;
                 $this->hasArg=$hasArg;
 		$this->priority=$priority;
+<<<<<<< HEAD
 		$this->mustSave=$mustSave;
+=======
+>>>>>>> added --user -expel and validation fixes
 		$this->isOption=$isOption;
         }
 
@@ -35,7 +44,10 @@ class CommandActionDefinition
 			$action,
 			$actionArg,
 			$this->priority,
+<<<<<<< HEAD
 			$this->mustSave,
+=======
+>>>>>>> added --user -expel and validation fixes
 			$this->isOption
 		);
 		

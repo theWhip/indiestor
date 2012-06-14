@@ -46,7 +46,7 @@ class ProgramActions
 		return self::$actions[$actionName];
 	}
 
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 	static function actionPriorityArray()
 	{
 		$priorities=array();

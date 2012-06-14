@@ -42,44 +42,63 @@ class CommandActionDefinitions
 		//user
 		$this->addPrimaryAction("user","add");
 		$this->addPrimaryAction("user","delete");
+<<<<<<< HEAD
 		$this->addSecondaryAction("user","set-home",true);
 		$this->addSecondaryAction("user","remove-home",false);
-<<<<<<< HEAD
 		$this->addSecondaryAction("user","add-to-group",true);
 		$this->addSecondaryAction("user","remove-from-group",false);
                 $this->addActionDefinition("user","set-passwd",true,2,false,false);
 =======
+		$this->addPrimaryAction("user","expel");
+		$this->addSecondaryAction("user","set-home",true);
+		$this->addSecondaryAction("user","remove-home",false);
 		$this->addSecondaryAction("user","move-home-content",false);
 		$this->addSecondaryAction("user","add-to-group",true);
 		$this->addSecondaryAction("user","remove-from-group",false);
                 $this->addActionDefinition("user","set-passwd",true,2,false,false);
 		$this->addSecondaryAction("user","lock",false);
-		$this->addSecondaryAction("user","unlock",false);
 		$this->addSecondaryAction("user","remove-from-indiestor",false);
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 		$this->addOutputAction("user","show");
 		$this->addExecOptionDefinitions("user");
 	}
 
 	function addOutputAction($entity,$action)
 	{
+<<<<<<< HEAD
                 $this->addActionDefinition($entity,$action,false,9,false,false);
+=======
+                $this->addActionDefinition($entity,$action,false,9,false);
+>>>>>>> added --user -expel and validation fixes
 	}
 
 	function addPrimaryAction($entity,$action)
 	{
+<<<<<<< HEAD
                 $this->addActionDefinition($entity,$action,false,1,true,false);
+=======
+                $this->addActionDefinition($entity,$action,false,1,false);
+>>>>>>> added --user -expel and validation fixes
 	}
 
 	function addSecondaryAction($entity,$action,$hasArg)
 	{
+<<<<<<< HEAD
                 $this->addActionDefinition($entity,$action,$hasArg,2,true,false);
+=======
+                $this->addActionDefinition($entity,$action,$hasArg,2,false);
+>>>>>>> added --user -expel and validation fixes
 	}
 
 	function addExecOptionDefinitions($entity)
 	{
+<<<<<<< HEAD
                 $this->addActionDefinition($entity,"simulate",false,9,false,true);
                 $this->addActionDefinition($entity,"verbose",false,9,false,true);
+=======
+                $this->addActionDefinition($entity,"simulate",false,9,true);
+                $this->addActionDefinition($entity,"verbose",false,9,true);
+>>>>>>> added --user -expel and validation fixes
 	}
 
 	function configureIncompatibleActions()
@@ -94,7 +113,7 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair('user','delete','add-to-group');
 <<<<<<< HEAD
 =======
-		$this->addIncompatibleActionPair('user','lock','unlock');
+		$this->addIncompatibleActionPair('user','lock','set-passwd');
 		$this->addIncompatibleActionPair('user','remove-from-indiestor','add');
 		$this->addIncompatibleActionPair('user','remove-from-indiestor','delete');
 		$this->addIncompatibleActionPair('user','remove-from-indiestor','add-to-group');
@@ -102,7 +121,7 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair('user','move-home-content','add');
 		$this->addIncompatibleActionPair('user','move-home-content','delete');
 		$this->addIncompatibleActionPair('user','move-home-content','remove-home');
->>>>>>> added --user -set-home -move-home-content -remove-home
+>>>>>>> added --user -expel and validation fixes
 	}
 
 	function syntheticKey($entityType,$action)
@@ -122,11 +141,19 @@ class CommandActionDefinitions
 			new CommandIncompatibleActionPair($entityType,$action1,$action2);
 	}
 
+<<<<<<< HEAD
         function addActionDefinition($entityType,$action,$hasArg,$priority,$mustSave,$isOption)
         {
                 $this->actionDefinitions[$this->syntheticKey($entityType,$action)]=
 			new CommandActionDefinition($entityType,$action,$hasArg,
 					$priority,$mustSave,$isOption);
+=======
+        function addActionDefinition($entityType,$action,$hasArg,$priority,$isOption)
+        {
+                $this->actionDefinitions[$this->syntheticKey($entityType,$action)]=
+			new CommandActionDefinition($entityType,$action,$hasArg,
+					$priority,$isOption);
+>>>>>>> added --user -expel and validation fixes
         }
 
 	function firstIncompatibleAction($entityType,$actions,$newAction)
@@ -181,6 +208,7 @@ class CommandActionDefinitions
 		return $actionDefinition->priority;
 	}
 
+<<<<<<< HEAD
 	function actionMustSave($entityType,$action)
 	{
 		if(!$this->isValidActionForEntityType($entityType,$action))
@@ -190,6 +218,8 @@ class CommandActionDefinitions
 		return $actionDefinition->mustSave;
 	}
 
+=======
+>>>>>>> added --user -expel and validation fixes
 	function commandsForEntityType($entityType)
 	{
 		$buffer='';
