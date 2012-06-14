@@ -25,7 +25,7 @@ class Volumes extends EntityType
 		$format1="%-20s %-7s %-5s %7s %7s %10s %3s  %-s\n";
 		$format2="%-20s %-7s %-5s %7d %7d %10d %3d  %-s\n";
 		printf($format1,'device (in GB)','type','quota','total','used','avail','%','mounted on');
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 		$dfFileSystems=sysquery_df();
 		if(count($dfFileSystems>0))
 		{
@@ -36,7 +36,7 @@ class Volumes extends EntityType
 <<<<<<< HEAD
 =======
 						$dfFileSystem->quotaYN,
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 						$dfFileSystem->storageGB,
 						$dfFileSystem->usedGB,
 						$dfFileSystem->availableGB,
@@ -59,6 +59,6 @@ class Volumes extends EntityType
 		syscommand_ls($glob);
 		syscommand_rm($glob);
 	}
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 }
 

@@ -21,7 +21,7 @@ class Group extends EntityType
 <<<<<<< HEAD
 =======
 		EtcGroup::reset();
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
         }
 
 	static function checkValidCharactersInGroupName($groupName)
@@ -53,7 +53,7 @@ class Group extends EntityType
 <<<<<<< HEAD
 =======
 		EtcGroup::reset();
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
         }
 
 	static function checkInvalidGroup($ISGroupName)
@@ -73,7 +73,7 @@ class Group extends EntityType
 		echo "no members for group $groupName\n";
 	}
 
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	static function showMembers($commandAction)
 	{
 		$ISGroupName=ProgramActions::$entityName;
@@ -107,7 +107,7 @@ class Group extends EntityType
                 }
 
 		ActionEngine::printUserRecords($userRecords);
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	}
 }
 

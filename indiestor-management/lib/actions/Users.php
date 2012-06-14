@@ -46,7 +46,7 @@ class Users extends EntityType
                 }
 
 		ActionEngine::printUserRecords($userRecords);
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
         }
 }
 

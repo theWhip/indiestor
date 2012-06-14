@@ -42,7 +42,7 @@ class CommandEntityDefinitions
 	{
 		$this->add($entityType,true,true);
 	}
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 
         function add($entityType,$hasArg,$mustHaveActions)
         {

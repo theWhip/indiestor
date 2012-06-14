@@ -171,7 +171,7 @@ class EtcGroup
 	// FIND GROUP FOR MEMBER
 =======
 	// FIND GROUP FOR USER
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	//----------------------------------------------
 	function findGroupForUserName($userName)
 	{

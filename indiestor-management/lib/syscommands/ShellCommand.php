@@ -46,4 +46,4 @@ class ShellCommand
 	}
 }
 
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders

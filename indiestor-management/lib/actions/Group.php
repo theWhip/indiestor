@@ -67,7 +67,7 @@ class Group extends EntityType
 		echo "no members for group $groupName\n";
 	}
 
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	static function showMembers($commandAction)
 	{
 		$ISGroupName=ProgramActions::$entityName;
@@ -83,7 +83,7 @@ class Group extends EntityType
 
 		if($group->members==null) 
 		{
-			self::noMember($ISGroupName);
+			self::noMembers($ISGroupName);
 			return;
 		}
 
@@ -101,7 +101,7 @@ class Group extends EntityType
                 }
 
 		ActionEngine::printUserRecords($userRecords);
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	}
 }
 

@@ -19,5 +19,5 @@ require_once('mv.php');
 require_once('cp.php');
 =======
 require_once_folder(dirname(__FILE__));
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 

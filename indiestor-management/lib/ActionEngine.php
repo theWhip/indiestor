@@ -83,7 +83,7 @@ class UserReportRecord
 		}
 	}
 }
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 
 class ActionEngine
 {
@@ -144,7 +144,7 @@ class ActionEngine
 		}
 	}
 
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	static function sysGroupName($indieStorGroupName)
 	{
 		return self::indiestorGroupPrefix.$indieStorGroupName;
@@ -301,7 +301,7 @@ class ActionEngine
 		return $GB;
 	}
 
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
         static function execute()
         {
                 $className=self::actionCamelCaseName(ProgramActions::$entityType);
@@ -340,4 +340,4 @@ class ActionEngine
 <<<<<<< HEAD
 =======
 
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders

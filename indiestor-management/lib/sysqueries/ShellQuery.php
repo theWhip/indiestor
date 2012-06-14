@@ -24,6 +24,6 @@ function sysquery($commandString)
 		echo "--result--> $result";
 	}
 	return $result;
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 }
 

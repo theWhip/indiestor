@@ -11,7 +11,7 @@
 require_once('ShellCommand.php');
 
 =======
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 /*
 
 Copies a folder recursively preserving all atributes. Example:

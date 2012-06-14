@@ -167,7 +167,11 @@ class EtcGroup
 	}
 
 	//----------------------------------------------
+<<<<<<< HEAD
 	// FIND GROUP FOR MEMBER
+=======
+	// FIND GROUP FOR USER
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	//----------------------------------------------
 	function findGroupForUserName($userName)
 	{

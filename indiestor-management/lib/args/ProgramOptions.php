@@ -16,7 +16,7 @@ class ProgramOptions
 <<<<<<< HEAD
 	static $debug=false;
 =======
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 
         static function ifNull($defaultValue,$value)
         {
@@ -38,11 +38,26 @@ class ProgramOptions
 =======
                                 case 'simulate': self::$simulation=true; break;
                                 case 'verbose': self::$verbose=true; break;
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
                         }
                 }
         }
 
+<<<<<<< HEAD
+=======
+	static function hideStdErrOutput()
+	{
+		if(self::$verbose)
+		{
+			return ''; //don't hide
+		}
+		else
+		{
+			return '2> /dev/null'; //hide
+		}
+	}
+
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	static function bool2String($bool)
 	{
 		if($bool) return 'true'; else return 'false';
@@ -58,7 +73,7 @@ class ProgramOptions
 <<<<<<< HEAD
 		$buffer.="debug: ".self::bool2String(self::$debug)."\n";
 =======
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 		return $buffer;
         }
 }

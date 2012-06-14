@@ -30,7 +30,7 @@ class CommandActionDefinitions
 <<<<<<< HEAD
 =======
 		$this->addPrimaryAction("volumes","purge-fstab-backups");
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 		$this->addExecOptionDefinitions("volumes");
 
 		//groups
@@ -49,7 +49,7 @@ class CommandActionDefinitions
 		$this->addPrimaryAction("volume","quota-remove");
 		$this->addExecOptionDefinitions("volume");
 
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 		//group
 		$this->addPrimaryAction("group","add");
 		$this->addPrimaryAction("group","delete");
@@ -63,13 +63,15 @@ class CommandActionDefinitions
 		$this->addSecondaryAction("user","set-home",true);
 		$this->addSecondaryAction("user","remove-home",false);
 		$this->addSecondaryAction("user","move-home-content",false);
+<<<<<<< HEAD
 		$this->addSecondaryAction("user","add-to-group",true);
 		$this->addSecondaryAction("user","remove-from-group",false);
-<<<<<<< HEAD
 =======
+		$this->addSecondaryAction("user","set-group",true);
+		$this->addSecondaryAction("user","unset-group",false);
 		$this->addSecondaryAction("user","set-quota",true);
 		$this->addSecondaryAction("user","remove-quota",false);
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
                 $this->addActionDefinition("user","set-passwd",true,2,false,false);
 		$this->addSecondaryAction("user","lock",false);
 		$this->addSecondaryAction("user","remove-from-indiestor",false);
@@ -96,7 +98,7 @@ class CommandActionDefinitions
 	}
 
 	function addSecondaryAction($entity,$action,$hasArg=false)
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	{
                 $this->addActionDefinition($entity,$action,$hasArg,2,false);
 	}
@@ -111,11 +113,6 @@ class CommandActionDefinitions
 	{
                 $this->incompatibleActions=array();
 <<<<<<< HEAD
-=======
-		$this->addIncompatibleActionPair("volume","quota-on","quota-off");
-		$this->addIncompatibleActionPair("volume","quota-on","quota-remove");
-		$this->addIncompatibleActionPair("volume","quota-off","quota-remove");
->>>>>>> lots of fixes to quota support
 		$this->addIncompatibleActionPair('group','add','delete');
 		$this->addIncompatibleActionPair('user','add','delete');
 		$this->addIncompatibleActionPair('user','add','remove-home');
@@ -123,10 +120,6 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair('user','delete','set-passwd');
 		$this->addIncompatibleActionPair('user','delete','set-home');
 		$this->addIncompatibleActionPair('user','delete','add-to-group');
-<<<<<<< HEAD
-=======
-		$this->addIncompatibleActionPair('user','delete','set-quota');
->>>>>>> lots of fixes to quota support
 		$this->addIncompatibleActionPair('user','lock','set-passwd');
 		$this->addIncompatibleActionPair('user','remove-from-indiestor','add');
 		$this->addIncompatibleActionPair('user','remove-from-indiestor','delete');
@@ -135,10 +128,28 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair('user','move-home-content','add');
 		$this->addIncompatibleActionPair('user','move-home-content','delete');
 		$this->addIncompatibleActionPair('user','move-home-content','remove-home');
-<<<<<<< HEAD
 =======
+		$this->addIncompatibleActionPair("volume","quota-on","quota-off");
+		$this->addIncompatibleActionPair("volume","quota-on","quota-remove");
+		$this->addIncompatibleActionPair("volume","quota-off","quota-remove");
+		$this->addIncompatibleActionPair('group','add','delete');
+		$this->addIncompatibleActionPair('user','add','delete');
+		$this->addIncompatibleActionPair('user','add','remove-home');
+		$this->addIncompatibleActionPair('user','add','unset-group');
+		$this->addIncompatibleActionPair('user','delete','set-passwd');
+		$this->addIncompatibleActionPair('user','delete','set-home');
+		$this->addIncompatibleActionPair('user','delete','set-group');
+		$this->addIncompatibleActionPair('user','delete','set-quota');
+		$this->addIncompatibleActionPair('user','lock','set-passwd');
+		$this->addIncompatibleActionPair('user','remove-from-indiestor','add');
+		$this->addIncompatibleActionPair('user','remove-from-indiestor','delete');
+		$this->addIncompatibleActionPair('user','remove-from-indiestor','set-group');
+		$this->addIncompatibleActionPair('user','remove-from-indiestor','unset-group');
+		$this->addIncompatibleActionPair('user','move-home-content','add');
+		$this->addIncompatibleActionPair('user','move-home-content','delete');
+		$this->addIncompatibleActionPair('user','move-home-content','remove-home');
 		$this->addIncompatibleActionPair('user','set-quota','remove-quota');
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	}
 
 	function syntheticKey($entityType,$action)

@@ -11,7 +11,7 @@
 require_once('ShellQuery.php');
 
 =======
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 /*
 
 Returns all groups in which a user is member. Example:

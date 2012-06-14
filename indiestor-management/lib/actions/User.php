@@ -54,8 +54,13 @@ class User extends EntityType
 		$otherUser=$etcPasswd->findUserByHomeFolder($homeFolder);
 		if($otherUser==null) return; //nobody owns this folder as home folder
 		$otherUserName=$otherUser->name;
+<<<<<<< HEAD
 		ActionEngine::error("home folder $homeFolder already belongs".
 			" to user $otherUserName",
+=======
+		ActionEngine::error("home folder '$homeFolder' already belongs".
+			" to user '$otherUserName'",
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 			ERRNUM_HOME_FOLDER_ALREADY_BELONGS_TO_USER);
 	}
 
@@ -63,7 +68,11 @@ class User extends EntityType
 	{
 		if(substr($homeFolder,0,1)!='/')
 		{
+<<<<<<< HEAD
 			ActionEngine::error("home folder must be absolute path".
+=======
+			ActionEngine::error("home folder '$homeFolder' must be absolute path".
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 					" (starting with a '/' character)",
 					ERRNUM_HOME_FOLDER_MUST_BE_ABSOLUTE_PATH);
 		}
@@ -80,7 +89,7 @@ class User extends EntityType
 		}
 	}
 
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	static function checkValidCharactersInUserName($userName)
 	{
 		if(!ActionEngine::isValidCharactersInName($userName))
@@ -152,7 +161,11 @@ class User extends EntityType
 		if($group!=null)
 		{
 			$groupName=$group->name;
+<<<<<<< HEAD
 			ActionEngine::error("user '$userName' already member of group $groupName",
+=======
+			ActionEngine::error("user '$userName' already member of group '$groupName'",
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 						ERRNUM_DUPLICATE_MEMBERSHIP);
 		}
 	}
@@ -175,7 +188,11 @@ class User extends EntityType
 						ERRNUM_REMOVE_HOME_CONTENT_WITHOUT_DELETE);
 	}
 
+<<<<<<< HEAD
 	static function addToGroup($commandAction)
+=======
+	static function setGroup($commandAction)
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	{
 		$userName=ProgramActions::$entityName;
 		//if user does not exists, abort
@@ -210,7 +227,11 @@ class User extends EntityType
                 return implode(',',$newGroupNamesForUserName);
 	}
 
+<<<<<<< HEAD
 	static function removeFromGroup($commandAction)
+=======
+	static function unsetGroup($commandAction)
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	{
 		$userName=ProgramActions::$entityName;
 		//if user does not exists, abort
@@ -249,7 +270,7 @@ class User extends EntityType
 <<<<<<< HEAD
 =======
 		self::checkIfUserAlreadyLocked($userName);
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 		syscommand_usermod_lock($userName);
 		EtcPasswd::reset();
 	}
@@ -301,7 +322,11 @@ class User extends EntityType
 			}
 			else
 			{
+<<<<<<< HEAD
 				ActionEngine::error("cannot move home content to folder $homeFolder;".
+=======
+				ActionEngine::error("cannot move home content to folder '$homeFolder';".
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 					"the folder exists already",
 					ERRNUM_CANNOT_MOVE_HOME_CONTENT_TO_EXISTING_FOLDER);
 			}
@@ -318,7 +343,11 @@ class User extends EntityType
 			{
 				if(!is_dir($homeFolder))
 				{
+<<<<<<< HEAD
 					ActionEngine::error("cannot set home content to $homeFolder;".
+=======
+					ActionEngine::error("cannot set home content to '$homeFolder';".
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 					"it is not a folder",
 					ERRNUM_CANNOT_MOVE_HOME_TO_NON_FOLDER);
 				}
@@ -406,6 +435,6 @@ class User extends EntityType
 		$userRecords[]=$userRecord;
 		ActionEngine::printUserRecords($userRecords);
 	}
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 }
 

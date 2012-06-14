@@ -11,7 +11,7 @@
 require_once('ShellQuery.php');
 
 =======
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 /*
 Returns all device-hosted filesystems on the system. Example:
 
@@ -29,7 +29,7 @@ class DFFileSystem
 <<<<<<< HEAD
 =======
 	var $quotaYN=null;
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 	var $storageGB=null;
 	var $usedGB=null;
 	var $availableGB=null;
@@ -65,7 +65,7 @@ function sysquery_df()
 			else if($quotaEnabled===false) $dfFileSystem->quotaYN='N';
 			else $dfFileSystem->quotaYN='?'; 
 
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders
 			$dfFileSystems[]=$dfFileSystem;
 		}
 	}
@@ -90,4 +90,4 @@ function sysquery_df_device_for_folder($folder)
 }
 
 
->>>>>>> lots of fixes to quota support
+>>>>>>> fixes to error messages; reorganized indiestor subfolders

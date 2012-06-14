@@ -31,7 +31,7 @@ class Volumes extends EntityType
 						$dfFileSystem->storageGB,
 						$dfFileSystem->usedGB,
 						$dfFileSystem->availableGB,
-						100-$dfFileSystem->percUse,
+						$dfFileSystem->percUse,
 						$dfFileSystem->mountedOn);
 			}
 		}
