@@ -9,16 +9,19 @@
 
 require_once('CommandActionDefinition.php');
 require_once('CommandIncompatibleActionPair.php');
+require_once('CommandMandatoryActionPair.php');
 
 class CommandActionDefinitions
 {
         var $actionDefinitions=null;
 	var $incompatibleActions=null;
+	var $mandatoryActions=null;
 
         function __construct()
         {
 		$this->configureActionDefinitions();
 		$this->configureIncompatibleActions();
+		$this->configureMandatoryActions();
         }
 
 	function configureActionDefinitions()
@@ -112,7 +115,27 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair('user','move-home-content','delete');
 		$this->addIncompatibleActionPair('user','move-home-content','remove-home');
 		$this->addIncompatibleActionPair('user','set-quota','remove-quota');
+		$this->addIncompatibleActionPair('user','delete','unset-group');
+		$this->addIncompatibleActionPair('user','delete','remove-quota');
+		$this->addIncompatibleActionPair('user','delete','lock');
+		$this->addIncompatibleActionPair('user','set-home','remove-home');
+		$this->addIncompatibleActionPair('user','set-group','unset-group');
 	}
+
+	function configureMandatoryActions()
+	{
+                $this->mandatoryActions=array();
+		$this->addMandatoryActionPair("user",'remove-home','delete');
+		$this->addMandatoryActionPair("user",'move-home-content','set-home');
+	}
+
+	function addMandatoryActionPair($entityType,$action1,$action2)
+	{
+		$mandatorySyntheticKey=$this->mandatorySyntheticKey($entityType,$action1,$action2);
+		$this->mandatoryActions[$mandatorySyntheticKey]=
+			new CommandMandatoryActionPair($entityType,$action1,$action2);
+	}
+
 
 	function syntheticKey($entityType,$action)
 	{
@@ -120,6 +143,11 @@ class CommandActionDefinitions
 	}
 
 	function incompatibleSyntheticKey($entityType,$action1,$action2)
+	{
+		return $entityType.'|'.$action1.'|'.$action2;
+	}
+
+	function mandatorySyntheticKey($entityType,$action1,$action2)
 	{
 		return $entityType.'|'.$action1.'|'.$action2;
 	}
@@ -145,6 +173,15 @@ class CommandActionDefinitions
 			if($this->checkIncompatibleActions($entityType,$action,$newAction) ||
 			   $this->checkIncompatibleActions($entityType,$newAction,$action))
 				return $action;			
+		}
+		return null;
+	}
+
+	function mandatoryPrerequisiteAction($entityType,$action)
+	{
+		foreach($this->mandatoryActions as $mandatoryActionPair)
+		{
+			if($mandatoryActionPair->action1==$action) return $mandatoryActionPair->action2;
 		}
 		return null;
 	}

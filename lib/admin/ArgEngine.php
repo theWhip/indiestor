@@ -22,6 +22,7 @@ define('ERRNUM_MISSING_ACTION_ARGUMENT',17);
 define('ERRNUM_INVALID_ACTION_ARGUMENT',18);
 define('ERRNUM_MISSING_ENTITY_NAME',19);
 define('ERRNUM_NO_ACTIONS',20);
+define('ERRNUM_MANDATORY_PREREQUISITE_ACTION_MISSING',21);
 
 class ArgEngine
 {
@@ -73,6 +74,7 @@ class ArgEngine
 		$this->processActions();
 		$this->checkEntity();
 		$this->checkActions();
+		$this->checkMandatoryActions();
 		ProgramActions::sortActionsByPriority();
 	}
 
@@ -149,7 +151,7 @@ class ArgEngine
 		{
 			$this->processCurrentArg();
 			$this->moveNext();
-		}        
+		}
 	}
 
 	function processCurrentArg()
@@ -239,6 +241,28 @@ class ArgEngine
 			$this->argsError("No action specified for entity type '$entityType'",true,
 					ERRNUM_NO_ACTIONS);
 	}
+
+	function checkMandatoryActions()
+	{
+		$entityType=ProgramActions::$entityType;
+	        foreach(ProgramActions::$actions as $commandAction)
+	        {
+	                $action=$commandAction->action;
+			//check if the action has a mandatory prerequisite action
+			$mandatoryPrerequisiteAction=$this->commandActionDefinitions->mandatoryPrerequisiteAction($entityType,$action);
+			if($mandatoryPrerequisiteAction!=null)
+			{
+				//check if the mandatory prerequisite action is present
+				if(!array_key_exists($mandatoryPrerequisiteAction,ProgramActions::$actions))
+				{
+					$this->argsError("Action '$action' for entity type '$entityType' can only be used along ".
+							"with '$mandatoryPrerequisiteAction'",
+							true, ERRNUM_MANDATORY_PREREQUISITE_ACTION_MISSING);
+				}
+			}
+	        }
+	}
+
 
 	function processEntity()
 	{

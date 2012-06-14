@@ -35,7 +35,9 @@ $forbidden=array(
 	array('set-group','remove-from-indiestor'),
 	array('unset-group','remove-from-indiestor'),
 	array('set-quota','remove-quota'),
-	array('set-passwd','lock')
+	array('set-passwd','lock'),
+	array('remove-from-indiestor','add'),
+	array('move-home-content','remove-home')
 );
 
 $mandatory=array(

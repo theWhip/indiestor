@@ -7,17 +7,17 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-class CommandEntityDefinition
+class CommandMandatoryActionPair
 {
         var $entityType=null;
-        var $hasArg=null;
-	var $mustHaveActions=null;
+        var $action1=null;
+        var $action2=null;
 
-        function __construct($entityType,$hasArg,$mustHaveActions)
+        function __construct($entityType,$action1,$action2)
         {
                 $this->entityType=$entityType;
-                $this->hasArg=$hasArg;
-		$this->mustHaveActions=$mustHaveActions;
+                $this->action1=$action1;
+                $this->action2=$action2;
         }
 }
 
