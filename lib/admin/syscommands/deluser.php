@@ -19,6 +19,6 @@ function syscommand_deluser($userName,$removeHome=false)
 {
 	if($removeHome) $removeHomeOption='--remove-home';
 	else $removeHomeOption='';
-	ShellCommand::exec("deluser $removeHomeOption $userName");
+	ShellCommand::exec_fail_if_error("deluser $removeHomeOption $userName");
 }
 

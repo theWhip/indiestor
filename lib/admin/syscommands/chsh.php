@@ -17,6 +17,6 @@ $ chsh --shell /bin/false john
 
 function syscommand_chsh($userName,$shell)
 {
-	ShellCommand::exec("chsh --shell $shell $userName");
+	ShellCommand::exec_fail_if_error("chsh --shell $shell $userName");
 }
 

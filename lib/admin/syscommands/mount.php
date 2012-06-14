@@ -17,6 +17,6 @@ $ mount -o remount /
 
 function syscommand_mount_remount($mountPoint)
 {
-	ShellCommand::exec("mount -o remount $mountPoint");
+	ShellCommand::exec_fail_if_error("mount -o remount $mountPoint");
 }
 

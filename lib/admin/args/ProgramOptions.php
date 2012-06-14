@@ -33,18 +33,6 @@ class ProgramOptions
                 }
         }
 
-	static function hideStdErrOutput()
-	{
-		if(self::$verbose)
-		{
-			return ''; //don't hide
-		}
-		else
-		{
-			return '2> /dev/null'; //hide
-		}
-	}
-
 	static function bool2String($bool)
 	{
 		if($bool) return 'true'; else return 'false';

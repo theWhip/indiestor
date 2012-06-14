@@ -17,6 +17,6 @@ $ chown -R john.john /var/users/stor2
 
 function syscommand_chown_R($folder,$userName,$groupName)
 {
-	ShellCommand::exec("chown -R $userName.$groupName $folder");
+	ShellCommand::exec_fail_if_error("chown -R $userName.$groupName $folder");
 }
 

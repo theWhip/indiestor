@@ -17,7 +17,7 @@ $ usermod -a -G myfriends john
 
 function syscommand_usermod_aG($userName,$groupName)
 {
-	ShellCommand::exec("usermod -a -G $groupName $userName");
+	ShellCommand::exec_fail_if_error("usermod -a -G $groupName $userName");
 }
 
 /*
@@ -30,7 +30,7 @@ $ usermod -G myfriends john
 
 function syscommand_usermod_G($userName,$groupNames)
 {
-	ShellCommand::exec("usermod -G $groupNames  $userName");
+	ShellCommand::exec_fail_if_error("usermod -G $groupNames  $userName");
 }
 
 /*
@@ -44,7 +44,7 @@ $ usermod --password john '343#&*'
 function syscommand_usermod_password($userName,$passwd)
 {
 	$cryptedPwd=crypt($passwd);
-	ShellCommand::exec("usermod --password '$cryptedPwd' $userName");
+	ShellCommand::exec_fail_if_error("usermod --password '$cryptedPwd' $userName");
 }
 
 /*
@@ -57,7 +57,7 @@ $ usermod --lock john
 
 function syscommand_usermod_lock($userName)
 {
-	ShellCommand::exec("usermod --lock $userName");
+	ShellCommand::exec_fail_if_error("usermod --lock $userName");
 }
 
 /*
@@ -70,6 +70,6 @@ $ usermod --home /var/users/stor1 john
 
 function syscommand_usermod_home($userName,$homeFolder)
 {
-	ShellCommand::exec("usermod --home $homeFolder $userName");
+	ShellCommand::exec_fail_if_error("usermod --home $homeFolder $userName");
 }
 

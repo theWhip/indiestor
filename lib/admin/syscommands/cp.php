@@ -17,6 +17,6 @@ $ cp /home/john /var/users/stor3
 
 function syscommand_cp_aR($fromPath,$toPath)
 {
-	ShellCommand::exec("cp -aR $fromPath $toPath");
+	ShellCommand::exec_fail_if_error("cp -aR $fromPath $toPath");
 }
 

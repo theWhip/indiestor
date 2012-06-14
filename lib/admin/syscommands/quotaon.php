@@ -17,6 +17,6 @@ $ quotaon -ug /
 
 function syscommand_quotaon($mountPoint)
 {
-	ShellCommand::exec("quotaon --format=vfsold -u $mountPoint");
+	ShellCommand::exec_fail_if_error("quotaon --format=vfsold -u $mountPoint");
 }
 

@@ -13,6 +13,7 @@ require_once(dirname(dirname(__FILE__)).'/common/etcfiles/all.php');
 require_once('syscommands/all.php');
 require_once('sysqueries/all.php');
 
+define('ERRNUM_NO_ACTIONS_JUST_OPTIONS_SPECIFIED',10);
 define('ERRNUM_USER_EXISTS_ALREADY',50);
 define('ERRNUM_GROUP_EXISTS_ALREADY',51);
 define('ERRNUM_GROUP_DOES_NOT_EXISTS',52);
@@ -96,7 +97,7 @@ class ActionEngine
 
 	static function error($msg,$errNum)
 	{
-		self::printStdErr("Error $errNum: $msg.\n");
+		self::printStdErr("ERR-VALIDATION-$errNum: $msg.\n");
 		exit($errNum);
 	}
 

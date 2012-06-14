@@ -17,6 +17,6 @@ $ mkdir /home/john/myfile
 
 function syscommand_mkdir($folder)
 {
-	ShellCommand::exec("mkdir $folder");
+	ShellCommand::exec_fail_if_error("mkdir $folder");
 }
 

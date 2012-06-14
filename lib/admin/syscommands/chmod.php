@@ -17,6 +17,6 @@ $ chmod 600 myfile.txt
 
 function syscommand_chmod_numeric($filePath,$permissions)
 {
-	ShellCommand::exec("chmod $permissions $filePath");
+	ShellCommand::exec_fail_if_error("chmod $permissions $filePath");
 }
 

@@ -3,7 +3,9 @@
                 "name": "alex",
                 "folders":
                 {
-                        "default": ["ALEX_DEFAULT_1"]
+                        "default": ["ALEX_DEFAULT_1"],
+                        "avid": ["ALEX_AVID_1"]
+
                 }
         },
         {

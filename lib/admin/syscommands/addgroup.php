@@ -17,6 +17,6 @@ $ addgroup myfriends
 
 function syscommand_addgroup($groupName)
 {
-	ShellCommand::exec("addgroup $groupName");
+	ShellCommand::exec_fail_if_error("addgroup $groupName");
 }
 

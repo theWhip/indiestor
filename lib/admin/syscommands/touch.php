@@ -17,6 +17,6 @@ $ touch myfile.txt
 
 function syscommand_touch($filePath)
 {
-	ShellCommand::exec("touch $filePath");	
+	ShellCommand::exec_fail_if_error("touch $filePath");	
 }
 

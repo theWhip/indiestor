@@ -17,6 +17,6 @@ $ delgroup myfriends
 
 function syscommand_delgroup($groupName)
 {
-	ShellCommand::exec("delgroup $groupName");
+	ShellCommand::exec_fail_if_error("delgroup $groupName");
 }
 

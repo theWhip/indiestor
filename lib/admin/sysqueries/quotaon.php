@@ -24,8 +24,7 @@ function sysquery_quotaon_p($deviceOrMountPoint)
 		null: 	error while trying to figure it out
 	*/
 
-	$hideStdErrOutput=ProgramOptions::hideStdErrOutput();
-	$result=ShellCommand::query("quotaon --format=vfsold -p $deviceOrMountPoint $hideStdErrOutput | grep user");
+	$result=ShellCommand::query("quotaon --format=vfsold -p $deviceOrMountPoint | grep user");
 	//no result is not an error; it means that the quota system is not even active
 	if($result==null) return false;
 	//if the result says 'is off', the quota has been activated, but quota are disabled

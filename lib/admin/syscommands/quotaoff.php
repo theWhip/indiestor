@@ -17,6 +17,6 @@ $ quotaoff /
 
 function syscommand_quotaoff($mountPoint)
 {
-	ShellCommand::exec("quotaoff --format=vfsold -u $mountPoint");
+	ShellCommand::exec_fail_if_error("quotaoff --format=vfsold -u $mountPoint");
 }
 

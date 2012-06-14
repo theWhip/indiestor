@@ -40,6 +40,7 @@ function syscommand_adduser($userName,$homeFolder=null)
 		}
 	}
 
-	ShellCommand::exec("adduser --disabled-password --gecos '' $homeFolderOption $noCreateHome $userName");
+	ShellCommand::exec_fail_if_error(
+		"adduser --disabled-password --gecos '' $homeFolderOption $noCreateHome $userName");
 }
 
