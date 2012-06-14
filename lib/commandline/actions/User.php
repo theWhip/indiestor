@@ -55,6 +55,10 @@ class User extends EntityType
 	{
                 $etcGroup=EtcGroup::instance();
 		$indiestorGroup=$etcGroup->indiestorGroup;
+<<<<<<< HEAD
+=======
+                if($indiestorGroup==null) return;
+>>>>>>> fixed bug in --user -add
 		if($indiestorGroup->findMember($userName)!=null)
 		{
 			ActionEngine::error("indiestor user '$userName' exists already",
@@ -66,6 +70,10 @@ class User extends EntityType
 	{
                 $etcGroup=EtcGroup::instance();
 		$indiestorGroup=$etcGroup->indiestorGroup;
+<<<<<<< HEAD
+=======
+                if($indiestorGroup==null) return;
+>>>>>>> fixed bug in --user -add
 		if($indiestorGroup->findMember($userName)==null)
 		{
 			ActionEngine::error("indiestor user '$userName' does not exist",

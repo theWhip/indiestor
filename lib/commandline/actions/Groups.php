@@ -12,7 +12,11 @@ class Groups extends EntityType
 
 	static function noMembers()
 	{
+<<<<<<< HEAD
 		echo "no indiestor members\n";
+=======
+		echo "no indiestor groups\n";
+>>>>>>> fixed bug in --user -add
 	}
 
         static function show($commandAction)
