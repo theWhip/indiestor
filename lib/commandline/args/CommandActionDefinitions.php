@@ -44,15 +44,19 @@ class CommandActionDefinitions
 		$this->addPrimaryAction("user","delete");
 		$this->addSecondaryAction("user","set-home",true);
 		$this->addSecondaryAction("user","remove-home",false);
+<<<<<<< HEAD
 		$this->addSecondaryAction("user","add-to-group",true);
 		$this->addSecondaryAction("user","remove-from-group",false);
                 $this->addActionDefinition("user","set-passwd",true,2,false,false);
-<<<<<<< HEAD
 =======
+		$this->addSecondaryAction("user","move-home-content",false);
+		$this->addSecondaryAction("user","add-to-group",true);
+		$this->addSecondaryAction("user","remove-from-group",false);
+                $this->addActionDefinition("user","set-passwd",true,2,false,false);
 		$this->addSecondaryAction("user","lock",false);
 		$this->addSecondaryAction("user","unlock",false);
 		$this->addSecondaryAction("user","remove-from-indiestor",false);
->>>>>>> added --user -set-passwd -lock -unlock
+>>>>>>> added --user -set-home -move-home-content -remove-home
 		$this->addOutputAction("user","show");
 		$this->addExecOptionDefinitions("user");
 	}
@@ -95,7 +99,10 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair('user','remove-from-indiestor','delete');
 		$this->addIncompatibleActionPair('user','remove-from-indiestor','add-to-group');
 		$this->addIncompatibleActionPair('user','remove-from-indiestor','remove-from-group');
->>>>>>> added --user -set-passwd -lock -unlock
+		$this->addIncompatibleActionPair('user','move-home-content','add');
+		$this->addIncompatibleActionPair('user','move-home-content','delete');
+		$this->addIncompatibleActionPair('user','move-home-content','remove-home');
+>>>>>>> added --user -set-home -move-home-content -remove-home
 	}
 
 	function syntheticKey($entityType,$action)

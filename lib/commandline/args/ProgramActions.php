@@ -38,6 +38,15 @@ class ProgramActions
 		return array_key_exists($actionName,self::$actions);
 	}
 
+<<<<<<< HEAD
+=======
+	static function findByName($actionName)
+	{
+		if(!self::actionExists($actionName)) return null;
+		return self::$actions[$actionName];
+	}
+
+>>>>>>> added --user -set-home -move-home-content -remove-home
 	static function actionPriorityArray()
 	{
 		$priorities=array();

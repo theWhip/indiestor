@@ -27,7 +27,14 @@ define('ERRNUM_GROUP_DOES_NOT_EXIST',54);
 define('ERRNUM_DUPLICATE_MEMBERSHIP',55);
 define('ERRNUM_USER_NOT_MEMBER_OF_ANY_GROUP',56);
 define('ERRNUM_CANNOT_ADD_INDIESTOR_SYSUSER',57);
->>>>>>> added --user -set-passwd -lock -unlock
+define('ERRNUM_USERNAME_INVALID_CHARACTERS',58);
+define('ERRNUM_GROUPNAME_INVALID_CHARACTERS',58);
+define('ERRNUM_MOVE_HOME_CONTENT_WITHOUT_SET_HOME',59);
+define('ERRNUM_CANNOT_MOVE_HOME_CONTENT_TO_EXISTING_FOLDER',60);
+define('ERRNUM_CANNOT_MOVE_HOME_TO_NON_FOLDER',61);
+define('ERRNUM_HOME_FOLDER_MUST_BE_ABSOLUTE_PATH',62);
+define('ERRNUM_REMOVE_HOME_CONTENT_WITHOUT_DELETE',63);
+>>>>>>> added --user -set-home -move-home-content -remove-home
 
 class ActionEngine
 {
@@ -36,7 +43,7 @@ class ActionEngine
 <<<<<<< HEAD
 =======
 	const indiestorSysUserName='indiestor';
->>>>>>> added --user -set-passwd -lock -unlock
+>>>>>>> added --user -set-home -move-home-content -remove-home
 
 	static function printStdErr($msg)
 	{
@@ -72,7 +79,7 @@ class ActionEngine
 		return $userName==self::indiestorSysUserName;
 	}
 
->>>>>>> added --user -set-passwd -lock -unlock
+>>>>>>> added --user -set-home -move-home-content -remove-home
 	static function indiestorGroupName($sysGroupName)
 	{
 		$lenISGPrefix=strlen(self::indiestorGroupPrefix);
@@ -80,6 +87,16 @@ class ActionEngine
                 return substr($sysGroupName,$lenISGPrefix);
 	}
 
+<<<<<<< HEAD
+=======
+	static function isValidCharactersInName($name)
+	{
+		//a valid name must start with a letter
+		//and be followed by a letter of a digit, a dash or an underscore
+		return preg_match('/^[a-z][-a-z0-9_]*$/',$name);
+	}
+
+>>>>>>> added --user -set-home -move-home-content -remove-home
         static function execute()
         {
                 $className=self::actionCamelCaseName(ProgramActions::$entityType);

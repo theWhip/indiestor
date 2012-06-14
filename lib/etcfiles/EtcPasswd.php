@@ -8,6 +8,15 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+<<<<<<< HEAD
+=======
+class oneUser
+{
+	var $name=null;
+	var $homeFolder=null;
+}
+
+>>>>>>> added --user -set-home -move-home-content -remove-home
 class EtcPasswd
 {
 	static $instance=null;	
@@ -67,8 +76,15 @@ class EtcPasswd
 	function parseEtcPasswdFileLine($etcPasswdFileLine)
 	{
 		$etcPasswdFileLinefields=explode(':',$etcPasswdFileLine);
+<<<<<<< HEAD
 		$user=$etcPasswdFileLinefields[0];
 		$this->users[$user]=$user;
+=======
+		$user=new oneUser();
+		$user->name=$etcPasswdFileLinefields[0];
+		$user->homeFolder=$etcPasswdFileLinefields[5];
+		$this->users[$user->name]=$user;
+>>>>>>> added --user -set-home -move-home-content -remove-home
 	}
 
 	//----------------------------------------------
@@ -77,6 +93,7 @@ class EtcPasswd
 
 	function exists($userName)
 	{
+<<<<<<< HEAD
 		foreach($this->users as $user)
 		{
 			if($user==$userName)
@@ -85,6 +102,25 @@ class EtcPasswd
 			}
 		}
 		return false;
+=======
+		return $this->findUserByName($userName)!=null;
+	}
+
+	//----------------------------------------------
+	// FIND USER BY NAME
+	//----------------------------------------------
+
+	function findUserByName($userName)
+	{
+		foreach($this->users as $user)
+		{
+			if($user->name==$userName)
+			{
+				return $user;
+			}
+		}
+		return null;
+>>>>>>> added --user -set-home -move-home-content -remove-home
 	}
 
 }
