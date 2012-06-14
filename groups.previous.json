@@ -3,14 +3,6 @@
                 "name":"groupa",
                 "members": 
                 [ 
-                        {       
-                                "name": "alex",
-<<<<<<< HEAD
-                                quota: "10"
-=======
-                                "quota": "10"
->>>>>>> move groups.json
-                        },
                         {
                                 "name":"john",
                                 "quota":"20"
@@ -20,6 +12,20 @@
                                 "quota":"30"
                         }
                 ]
-        }
+        },
+	{
+		"name":"groupb",
+		"members":
+		[
+			{
+				"name":"sandra",
+				"quota":"100"
+			},
+			{
+				"name":"alex",
+				"quota":"50"
+			}
+		]
+	}
 ]
 

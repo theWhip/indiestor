@@ -1,0 +1,21 @@
+#!/usr/bin/php
+<?php
+/*
+        Indiestor simulation program
+
+	Written by Erik Poupaert, erik@sankuru.biz
+        Commissioned at peopleperhour.com 
+        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
+*/
+
+require_once('lib/JSONFile.php');
+require_once('lib/groupdefinitions/GroupDefinitions.php');
+require_once('indiestor-cl-args.php');
+
+processCommandLineArgs();
+
+$groups=JSONFile::load(ProgramOptions::$groupsFilePath);
+$memberFolders=JSONFile::load(ProgramOptions::$memberFoldersFilePath);
+$groupDefinitions=new GroupDefinitions($groups,$memberFolders);
+$groupDefinitions->FSPaths->dump();
+
