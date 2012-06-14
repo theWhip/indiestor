@@ -17,7 +17,6 @@ class CommandEntityDefinitions
         {
                 $this->entityDefinitions=array();
                 $this->add("help",false,false);
-                $this->add("sync",false,false);
                 $this->add("groups",false,true);
                 $this->add("group",true,true);
                 $this->add("users",false,true);

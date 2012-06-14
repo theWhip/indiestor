@@ -11,45 +11,21 @@
 require_once('lib/commandline/args/ProgramActions.php');
 require_once('lib/commandline/args/ProgramOptions.php');
 require_once('lib/commandline/args/CommandLineArgs.php');
-require_once('lib/JSONFile.php');
-require_once('lib/repairengine/RepairEngine.php');
+require_once('lib/commandline/ActionEngine.php');
 
 $commandLineArgs=new CommandLineArgs($argv);
+$commandLineArgs->process();
+
 ProgramOptions::extractFromProgramActions();
 
-//Temporarily: just output the Options and the Actions
-echo ProgramOptions::toString();
-echo ProgramActions::toString();
-exit(0);
 
 //check that the user is root
 $processUser = posix_getpwuid(posix_geteuid());
 $processUserName=$processUser['name'];
 if($processUserName!='root')
 {
-	die("Only root can run this script");
+	die("Only root can run this program");
 }
 
-//if needed, create a empty backup config
-if(!ProgramOptions::$simulation)
-{
-        if(!file_exists(ProgramOptions::$previousGroupsFilePath))
-        {
-	        file_put_contents(ProgramOptions::$previousGroupsFilePath,'[]');
-        }
-}
-
-//load config and previous config
-$indiestorPreviousGroups=JSONFile::load(ProgramOptions::$previousGroupsFilePath);
-$indiestorGroups=JSONFile::load(ProgramOptions::$groupsFilePath);
-
-//repair
-RepairEngine::repair($indiestorGroups,$indiestorPreviousGroups);
-
-//only do this if processing was successful
-if(!ProgramOptions::$simulation)
-{
-	unlink(ProgramOptions::$previousGroupsFilePath);
-	copy(ProgramOptions::$groupsFilePath,ProgramOptions::$previousGroupsFilePath);
-}
+ActionEngine::execute();
 

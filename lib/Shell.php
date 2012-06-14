@@ -7,6 +7,9 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+require_once('etcfiles/EtcGroup.php');
+require_once('etcfiles/EtcPasswd.php');
+
 class Shell
 {
 

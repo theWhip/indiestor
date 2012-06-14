@@ -24,23 +24,20 @@ class CommandActionDefinitions
 	function configureActionDefinitions()
 	{
                 $this->actionDefinitions=array();
-
-		//synch
-		$this->addAllOptionDefinitions("sync");
 		
 		//groups
-		$this->addOutputAction("groups","show-all");
-		$this->addConfigFileOptionDefinition("groups");
+		$this->addOutputAction("groups","show");
+		$this->addExecOptionDefinitions("groups");
 
 		//users
-		$this->addOutputAction("users","show-all");
-		$this->addConfigFileOptionDefinition("users");
+		$this->addOutputAction("users","show");
+		$this->addExecOptionDefinitions("users");
 
 		//group
 		$this->addPrimaryAction("group","add");
 		$this->addPrimaryAction("group","delete");
 		$this->addOutputAction("group","show-members");
-		$this->addAllOptionDefinitions("group");
+		$this->addExecOptionDefinitions("group");
 
 		//user
 		$this->addPrimaryAction("user","add");
@@ -48,11 +45,10 @@ class CommandActionDefinitions
 		$this->addSecondaryAction("user","set-home",true);
 		$this->addSecondaryAction("user","remove-home",false);
 		$this->addSecondaryAction("user","add-to-group",true);
-		$this->addSecondaryAction("user","remove-from-group",true);
-		//exception: set password will not cause the config file to be saved
+		$this->addSecondaryAction("user","remove-from-group",false);
                 $this->addActionDefinition("user","set-passwd",true,2,false,false);
 		$this->addOutputAction("user","show");
-		$this->addAllOptionDefinitions("user");
+		$this->addExecOptionDefinitions("user");
 	}
 
 	function addOutputAction($entity,$action)
@@ -70,32 +66,10 @@ class CommandActionDefinitions
                 $this->addActionDefinition($entity,$action,$hasArg,2,true,false);
 	}
 
-	function addAllOptionDefinitions($entity)
-	{
-		$this->addExecOptionDefinitions($entity);
-		$this->addConfigFileOptionDefinitions($entity);
-	}
-
 	function addExecOptionDefinitions($entity)
 	{
                 $this->addActionDefinition($entity,"simulate",false,9,false,true);
                 $this->addActionDefinition($entity,"verbose",false,9,false,true);
-	}
-
-	function addConfigFileOptionDefinition($entity)
-	{
-                $this->addActionDefinition($entity,"configfile",true,9,false,true);
-	}
-
-	function addPreviousConfigFileOptionDefinition($entity)
-	{
-                $this->addActionDefinition($entity,"previous-configfile",true,9,false,true);
-	}
-
-	function addConfigFileOptionDefinitions($entity)
-	{
-		$this->addConfigFileOptionDefinition($entity);
-		$this->addPreviousConfigFileOptionDefinition($entity);
 	}
 
 	function configureIncompatibleActions()
@@ -200,15 +174,13 @@ class CommandActionDefinitions
 		$buffer='';
 		foreach($this->actionDefinitions as $actionDefinition)
 		{
-			if($actionDefinition->entityType==$entityType)
+			if($actionDefinition->entityType==$entityType && !$actionDefinition->isOption)
 			{
-				if($actionDefinition->isOption) $buffer.='[';
 				$buffer.='-'.$actionDefinition->action;
 				if($actionDefinition->hasArg) 
 				{
 					$buffer.=' <arg>';
 				}
-				if($actionDefinition->isOption) $buffer.=']';
 				$buffer.=' ';
 			}
 		}

@@ -38,7 +38,6 @@ class CommandLineArgs
 		$this->args=$args;
 		$this->scriptName=$args[0];
 		$this->removeArg(0); //remove calling script
-		$this->process();
 	}
 
 	function argType($arg)
@@ -292,32 +291,22 @@ class CommandLineArgs
 
 	function usage()
 	{
-		$this->showEntityTypes();
 		$this->showCommands();
-	}
-
-	function showEntityTypes()
-	{
-		$this->printStdErr("** Entity types **\n");
-		foreach($this->commandEntityDefinitions->entityDefinitions as $entityDefinition)
-		{
-			$entityType=$entityDefinition->entityType;
-			$this->printStdErr("--$entityType ");			
-		}
-		$this->printStdErr("\n");
 	}
 
 	function showCommands()
 	{
-		$this->printStdErr("** Usage **\n");
+		$this->printStdErr("--- Usage ---\n");
 		$scriptName=$this->scriptName;
 		foreach($this->commandEntityDefinitions->entityDefinitions as $entityDefinition)
 		{
 			$entityType=$entityDefinition->entityType;
+                        if($entityDefinition->hasArg) $hasArg=' <arg>'; else $hasArg='';
 			$commandActionDefs=
 				$this->commandActionDefinitions->commandsForEntityType($entityType);
-			$this->printStdErr("$scriptName --$entityType $commandActionDefs\n");
+			$this->printStdErr("$scriptName --$entityType$hasArg $commandActionDefs\n");
 		}
+		$this->printStdErr("supported options: [-simulate] [-verbose]\n");
 	}
 }
 

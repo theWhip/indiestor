@@ -5,11 +5,7 @@
                 [ 
                         {       
                                 "name": "alex",
-<<<<<<< HEAD
                                 quota: "10"
-=======
-                                "quota": "10"
->>>>>>> move groups.json
                         },
                         {
                                 "name":"john",

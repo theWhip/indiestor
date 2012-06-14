@@ -12,12 +12,31 @@ class EtcOneGroup
 {
 	var $name=null;
 	var $members=null;
+
+	function findMember($memberName)
+	{
+		foreach($this->members as $memberInGroup)
+		{
+			if($memberInGroup==$memberName)
+			{
+				return $memberInGroup;
+			}
+		}
+		return null;
+	}
+
+	function isMember($userName)
+	{
+		if($this->findMember($userName)!=null) return true;
+		else return false;
+	}
 }
 
 class EtcGroup
 {
 	static $instance=null;	
 	var $groups=null;
+	var $indiestorGroup=null;
 
 	//----------------------------------------------
 	// INSTANCE
@@ -46,8 +65,44 @@ class EtcGroup
 	{
 		//group_name:password:GID:user_list
 		//user_list: a list of the usernames that are members of this group, separated by commas.
+                $this->groups=array();
 		$etcGroupFile=file_get_contents('/etc/group');
-		$this->parseEtcGroupFile($etcGroupFile);
+		$groups=$this->parseEtcGroupFile($etcGroupFile);
+		$this->findIndiestorUserGroup($groups);
+		$this->groups=$this->purge($groups);
+	}
+
+	//----------------------------------------------
+	// CHECK INDIESTOR USER GROUP PRESENT
+	//----------------------------------------------
+
+	function findIndiestorUserGroup($groups)
+	{
+		foreach($groups as $group)
+		{
+			if($group->name==ActionEngine::indiestorUserGroup)
+			{
+				$this->indiestorGroup=$group;
+				return;
+			}
+		}
+	}
+	//----------------------------------------------
+	// PURGE
+	//----------------------------------------------
+
+	function purge($groups)
+	{
+		$newGroups=array();
+		foreach($groups as $group)
+		{
+			if(ActionEngine::isSysGroupIndiestorGroup($group->name))
+		        {
+		                $group->name=ActionEngine::indiestorGroupName($group->name);
+				$newGroups[$group->name]=$group;
+		        }
+		}
+		return $newGroups;
 	}
 
 	//----------------------------------------------
@@ -56,14 +111,17 @@ class EtcGroup
 
 	function parseEtcGroupFile($etcGroupFile)
 	{
+		$groups=array();
 		$etcGroupFileLines=explode("\n",$etcGroupFile);
 		foreach($etcGroupFileLines as $etcGroupFileLine)
 		{
 			if(strlen($etcGroupFileLine)>0)
 			{
-				$this->parseEtcGroupFileLine($etcGroupFileLine);
+				$group=$this->parseEtcGroupFileLine($etcGroupFileLine);
+				$groups[$group->name]=$group;
 			}
 		}
+		return $groups;
 	}
 
 	//----------------------------------------------
@@ -73,10 +131,11 @@ class EtcGroup
 	function parseEtcGroupFileLine($etcGroupFileLine)
 	{
 		$etcGroupFileLinefields=explode(':',$etcGroupFileLine);
-		$oneGroup=new EtcOneGroup();
-		$oneGroup->name=$etcGroupFileLinefields[0];
-		$oneGroup->members=$this->parseEtcGroupFileLineMembers($etcGroupFileLinefields[3]);
-		$this->groups[]=$oneGroup;
+                $name=$etcGroupFileLinefields[0];
+	        $oneGroup=new EtcOneGroup();
+	        $oneGroup->name=$name;
+	        $oneGroup->members=$this->parseEtcGroupFileLineMembers($etcGroupFileLinefields[3]);
+	        return $oneGroup;
 	}
 
 	//----------------------------------------------
@@ -108,6 +167,21 @@ class EtcGroup
 	}
 
 	//----------------------------------------------
+	// FIND GROUP FOR MEMBER
+	//----------------------------------------------
+	function findGroupForUserName($userName)
+	{
+		foreach($this->groups as $group)
+		{
+			if($group->isMember($userName))
+			{
+				return $group;
+			}
+		}
+		return null;
+	}
+
+	//----------------------------------------------
 	// FIND GROUP
 	//----------------------------------------------
 
@@ -122,35 +196,5 @@ class EtcGroup
 		}
 		return null;
 	}
-
-	//----------------------------------------------
-	// FIND GROUP MEMBER
-	//----------------------------------------------
-	
-	function findGroupMember($group,$memberName)
-	{
-		foreach($group->members as $memberInGroup)
-		{
-			if($memberInGroup==$memberName)
-			{
-				return $memberInGroup;
-			}
-		}
-		return null;
-	}
-
-	//----------------------------------------------
-	// IS MEMBER
-	//----------------------------------------------
-
-	function isMember($groupName,$userName)
-	{
-		$group=$this->findGroup($groupName);
-		if($group==null) return false;
-		$member=$this->findGroupMember($group,$userName);
-		if($member==null) return false;
-		return true;
-	}
-
 }
 
