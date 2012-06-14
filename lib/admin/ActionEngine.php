@@ -104,7 +104,7 @@ class ActionEngine
 	{
 		$format1="%-10s %-20s %-7s %-10s %10s %10s %10s\n";
 		$format2="%-10s %-20s %-7s %-10s %10s %10s %10s\n";
-		printf($format1,'user','home','locked','group','quota','used','%avail');
+		printf($format1,'user','home','locked','group','quota','used','%used');
 		foreach($userRecords as $userRecord)
 		{
 			//locked
