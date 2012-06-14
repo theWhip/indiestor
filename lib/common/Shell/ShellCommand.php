@@ -13,7 +13,7 @@ class ShellCommand
 	{
 		if(ProgramOptions::$simulation || ProgramOptions::$verbose)
 		{
-			echo "-exec-> $command\n";
+			echo "# $command\n";
 		}
 		if(!ProgramOptions::$verbose) $command=$command.' 2>&1';
 		if(!ProgramOptions::$simulation)
@@ -21,9 +21,27 @@ class ShellCommand
 			$output=shell_exec($command);
 			if(ProgramOptions::$verbose)
 			{
-				echo "-output--> $output";
+				echo " $output";
 			}
 		}
+	}
+
+	function query($command)
+	{
+		if(ProgramOptions::$simulation || ProgramOptions::$verbose)
+		{
+			echo "# $command\n";
+		}
+
+		if(!ProgramOptions::$verbose) $command=$command.' 2>&1';
+
+		$result=shell_exec($command);
+
+		if(ProgramOptions::$simulation || ProgramOptions::$verbose)
+		{
+			echo "$result";
+		}
+		return $result;
 	}
 }
 

@@ -32,7 +32,7 @@ class DFFileSystem
 function sysquery_df()
 {
 	$dfFileSystems=array();
-	$fileSystemLines=sysquery('df -T -BG | grep -v tmpfs | tail -n +2');
+	$fileSystemLines=ShellCommand::query('df -T -BG | grep -v tmpfs | tail -n +2');
 	$fileSystemArray=explode("\n",$fileSystemLines);
 	foreach($fileSystemArray as $fileSystemLine)
 	{
@@ -69,7 +69,7 @@ function strip_last_char($string)
 
 function sysquery_df_device_for_folder($folder)
 {
-	$fileSystemLine=sysquery('df $folder | tail -n +2');	
+	$fileSystemLine=ShellCommand::query('df $folder | tail -n +2');	
 	$fileSystemLine=preg_replace('/ +/',' ',$fileSystemLine);
 	$fileSystemLineFields=explode(' ',$fileSystemLine);
 	$device=$fileSystemLineFields[0];

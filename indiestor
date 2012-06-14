@@ -43,7 +43,6 @@ require_once('lib/admin/args/ProgramOptions.php');
 require_once('lib/admin/ArgEngine.php');
 require_once('lib/admin/ActionEngine.php');
 require_once('lib/common/Shell/ShellCommand.php');
-require_once('lib/common/Shell/ShellQuery.php');
 
 $argEngine=new ArgEngine($argv);
 $argEngine->process();

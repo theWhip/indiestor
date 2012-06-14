@@ -17,7 +17,7 @@ $blkid /dev/sda1
 
 function sysquery_blkid($device)
 {
-	$deviceLine=sysquery("blkid $device");
+	$deviceLine=ShellCommand::query("blkid $device");
 	if($deviceLine=='') return null;
 	$deviceFields=explode(' ',$deviceLine);
 	$deviceUUIDfields=explode('=',$deviceFields[1]);

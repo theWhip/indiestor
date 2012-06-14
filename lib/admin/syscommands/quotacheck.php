@@ -52,8 +52,8 @@ function unclusterFuckTheHorribleGnome_gvfs($mountPoint)
 			if($errorCode==2) //cannot stat the folder
 			{
 				//some folders will cannot be stat'ed too, for other reasons
-				shellCommand::exec("umount $dirtyFuck 2> /dev/null");
-				shellCommand::exec("chmod 755 $dirtyFuck  2> /dev/null");
+				shell_exec("umount $dirtyFuck 2> /dev/null");
+				shell_exec("chmod 755 $dirtyFuck  2> /dev/null");
 			}
 		}
 	}

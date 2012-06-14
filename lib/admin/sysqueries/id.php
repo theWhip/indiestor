@@ -19,7 +19,7 @@ erik adm dialout cdrom plugdev lpadmin admin sambashare
 function sysquery_id_nG($userName)
 {
 	//group names for user name
-	$groupNamesForUserName=sysquery("id -nG $userName");
+	$groupNamesForUserName=ShellCommand::query("id -nG $userName");
         if($groupNamesForUserName==null) return array();
 	return explode(' ',$groupNamesForUserName);
 }

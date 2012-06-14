@@ -23,9 +23,23 @@ is so friendly to go in interactive mode and hang the process !!!
 
 function syscommand_adduser($userName,$homeFolder=null)
 {
-	if($homeFolder==null) $homeFolderOption='';
-	else $homeFolderOption="--home $homeFolder";
+	if($homeFolder==null)
+	{
+		$homeFolderOption='';
+	}
+	else
+	{
+		$homeFolderOption="--home $homeFolder";
+		if(file_exists($homeFolder))
+		{
+			$noCreateHome="--no-create-home";
+		}
+		else
+		{
+			$noCreateHome='';
+		}
+	}
 
-	ShellCommand::exec("adduser --disabled-password --gecos '' $homeFolderOption $userName");
+	ShellCommand::exec("adduser --disabled-password --gecos '' $homeFolderOption $noCreateHome $userName");
 }
 

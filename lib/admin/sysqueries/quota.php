@@ -27,7 +27,7 @@ Disk quotas for user john (uid 1011):
 function sysquery_quota_u($userName)
 {
 	$hideStdErrOutput=ProgramOptions::hideStdErrOutput();
-	$result=sysquery("quota --format=vfsold -u $userName $hideStdErrOutput");
+	$result=ShellCommand::query("quota --format=vfsold -u $userName $hideStdErrOutput");
 	if(preg_match("/^Disk quotas for user $userName \(uid .*\)\: none$/",$result))
 	{
 	 	return null;
@@ -37,7 +37,7 @@ function sysquery_quota_u($userName)
 	 	return null;
 	}
 	//watch out --show-mntpoint and --hide-device is not supported in older versions of the quota package
-	$result=sysquery("quota --no-wrap -u $userName $hideStdErrOutput | tail -n +3");
+	$result=ShellCommand::query("quota --no-wrap -u $userName $hideStdErrOutput | tail -n +3");
 	$result=preg_replace('/ +/',' ',$result);
 	$fields=explode(' ',$result);
 

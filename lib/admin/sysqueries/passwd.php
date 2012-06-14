@@ -19,7 +19,7 @@ nothing --> means the user does not exist
 
 function sysquery_passwd_S_locked($userName)
 {
-	$result=sysquery("passwd -S $userName");
+	$result=ShellCommand::query("passwd -S $userName");
 	//for the sake of the argument, let's agree that a non-existent user is considered not-locked
 	if($result==null) return false;	
 	$fields=explode(' ',$result);

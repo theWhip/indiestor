@@ -310,6 +310,11 @@ class ActionEngine
 
         static function execute()
         {
+		if(ProgramOptions::$verbose)
+		{
+			echo ProgramActions::toString();
+		}
+
                 $className=self::actionCamelCaseName(ProgramActions::$entityType);
                 $scriptName='actions/'.$className.'.php';
                 require_once($scriptName);

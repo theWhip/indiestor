@@ -8,8 +8,7 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once(dirname(dirname(__FILE__)).'/Shell/ShellQuery.php');
-require_once(dirname(dirname(dirname(__FILE__))).'/admin/sysqueries/all.php');
+require_once(dirname(dirname(__FILE__)).'/Shell/ShellCommand.php');
 
 class EtcOneFileSystem
 {
@@ -103,7 +102,7 @@ class EtcFsTab
 
 	function __construct()
 	{
-		$etcFstabFile=sysquery("nl /etc/fstab | grep -v '#'");
+		$etcFstabFile=ShellCommand::query("nl /etc/fstab | grep -v '#'");
                 $this->fileSystems=$this->parseEtcFstabFile($etcFstabFile);
 	}
 
