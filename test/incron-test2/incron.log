@@ -1,0 +1,14 @@
+pid=7775 type=MAIN object='hello6.shared' events=IN_MOVED_TO,IN_ISDIR
+pid=7774 type=MAIN object='hello5.shared' events=IN_MOVED_FROM,IN_ISDIR
+====>pid=7775 decision=DELAYED
+====>pid=7774 decision=RENAME 'hello5.shared' TO 'hello6.shared'
+pid=7776 type=IMP object='20c0075ae6ec6fd81200625f5415808d' events=IN_CREATE
+====>pid=7776 decision=IGNORE
+
+Warning: require_once(InotifyEventHandlerDecisions.php): failed to open stream: No such file or directory in /home/erik/Dropbox/alex/indiestor/indiestor-0.6.6/test/incron-test2/InotifyEventHandler.php on line 10
+
+Fatal error: require_once(): Failed opening required 'InotifyEventHandlerDecisions.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/erik/Dropbox/alex/indiestor/indiestor-0.6.6/test/incron-test2/InotifyEventHandler.php on line 10
+
+Warning: require_once(InotifyEventHandlerDecisions.php): failed to open stream: No such file or directory in /home/erik/Dropbox/alex/indiestor/indiestor-0.6.6/test/incron-test2/InotifyEventHandler.php on line 10
+
+Fatal error: require_once(): Failed opening required 'InotifyEventHandlerDecisions.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/erik/Dropbox/alex/indiestor/indiestor-0.6.6/test/incron-test2/InotifyEventHandler.php on line 10
