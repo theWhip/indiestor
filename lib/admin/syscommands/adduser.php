@@ -26,6 +26,7 @@ function syscommand_adduser($userName,$homeFolder=null)
 	if($homeFolder==null)
 	{
 		$homeFolderOption='';
+		$noCreateHome='';
 	}
 	else
 	{

@@ -13,7 +13,18 @@ class EntityType
         {
 		if(ProgramActions::$actions==null)
 		{
-			ActionEngine::error('no actions specified, just options',ERRNUM_NO_ACTIONS_JUST_OPTIONS_SPECIFIED);
+			$function='default_action';
+	                $className=get_called_class();
+
+			if(method_exists($className,$function))
+			{
+		                $className::$function(null);
+			}
+			else
+			{
+				ActionEngine::error('no actions specified, just options',
+					ERRNUM_NO_ACTIONS_JUST_OPTIONS_SPECIFIED);
+			}
 		}
 		else
 		{
