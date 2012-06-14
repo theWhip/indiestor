@@ -16,7 +16,7 @@ class ProgramOptions
 <<<<<<< HEAD
 	static $debug=false;
 =======
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 
         static function ifNull($defaultValue,$value)
         {
@@ -36,9 +36,9 @@ class ProgramOptions
                                 case 'verbose': self::$verbose=true; Shell::$verbose=true; break;
                                 case 'debug': self::$debug=true; break;
 =======
-                                case 'simulate': self::$simulation=true; ShellCommand::$simulation=true; break;
-                                case 'verbose': self::$verbose=true; ShellCommand::$verbose=true; break;
->>>>>>> removed the call to quotacheck
+                                case 'simulate': self::$simulation=true; break;
+                                case 'verbose': self::$verbose=true; break;
+>>>>>>> lots of fixes to quota support
                         }
                 }
         }
@@ -58,7 +58,7 @@ class ProgramOptions
 <<<<<<< HEAD
 		$buffer.="debug: ".self::bool2String(self::$debug)."\n";
 =======
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 		return $buffer;
         }
 }

@@ -9,14 +9,14 @@
 
 /*
 
-Dumps the blocksize for a filesystem. Example:
+Enables quota. Example:
 
-$ rm myfile.*
+$ quotaon -ug /
 
 */
 
-function syscommand_rm($filePath)
+function syscommand_quotaon($mountPoint)
 {
-	ShellCommand::exec("rm $filePath");	
+	ShellCommand::exec("quotaon -u $mountPoint");
 }
 

@@ -24,10 +24,10 @@ function sysquery_quotaon_p($deviceOrMountPoint)
 		null: 	error while trying to figure it out
 	*/
 
-	$result=sysquery("quotaon -p $deviceOrMountPoint | grep user 2> /dev/null");
-	//no result is actually an error
-	if($result==null) return null;
-	//if the result says 'is off', quota are disabled
+	$result=sysquery("quotaon -p $deviceOrMountPoint  2> /dev/null | grep user");
+	//no result is not an error; it means that the quota system is not even active
+	if($result==null) return false;
+	//if the result says 'is off', the quota has been activated, but quota are disabled
 	$search=preg_match_all('/is off/',$result,$matches);
 	//if searching for 'is off' is invalid, it is actually an error
 	//when not found, the result should be zero, not false.

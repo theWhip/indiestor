@@ -17,6 +17,6 @@ $ quotaon -ug /
 
 function syscommand_quotaon($mountPoint)
 {
-	ShellCommand::exec("quotaon -ug $mountPoint");
+	ShellCommand::exec("quotaon -u $mountPoint");
 }
 

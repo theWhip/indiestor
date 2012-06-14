@@ -167,7 +167,11 @@ class EtcGroup
 	}
 
 	//----------------------------------------------
+<<<<<<< HEAD
 	// FIND GROUP FOR MEMBER
+=======
+	// FIND GROUP FOR USER
+>>>>>>> lots of fixes to quota support
 	//----------------------------------------------
 	function findGroupForUserName($userName)
 	{

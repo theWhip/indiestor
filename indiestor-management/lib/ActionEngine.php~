@@ -29,8 +29,6 @@ define('ERRNUM_CANNOT_MOVE_HOME_TO_NON_FOLDER',61);
 define('ERRNUM_HOME_FOLDER_MUST_BE_ABSOLUTE_PATH',62);
 define('ERRNUM_REMOVE_HOME_CONTENT_WITHOUT_DELETE',63);
 define('ERRNUM_HOME_FOLDER_ALREADY_BELONGS_TO_USER',64);
-<<<<<<< HEAD
-=======
 define('ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID',65);
 define('ERRNUM_VOLUME_CANNOT_FIND_DEVICE_NOR_UUID',66);
 define('ERRNUM_QUOTA_ALREADY_ON_FOR_DEVICE',67);
@@ -83,7 +81,6 @@ class UserReportRecord
 		}
 	}
 }
->>>>>>> lots of fixes to quota support
 
 class ActionEngine
 {
@@ -102,8 +99,6 @@ class ActionEngine
 		exit($errNum);
 	}
 
-<<<<<<< HEAD
-=======
 	static function printUserRecords($userRecords)
 	{
 		$format1="%-10s %-20s %-7s %-10s %10s %10s %10s\n";
@@ -144,7 +139,6 @@ class ActionEngine
 		}
 	}
 
->>>>>>> lots of fixes to quota support
 	static function sysGroupName($indieStorGroupName)
 	{
 		return self::indiestorGroupPrefix.$indieStorGroupName;
@@ -180,8 +174,6 @@ class ActionEngine
 		return preg_match('/^[a-z][-a-z0-9_]*$/',$name);
 	}
 
-<<<<<<< HEAD
-=======
 	static function endMountPointWithSlash($mountPoint)
 	{
 		if(strlen($mountPoint)==0)
@@ -214,11 +206,7 @@ class ActionEngine
 			syscommand_touch($userQuotaFile);
 			syscommand_chmod_numeric($userQuotaFile,'600');
 			//without quotacheck, the user quota file may (or may not) be considered corrupt by quotaon
-			syscommand_quotacheck_new_quota_file($mountPoint);
-		}
-		else
-		{
-			syscommand_quotacheck_existing_quota_file($mountPoint);
+			syscommand_quotacheck($mountPoint);
 		}
 		//we can finally switch on the quota system
 		syscommand_quotaon($mountPoint);
@@ -301,7 +289,6 @@ class ActionEngine
 		return $GB;
 	}
 
->>>>>>> lots of fixes to quota support
         static function execute()
         {
                 $className=self::actionCamelCaseName(ProgramActions::$entityType);
@@ -337,7 +324,4 @@ class ActionEngine
                 return $actionCamelCaseNameWithFirstLowerCase;
         }
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> lots of fixes to quota support

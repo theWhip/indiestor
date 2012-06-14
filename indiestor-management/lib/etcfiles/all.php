@@ -12,5 +12,5 @@ require_once('EtcGroup.php');
 require_once('EtcPasswd.php');
 =======
 require_once_folder(dirname(__FILE__));
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 

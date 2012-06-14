@@ -9,6 +9,21 @@
 
 function sysquery($commandString)
 {
+<<<<<<< HEAD
 	return shell_exec($commandString);
+=======
+	if(ProgramOptions::$simulation || ProgramOptions::$verbose)
+	{
+		echo "-query-> $commandString\n";
+	}
+
+	$result=shell_exec($commandString);
+
+	if(ProgramOptions::$simulation || ProgramOptions::$verbose)
+	{
+		echo "--result--> $result";
+	}
+	return $result;
+>>>>>>> lots of fixes to quota support
 }
 

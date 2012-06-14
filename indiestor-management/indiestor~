@@ -8,18 +8,15 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-<<<<<<< HEAD
-=======
 //check that the user is root
 $processUser = posix_getpwuid(posix_geteuid());
 $processUserName=$processUser['name'];
 if($processUserName!='root')
 {
-	die("Only root can run this program\n");
+	die("Only root can run this program");
 }
 
 require_once('lib/require_once_folder.php');
->>>>>>> lots of fixes to quota support
 require_once('lib/args/ProgramActions.php');
 require_once('lib/args/ProgramOptions.php');
 require_once('lib/ArgEngine.php');
@@ -32,17 +29,5 @@ $argEngine->process();
 
 ProgramOptions::extractFromProgramActions();
 
-<<<<<<< HEAD
-
-//check that the user is root
-$processUser = posix_getpwuid(posix_geteuid());
-$processUserName=$processUser['name'];
-if($processUserName!='root')
-{
-	die("Only root can run this program");
-}
-
-=======
->>>>>>> lots of fixes to quota support
 ActionEngine::execute();
 

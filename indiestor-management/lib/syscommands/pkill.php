@@ -11,7 +11,7 @@
 require_once('ShellCommand.php');
 
 =======
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 /*
 
 Expels a user from the system, killing all its sessions:

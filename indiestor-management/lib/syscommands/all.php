@@ -19,5 +19,5 @@ require_once('mv.php');
 require_once('cp.php');
 =======
 require_once_folder(dirname(__FILE__));
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 

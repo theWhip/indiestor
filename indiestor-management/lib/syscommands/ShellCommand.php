@@ -9,6 +9,7 @@
 
 class ShellCommand
 {
+<<<<<<< HEAD
 
 	static $simulation=false;
 	static $verbose=false;
@@ -19,18 +20,30 @@ class ShellCommand
 		{
 			echo "$command\n";
 		}
-<<<<<<< HEAD
 		$command=$command.' 2>&1 &';
-=======
-		if(!self::$verbose) $command=$command.' 2>&1';
->>>>>>> removed the call to quotacheck
 		if(!self::$simulation)
 		{
 			$output=shell_exec($command);
 		}
 	}
 }
-<<<<<<< HEAD
 =======
+	function exec($command)
+	{
+		if(ProgramOptions::$simulation || ProgramOptions::$verbose)
+		{
+			echo "-exec-> $command\n";
+		}
+		if(!ProgramOptions::$verbose) $command=$command.' 2>&1';
+		if(!ProgramOptions::$simulation)
+		{
+			$output=shell_exec($command);
+		}
+		if(ProgramOptions::$simulation || ProgramOptions::$verbose)
+		{
+			echo "-output--> $output";
+		}
+	}
+}
 
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support

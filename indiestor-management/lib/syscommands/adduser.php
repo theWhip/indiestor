@@ -11,7 +11,7 @@
 require_once('ShellCommand.php');
 
 =======
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 /*
 
 Adds a user to the system. Example:

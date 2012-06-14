@@ -42,7 +42,7 @@ class CommandEntityDefinitions
 	{
 		$this->add($entityType,true,true);
 	}
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 
         function add($entityType,$hasArg,$mustHaveActions)
         {

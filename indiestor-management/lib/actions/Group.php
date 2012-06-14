@@ -60,16 +60,48 @@ class Group extends EntityType
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	static function noMembers($groupName)
+	{
+		echo "no members for group $groupName\n";
+	}
+
+>>>>>>> lots of fixes to quota support
 	static function showMembers($commandAction)
 	{
 		$ISGroupName=ProgramActions::$entityName;
 		self::checkInvalidGroup($ISGroupName);
 		$etcGroup=EtcGroup::instance();
 		$group=$etcGroup->findGroup($ISGroupName);
+<<<<<<< HEAD
 		foreach($group->members as $member)
 		{
 			echo "$member\n";
 		}
+=======
+
+		if($group->members==null) 
+		{
+			self::noMember($ISGroupName);
+			return;
+		}
+
+		if(count($group->members)==0) 
+		{
+			self::noMember($ISGroupName);
+			return;
+		}
+
+		$userRecords=array();
+                foreach($group->members as $member)
+                {
+			$userRecord=new UserReportRecord($member);
+			$userRecords[]=$userRecord;
+                }
+
+		ActionEngine::printUserRecords($userRecords);
+>>>>>>> lots of fixes to quota support
 	}
 }
 

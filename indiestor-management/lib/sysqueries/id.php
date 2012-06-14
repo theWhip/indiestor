@@ -11,7 +11,7 @@
 require_once('ShellQuery.php');
 
 =======
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 /*
 
 Returns all groups in which a user is member. Example:

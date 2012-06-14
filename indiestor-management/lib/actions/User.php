@@ -69,6 +69,18 @@ class User extends EntityType
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	static function checkIfUserAlreadyLocked($userName)
+	{
+		if(sysquery_passwd_S_locked($userName))
+		{
+			ActionEngine::error("user '$userName' already locked",
+					ERRNUM_USER_ALREADY_LOCKED);
+		}
+	}
+
+>>>>>>> lots of fixes to quota support
 	static function checkValidCharactersInUserName($userName)
 	{
 		if(!ActionEngine::isValidCharactersInName($userName))
@@ -234,6 +246,10 @@ class User extends EntityType
 		$userName=ProgramActions::$entityName;
 		//if user does not exists, abort
 		self::checkForValidUserName($userName);	
+<<<<<<< HEAD
+=======
+		self::checkIfUserAlreadyLocked($userName);
+>>>>>>> lots of fixes to quota support
 		syscommand_usermod_lock($userName);
 		EtcPasswd::reset();
 	}
@@ -379,6 +395,17 @@ class User extends EntityType
 		//set the quota to zero; which effectively removes the quota
 		syscommand_setquota_u($device,$userName,0);
 	}
->>>>>>> removed the call to quotacheck
+
+	static function show($commandAction)
+	{
+		$userName=ProgramActions::$entityName;
+		//if user does not exists, abort
+		self::checkForValidUserName($userName);
+		$userRecord=new UserReportRecord($userName);
+		$userRecords=array();
+		$userRecords[]=$userRecord;
+		ActionEngine::printUserRecords($userRecords);
+	}
+>>>>>>> lots of fixes to quota support
 }
 

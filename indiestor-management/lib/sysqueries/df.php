@@ -11,7 +11,7 @@
 require_once('ShellQuery.php');
 
 =======
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 /*
 Returns all device-hosted filesystems on the system. Example:
 
@@ -29,7 +29,7 @@ class DFFileSystem
 <<<<<<< HEAD
 =======
 	var $quotaYN=null;
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 	var $storageGB=null;
 	var $usedGB=null;
 	var $availableGB=null;
@@ -65,7 +65,7 @@ function sysquery_df()
 			else if($quotaEnabled===false) $dfFileSystem->quotaYN='N';
 			else $dfFileSystem->quotaYN='?'; 
 
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support
 			$dfFileSystems[]=$dfFileSystem;
 		}
 	}
@@ -90,4 +90,4 @@ function sysquery_df_device_for_folder($folder)
 }
 
 
->>>>>>> removed the call to quotacheck
+>>>>>>> lots of fixes to quota support

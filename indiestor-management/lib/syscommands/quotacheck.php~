@@ -15,10 +15,9 @@ $ quotacheck --format=vfsold -ucm /
 
 */
 
-//http://loydgravitt.wordpress.com/2012/02/11/important-note-for-is418-linux-students/
-
 function syscommand_quotacheck_new_quota_file($mountPoint)
 {
+	//http://loydgravitt.wordpress.com/2012/02/11/important-note-for-is418-linux-students/
 	//Nice that the url above reveals that we can simply unmount and chmod all those .gvfs Gnome clusterfucks ;-)
 	//watch out for those horrible Gnome virtual file system .gvfs
 	//we will try to unmount them
@@ -28,6 +27,7 @@ function syscommand_quotacheck_new_quota_file($mountPoint)
 
 function syscommand_quotacheck_existing_quota_file($mountPoint)
 {
+	//http://loydgravitt.wordpress.com/2012/02/11/important-note-for-is418-linux-students/
 	//Nice that the url above reveals that we can simply unmount and chmod all those .gvfs Gnome clusterfucks ;-)
 	//watch out for those horrible Gnome virtual file system .gvfs
 	//we will try to unmount them

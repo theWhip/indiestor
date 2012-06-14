@@ -32,21 +32,10 @@ class Users extends EntityType
 			return;
 		}
 
-<<<<<<< HEAD
                 foreach($indiestorGroup->members as $member)
                 {
                         echo "$member\n";
                 }
-=======
-		$userRecords=array();
-                foreach($indiestorGroup->members as $member)
-                {
-			$userRecord=new UserReportRecord($member);
-			$userRecords[]=$userRecord;
-                }
-
-		ActionEngine::printUserRecords($userRecords);
->>>>>>> lots of fixes to quota support
         }
 }
 
