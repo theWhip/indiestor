@@ -16,7 +16,7 @@ class Groups extends EntityType
 		echo "no indiestor members\n";
 =======
 		echo "no indiestor groups\n";
->>>>>>> fixed bug in validating indiestor group membership
+>>>>>>> added --user -set-passwd -lock -unlock
 	}
 
         static function show($commandAction)

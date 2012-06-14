@@ -15,16 +15,28 @@ require_once(dirname(dirname(__FILE__)).'/etcfiles/EtcPasswd.php');
 define('ERRNUM_USER_EXISTS_ALREADY',50);
 define('ERRNUM_GROUP_EXISTS_ALREADY',51);
 define('ERRNUM_GROUP_DOES_NOT_EXISTS',52);
+<<<<<<< HEAD
 define('ERRNUM_USER_EXISTS_ALREADY_OUTSIDE_INDIESTOR',53);
 define('ERRNUM_USER_DOES_NOT_EXIST',54);
 define('ERRNUM_GROUP_DOES_NOT_EXIST',55);
 define('ERRNUM_DUPLICATE_MEMBERSHIP',56);
 define('ERRNUM_USER_NOT_MEMBER_OF_ANY_GROUP',57);
+=======
+define('ERRNUM_USER_DOES_NOT_EXIST',53);
+define('ERRNUM_GROUP_DOES_NOT_EXIST',54);
+define('ERRNUM_DUPLICATE_MEMBERSHIP',55);
+define('ERRNUM_USER_NOT_MEMBER_OF_ANY_GROUP',56);
+define('ERRNUM_CANNOT_ADD_INDIESTOR_SYSUSER',57);
+>>>>>>> added --user -set-passwd -lock -unlock
 
 class ActionEngine
 {
 	const indiestorGroupPrefix='is_';
 	const indiestorUserGroup='indiestor-users';
+<<<<<<< HEAD
+=======
+	const indiestorSysUserName='indiestor';
+>>>>>>> added --user -set-passwd -lock -unlock
 
 	static function printStdErr($msg)
 	{
@@ -53,6 +65,14 @@ class ActionEngine
 		else return false;
 	}
 
+<<<<<<< HEAD
+=======
+	static function isIndiestorSysUserName($userName)
+	{
+		return $userName==self::indiestorSysUserName;
+	}
+
+>>>>>>> added --user -set-passwd -lock -unlock
 	static function indiestorGroupName($sysGroupName)
 	{
 		$lenISGPrefix=strlen(self::indiestorGroupPrefix);

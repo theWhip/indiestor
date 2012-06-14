@@ -17,15 +17,24 @@ class User extends EntityType
 		self::checkForDuplicateUser($userName);
 		//if indiestor user exists already, abort
 		self::checkForDuplicateIndiestorUser($userName);
-=======
-		//if indiestor user exists already, abort
-		self::checkForDuplicateIndiestorUser($userName);
-		//if user exists already, abort
-		self::checkForDuplicateUser($userName);
->>>>>>> fixed bug in validating indiestor group membership
 		//now add the user
 		//XXX watch out home directory must be added immediately
         	Shell::exec("adduser $userName");
+=======
+		//check if the username is the indiestor system user
+		self::checkForIndiestorSysUserName($userName);	
+		//if indiestor user exists already, abort
+		self::checkForDuplicateIndiestorUser($userName);
+		//user exists already
+		$etcPasswd=EtcPasswd::instance();
+		$isExistingUser=$etcPasswd->exists($userName);
+		//now add the user
+        	if(!$isExistingUser)
+		{
+			//XXX watch out home directory must be added immediately
+			Shell::exec("adduser $userName");
+		}
+>>>>>>> added --user -set-passwd -lock -unlock
 		//make sure indiestor user group exists
 		self::ensureIndiestorGroupExists();
 		//add user to indiestor user group
@@ -48,6 +57,7 @@ class User extends EntityType
 		}
 	}
 
+<<<<<<< HEAD
 	static function checkForDuplicateUser($userName)
 	{
 		$etcPasswd=EtcPasswd::instance();
@@ -55,6 +65,14 @@ class User extends EntityType
 		{
 			ActionEngine::error("user '$userName' exists already outside indiestor",
 						ERRNUM_USER_EXISTS_ALREADY_OUTSIDE_INDIESTOR);
+=======
+	static function checkForIndiestorSysUserName($userName)
+	{
+		if(ActionEngine::isIndiestorSysUserName($userName))
+		{
+			ActionEngine::error("Cannot add '$userName' system user as indiestor user",
+						ERRNUM_CANNOT_ADD_INDIESTOR_SYSUSER);
+>>>>>>> added --user -set-passwd -lock -unlock
 		}
 	}
 
@@ -65,7 +83,7 @@ class User extends EntityType
 <<<<<<< HEAD
 =======
                 if($indiestorGroup==null) return;
->>>>>>> fixed bug in validating indiestor group membership
+>>>>>>> added --user -set-passwd -lock -unlock
 		if($indiestorGroup->findMember($userName)!=null)
 		{
 			ActionEngine::error("indiestor user '$userName' exists already",
@@ -80,7 +98,7 @@ class User extends EntityType
 <<<<<<< HEAD
 =======
                 if($indiestorGroup==null) return;
->>>>>>> fixed bug in validating indiestor group membership
+>>>>>>> added --user -set-passwd -lock -unlock
 		if($indiestorGroup->findMember($userName)==null)
 		{
 			ActionEngine::error("indiestor user '$userName' does not exist",
@@ -177,8 +195,48 @@ class User extends EntityType
 		}
 		//we calculate the new collection of groups to which the user belongs
 		//by removing his existing group from the list
+<<<<<<< HEAD
 		$groupName=ActionEngine::sysGroupName($group->name);
 		$groupNames=self::newGroupNamesForUserName($userName,$groupName);
+=======
+		$groupNameToRemove=ActionEngine::sysGroupName($group->name);
+		$groupNames=self::newGroupNamesForUserName($userName,$groupNameToRemove);
+		Shell::exec("usermod $userName -G $groupNames");
+	}
+
+	static function setPasswd($commandAction)
+	{
+		$userName=ProgramActions::$entityName;
+		//if user does not exists, abort
+		self::checkForValidUserName($userName);	
+		$passwd=$commandAction->actionArg;
+		$cryptedPwd=crypt($passwd);
+		Shell::exec("usermod --password '$cryptedPwd' $userName");
+	}
+
+	static function lock($commandAction)
+	{
+		$userName=ProgramActions::$entityName;
+		//if user does not exists, abort
+		self::checkForValidUserName($userName);	
+		Shell::exec("usermod --lock $userName");
+	}
+
+	static function unlock($commandAction)
+	{
+		$userName=ProgramActions::$entityName;
+		//if user does not exists, abort
+		self::checkForValidUserName($userName);	
+		Shell::exec("usermod --unlock $userName");
+	}
+
+	static function removeFromIndiestor($commandAction)
+	{
+		$userName=ProgramActions::$entityName;
+		//if user does not exists, abort
+		self::checkForValidUserName($userName);	
+		$groupNames=self::newGroupNamesForUserName($userName,ActionEngine::indiestorUserGroup);
+>>>>>>> added --user -set-passwd -lock -unlock
 		Shell::exec("usermod $userName -G $groupNames");
 	}
 }
