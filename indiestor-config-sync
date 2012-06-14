@@ -1,0 +1,44 @@
+#!/usr/bin/php
+<?php
+/*
+        Indiestor program
+
+	Written by Erik Poupaert, erik@sankuru.biz
+        Commissioned at peopleperhour.com 
+        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
+*/
+
+require_once('lib/JSONFile.php');
+require_once('lib/repairengine/RepairEngine.php');
+require_once('indiestor-cl-args.php');
+
+//check that the user is root
+$processUser = posix_getpwuid(posix_geteuid());
+$processUserName=$processUser['name'];
+if($processUserName!='root')
+{
+	die("Only root can run this script");
+}
+
+processCommandLineArgs();
+
+//if needed, create a empty backup config
+if(!file_exists(ProgramOptions::$previousGroupsFilePath))
+{
+	file_put_contents(ProgramOptions::$previousGroupsFilePath,'[]');
+}
+
+//load config and previous config
+$indiestorPreviousGroups=JSONFile::load(ProgramOptions::$previousGroupsFilePath);
+$indiestorGroups=JSONFile::load(ProgramOptions::$groupsFilePath);
+
+//repair
+RepairEngine::repair($indiestorGroups,$indiestorPreviousGroups);
+
+//only do this if processing was successful
+if(!ProgramOptions::$simulation)
+{
+	unlink(ProgramOptions::$previousGroupsFilePath);
+	copy(ProgramOptions::$groupsFilePath,ProgramOptions::$previousGroupsFilePath);
+}
+

@@ -1,1 +1,31 @@
-[]
+[
+        {
+                "name":"groupa",
+                "members": 
+                [ 
+                        {
+                                "name":"john",
+                                "quota":"20"
+                        },
+                        {
+                                "name":"peter",
+                                "quota":"30"
+                        }
+                ]
+        },
+	{
+		"name":"groupb",
+		"members":
+		[
+			{
+				"name":"sandra",
+				"quota":"100"
+			},
+			{
+				"name":"alex",
+				"quota":"50"
+			}
+		]
+	}
+]
+

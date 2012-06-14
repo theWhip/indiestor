@@ -9,15 +9,22 @@
 
 class Shell
 {
+
+	static $simulation=false;
+	static $verbose=false;
+
 	function exec($command)
 	{
-		$command=$command.' 2>&1';
-/*		echo "$command\n"; */
-		$output=shell_exec($command);
-		self::log($output);
-	}
-
-	function log($commandOutput)
-	{
+		if(self::$simulation || self::$verbose)
+		{
+			echo "$command\n";
+		}
+		$command=$command.' 2>&1 &';
+		if(!self::$simulation)
+		{
+			$output=shell_exec($command);
+			EtcGroup::reset();
+			EtcPasswd::reset();
+		}
 	}
 }

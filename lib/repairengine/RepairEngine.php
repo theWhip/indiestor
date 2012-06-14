@@ -9,14 +9,16 @@
 
 require_once('GroupRepairer.php');
 require_once('UserRepairer.php');
+require_once('GroupMembershipRepairer.php');
 
 class RepairEngine
 {
 
         function repair($indiestorGroups,$indiestorPreviousGroups)
         {
-         //       self::repairGroups($indiestorGroups,$indiestorPreviousGroups);
+                self::repairGroups($indiestorGroups,$indiestorPreviousGroups);
                 self::repairUsers($indiestorGroups,$indiestorPreviousGroups);
+                self::repairGroupMemberships($indiestorGroups,$indiestorPreviousGroups);
         }
 
         function repairGroups($indiestorGroups,$indiestorPreviousGroups)
@@ -25,7 +27,6 @@ class RepairEngine
                                 self::uniqueGroups($indiestorGroups),
                                 self::uniqueGroups($indiestorPreviousGroups));
                 $groupRepairer->process();
-                $groupRepairer->repairGroup('indiestor');                
         }
 
         function repairUsers($indiestorGroups,$indiestorPreviousGroups)
@@ -36,6 +37,14 @@ class RepairEngine
                 $userRepairer->process();
         }
 
+        function repairGroupMemberships($indiestorGroups,$indiestorPreviousGroups)
+        {
+                $groupMembershipRepairer=new GroupMembershipRepairer(
+                                self::uniqueGroupMemberships($indiestorGroups),
+                                self::uniqueGroupMemberships($indiestorPreviousGroups));
+                $groupMembershipRepairer->process();
+        }
+
         function uniqueGroups($indiestorGroups)
         {
                 $groups=array();
@@ -44,6 +53,20 @@ class RepairEngine
                         $groups[$indiestorGroup->name]=$indiestorGroup->name;
                 }
                 return $groups;
+        }
+
+        function uniqueGroupMemberships($indiestorGroups)
+        {
+                $groupMemberships=array();
+                foreach($indiestorGroups as $indiestorGroup)
+                {
+                        foreach($indiestorGroup->members as $member)
+                        {
+                                $groupMemberships[$indiestorGroup->name.'|'.$member->name]=
+                                                        array($indiestorGroup->name,$member->name);
+                        }
+                }
+                return $groupMemberships;
         }
 
         function uniqueUsers($indiestorGroups)

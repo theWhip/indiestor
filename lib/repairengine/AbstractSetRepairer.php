@@ -33,20 +33,20 @@ abstract class AbstractSetRepairer
 	function syncDeletedElements()
 	{
 		$deletedElements=$this->deletedElements();
-		foreach($deletedElements as $deletedElement)
+		foreach($deletedElements as $key=>$deletedElement)
 		{
-			$this->deleteElement($deletedElement);
+			$this->deleteElement($key);
 		}
 	}
 
 	function element1Minuselement2($elements1,$elements2)
 	{
 		$diff=array();
-		foreach($elements1 as $element1)
+		foreach($elements1 as $key1=>$element1)
 		{
-			if(!array_key_exists($element1,$elements2))
+			if(!array_key_exists($key1,$elements2))
 			{
-				$diff[]=$element1;
+				$diff[$key1]=$element1;
 			}
 		}
 		return $diff;
@@ -54,9 +54,9 @@ abstract class AbstractSetRepairer
 
 	function repairElements()
 	{
-		foreach($this->elements as $element)
+		foreach($this->elements as $key=>$element)
 		{
-			$this->repairElement($element);
+			$this->repairElement($key);
 		}
 	}
 }
