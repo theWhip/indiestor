@@ -7,11 +7,18 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('df.php');
-require_once('id.php');
-<<<<<<< HEAD
-=======
-require_once('quotaon.php');
-require_once('blkid.php');
->>>>>>> added --volumes -show --volume -quota-on -quota-off
+require_once('ShellCommand.php');
+
+/*
+
+Disables quota. Example:
+
+$ quotaoff /
+
+*/
+
+function syscommand_quotaoff($mountPoint)
+{
+	ShellCommand::exec("quotaoff -ug $mountPoint");
+}
 

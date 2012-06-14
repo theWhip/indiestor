@@ -16,4 +16,13 @@ require_once('pkill.php');
 require_once('chown.php');
 require_once('mv.php');
 require_once('cp.php');
+<<<<<<< HEAD
+=======
+require_once('touch.php');
+require_once('chmod.php');
+require_once('mount.php');
+require_once('quotacheck.php');
+require_once('quotaon.php');
+require_once('quotaoff.php');
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
 

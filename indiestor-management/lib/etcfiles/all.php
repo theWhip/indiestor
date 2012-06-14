@@ -9,4 +9,8 @@
 
 require_once('EtcGroup.php');
 require_once('EtcPasswd.php');
+<<<<<<< HEAD
+=======
+require_once('EtcFstab.php');
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
 

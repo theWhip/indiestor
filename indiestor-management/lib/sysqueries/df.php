@@ -8,6 +8,10 @@
 */
 
 require_once('ShellQuery.php');
+<<<<<<< HEAD
+=======
+require_once('quotaon.php');
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
 
 /*
 Returns all device-hosted filesystems on the system. Example:
@@ -23,6 +27,10 @@ class DFFileSystem
 {
 	var $device=null;
 	var $type=null;
+<<<<<<< HEAD
+=======
+	var $quotaYN=null;
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
 	var $storageGB=null;
 	var $usedGB=null;
 	var $availableGB=null;
@@ -49,6 +57,15 @@ function sysquery_df()
 			$dfFileSystem->availableGB=strip_last_char($fileSystemLineFields[4]);
 			$dfFileSystem->percUse=strip_last_char($fileSystemLineFields[5]);
 			$dfFileSystem->mountedOn=$fileSystemLineFields[6];
+<<<<<<< HEAD
+=======
+
+			//check quota
+			$quotaEnabled=sysquery_quotaon_p($dfFileSystem->device);
+			if($quotaEnabled) $dfFileSystem->quotaYN='Y'; 
+			else $dfFileSystem->quotaYN='N';
+
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
 			$dfFileSystems[]=$dfFileSystem;
 		}
 	}

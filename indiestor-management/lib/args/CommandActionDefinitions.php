@@ -37,6 +37,14 @@ class CommandActionDefinitions
 		$this->addOutputAction("users","show");
 		$this->addExecOptionDefinitions("users");
 
+<<<<<<< HEAD
+=======
+		//volume
+		$this->addPrimaryAction("volume","quota-on");
+		$this->addPrimaryAction("volume","quota-off");
+		$this->addExecOptionDefinitions("volume");
+
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
 		//group
 		$this->addPrimaryAction("group","add");
 		$this->addPrimaryAction("group","delete");
@@ -83,6 +91,10 @@ class CommandActionDefinitions
 	function configureIncompatibleActions()
 	{
                 $this->incompatibleActions=array();
+<<<<<<< HEAD
+=======
+		$this->addIncompatibleActionPair("volume","quota-on","quota-off");
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
 		$this->addIncompatibleActionPair('group','add','delete');
 		$this->addIncompatibleActionPair('user','add','delete');
 		$this->addIncompatibleActionPair('user','add','remove-home');

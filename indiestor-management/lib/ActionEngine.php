@@ -29,6 +29,13 @@ define('ERRNUM_CANNOT_MOVE_HOME_TO_NON_FOLDER',61);
 define('ERRNUM_HOME_FOLDER_MUST_BE_ABSOLUTE_PATH',62);
 define('ERRNUM_REMOVE_HOME_CONTENT_WITHOUT_DELETE',63);
 define('ERRNUM_HOME_FOLDER_ALREADY_BELONGS_TO_USER',64);
+<<<<<<< HEAD
+=======
+define('ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID',65);
+define('ERRNUM_VOLUME_CANNOT_FIND_DEVICE_NOR_UUID',66);
+define('ERRNUM_QUOTA_ALREADY_ON_FOR_DEVICE',67);
+define('ERRNUM_QUOTA_ALREADY_OFF_FOR_DEVICE',68);
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
 
 class ActionEngine
 {
@@ -82,6 +89,24 @@ class ActionEngine
 		return preg_match('/^[a-z][-a-z0-9_]*$/',$name);
 	}
 
+<<<<<<< HEAD
+=======
+	static function switchOnQuotaForMountPoint($mountPoint)
+	{
+		syscommand_touch("$mountPoint/quota.user");
+		syscommand_touch("$mountPoint/quota.group");
+		syscommand_chmod_numeric("$mountPoint/quota.*",'600');
+		syscommand_mount_remount($mountPoint);
+//XXX		syscommand_quotacheck_mountpoint($mountPoint);
+		syscommand_quotaon($mountPoint);
+	}
+
+	static function switchOffQuotaForMountPoint($mountPoint)
+	{
+		syscommand_quotaoff($mountPoint);
+	}
+
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
         static function execute()
         {
                 $className=self::actionCamelCaseName(ProgramActions::$entityType);

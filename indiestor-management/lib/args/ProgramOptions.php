@@ -13,7 +13,10 @@ class ProgramOptions
 {
 	static $simulation=false;
 	static $verbose=false;
+<<<<<<< HEAD
 	static $debug=false;
+=======
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
 
         static function ifNull($defaultValue,$value)
         {
@@ -28,9 +31,14 @@ class ProgramOptions
                 {
                         switch($programOption->action)
                         {
+<<<<<<< HEAD
                                 case 'simulate': self::$simulation=true; Shell::$simulation=true; break;
                                 case 'verbose': self::$verbose=true; Shell::$verbose=true; break;
                                 case 'debug': self::$debug=true; break;
+=======
+                                case 'simulate': self::$simulation=true; ShellCommand::$simulation=true; break;
+                                case 'verbose': self::$verbose=true; ShellCommand::$verbose=true; break;
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
                         }
                 }
         }
@@ -47,7 +55,10 @@ class ProgramOptions
 		$buffer.="-----------------------\n";
 		$buffer.="simulation: ".self::bool2String(self::$simulation)."\n";
 		$buffer.="verbose: ".self::bool2String(self::$verbose)."\n";
+<<<<<<< HEAD
 		$buffer.="debug: ".self::bool2String(self::$debug)."\n";
+=======
+>>>>>>> added --volumes -show --volume -quota-on -quota-off
 		return $buffer;
         }
 }
