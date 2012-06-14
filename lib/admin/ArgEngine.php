@@ -244,6 +244,10 @@ class ArgEngine
 
 	function checkMandatoryActions()
 	{
+		//if there are no actions, there cannot be any missing mandatory prerequisite actions
+		if(count(ProgramActions::$actions)==0) return;
+
+		//check for the entity specified
 		$entityType=ProgramActions::$entityType;
 	        foreach(ProgramActions::$actions as $commandAction)
 	        {

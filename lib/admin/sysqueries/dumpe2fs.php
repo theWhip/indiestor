@@ -18,10 +18,9 @@ Block size:               4096
 
 function sysquery_dumpe2fs_blocksize($device)
 {
-	$hideStdErrOutput=ProgramOptions::hideStdErrOutput();
 	//-h flag to limit output to superblock information (otherwise the command is really slow)
 	//-f to force output, even if there is potentially trouble with it
-	$result=ShellCommand::query_fail_if_error("dumpe2fs -hf $device $hideStdErrOutput | grep -i  'Block size'");
+	$result=ShellCommand::query_fail_if_error("dumpe2fs -hf $device | grep -i  'Block size'");
 	$resultArray=explode(':',$result);
 	$blockSize=trim($resultArray[1]);
 	if(is_numeric($blockSize))
