@@ -58,7 +58,7 @@ class CommandActionDefinitions
                 $this->addActionDefinition("user","set-passwd",true,2,false,false);
 		$this->addSecondaryAction("user","lock",false);
 		$this->addSecondaryAction("user","remove-from-indiestor",false);
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 		$this->addOutputAction("user","show");
 		$this->addExecOptionDefinitions("user");
 	}
@@ -69,7 +69,7 @@ class CommandActionDefinitions
                 $this->addActionDefinition($entity,$action,false,9,false,false);
 =======
                 $this->addActionDefinition($entity,$action,false,9,false);
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	}
 
 	function addPrimaryAction($entity,$action)
@@ -78,7 +78,7 @@ class CommandActionDefinitions
                 $this->addActionDefinition($entity,$action,false,1,true,false);
 =======
                 $this->addActionDefinition($entity,$action,false,1,false);
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	}
 
 	function addSecondaryAction($entity,$action,$hasArg)
@@ -87,7 +87,7 @@ class CommandActionDefinitions
                 $this->addActionDefinition($entity,$action,$hasArg,2,true,false);
 =======
                 $this->addActionDefinition($entity,$action,$hasArg,2,false);
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	}
 
 	function addExecOptionDefinitions($entity)
@@ -98,7 +98,7 @@ class CommandActionDefinitions
 =======
                 $this->addActionDefinition($entity,"simulate",false,9,true);
                 $this->addActionDefinition($entity,"verbose",false,9,true);
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	}
 
 	function configureIncompatibleActions()
@@ -121,7 +121,7 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair('user','move-home-content','add');
 		$this->addIncompatibleActionPair('user','move-home-content','delete');
 		$this->addIncompatibleActionPair('user','move-home-content','remove-home');
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	}
 
 	function syntheticKey($entityType,$action)
@@ -153,7 +153,7 @@ class CommandActionDefinitions
                 $this->actionDefinitions[$this->syntheticKey($entityType,$action)]=
 			new CommandActionDefinition($entityType,$action,$hasArg,
 					$priority,$isOption);
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
         }
 
 	function firstIncompatibleAction($entityType,$actions,$newAction)
@@ -219,7 +219,7 @@ class CommandActionDefinitions
 	}
 
 =======
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	function commandsForEntityType($entityType)
 	{
 		$buffer='';

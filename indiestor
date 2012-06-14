@@ -22,7 +22,7 @@ require_once('lib/commandline/ActionEngine.php');
 
 $argEngine=new ArgEngine($argv);
 $argEngine->process();
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 
 ProgramOptions::extractFromProgramActions();
 

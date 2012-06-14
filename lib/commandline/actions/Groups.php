@@ -16,7 +16,7 @@ class Groups extends EntityType
 		echo "no indiestor members\n";
 =======
 		echo "no indiestor groups\n";
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	}
 
         static function show($commandAction)

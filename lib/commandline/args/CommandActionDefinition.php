@@ -24,7 +24,7 @@ class CommandActionDefinition
 	var $isOption=null;
 
         function __construct($entityType,$action,$hasArg,$priority,$isOption)
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
         {
                 $this->entityType=$entityType;
                 $this->action=$action;
@@ -33,7 +33,7 @@ class CommandActionDefinition
 <<<<<<< HEAD
 		$this->mustSave=$mustSave;
 =======
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 		$this->isOption=$isOption;
         }
 
@@ -47,7 +47,7 @@ class CommandActionDefinition
 <<<<<<< HEAD
 			$this->mustSave,
 =======
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 			$this->isOption
 		);
 		

@@ -17,7 +17,7 @@ class oneUser
 	var $shell=null;
 }
 
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 class EtcPasswd
 {
 	static $instance=null;	
@@ -86,7 +86,7 @@ class EtcPasswd
 		$user->homeFolder=$etcPasswdFileLinefields[5];
 		$user->shell=$etcPasswdFileLinefields[6];
 		$this->users[$user->name]=$user;
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	}
 
 	//----------------------------------------------
@@ -141,5 +141,5 @@ class EtcPasswd
 		}
 		return null;
 	}
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 }

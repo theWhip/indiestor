@@ -46,7 +46,7 @@ class ProgramActions
 		return self::$actions[$actionName];
 	}
 
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	static function actionPriorityArray()
 	{
 		$priorities=array();

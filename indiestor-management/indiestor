@@ -1,0 +1,33 @@
+#!/usr/bin/php
+<?php
+/*
+        Indiestor program
+
+	Written by Erik Poupaert, erik@sankuru.biz
+        Commissioned at peopleperhour.com 
+        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
+*/
+
+require_once('lib/args/ProgramActions.php');
+require_once('lib/args/ProgramOptions.php');
+require_once('lib/ArgEngine.php');
+require_once('lib/ActionEngine.php');
+require_once('lib/syscommands/ShellCommand.php');
+require_once('lib/sysqueries/ShellQuery.php');
+
+$argEngine=new ArgEngine($argv);
+$argEngine->process();
+
+ProgramOptions::extractFromProgramActions();
+
+
+//check that the user is root
+$processUser = posix_getpwuid(posix_geteuid());
+$processUserName=$processUser['name'];
+if($processUserName!='root')
+{
+	die("Only root can run this program");
+}
+
+ActionEngine::execute();
+

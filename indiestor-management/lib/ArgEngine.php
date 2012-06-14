@@ -7,10 +7,10 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('CommandEntityDefinitions.php');
-require_once('CommandActionDefinitions.php');
-require_once('CommandAction.php');
-require_once('ProgramActions.php');
+require_once('args/CommandEntityDefinitions.php');
+require_once('args/CommandActionDefinitions.php');
+require_once('args/CommandAction.php');
+require_once('args/ProgramActions.php');
 
 define('ERRNUM_INVALID_ENTITY_TYPE',11);
 define('ERRNUM_MISSING_ENTITY_TYPE',12);
@@ -23,7 +23,7 @@ define('ERRNUM_INVALID_ACTION_ARGUMENT',18);
 define('ERRNUM_MISSING_ENTITY_NAME',19);
 define('ERRNUM_NO_ACTIONS',20);
 
-class CommandLineArgs
+class ArgEngine
 {
 	var $scriptName=null;
 	var $commandEntityDefinitions=null;

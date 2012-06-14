@@ -21,7 +21,7 @@ class CommandAction
 	var $isOption=null;
 
         function __construct($action,$actionArg,$priority,$isOption)
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
         {
                 $this->action=$action;
                 $this->actionArg=$actionArg;
@@ -29,7 +29,7 @@ class CommandAction
 <<<<<<< HEAD
 		$this->mustSave=$mustSave;
 =======
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 		$this->isOption=$isOption;
         }
 
@@ -41,7 +41,7 @@ class CommandAction
 <<<<<<< HEAD
 		$mustSave=$this->mustSave;
 =======
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 		$isOption=$this->isOption;
 
 		if($actionArg==null) $argIndication='';
@@ -60,7 +60,7 @@ class CommandAction
 		else $type='action';
 
 		$buffer="$type:$action $argIndication prio:$priority\n";
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 
 		return $buffer;
 	}

@@ -19,7 +19,7 @@ class Help extends EntityType
 =======
 		$argEngine=new ArgEngine($argv);
 		$argEngine->usage();
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
         }
 }
 

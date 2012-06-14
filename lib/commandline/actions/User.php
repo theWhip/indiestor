@@ -49,7 +49,7 @@ class User extends EntityType
 			//execute
 			Shell::exec("adduser $homeFolderOption $userName");
 		}
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 		//make sure indiestor user group exists
 		self::ensureIndiestorGroupExists();
 		//add user to indiestor user group
@@ -88,7 +88,7 @@ class User extends EntityType
 		}
 	}
 
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	static function shellExecAddUserToGroup($groupName,$userName)
 	{
 		Shell::exec("usermod -a -G $groupName $userName");
@@ -120,7 +120,7 @@ class User extends EntityType
 		{
 			ActionEngine::error("Cannot add '$userName' system user as indiestor user",
 						ERRNUM_CANNOT_ADD_INDIESTOR_SYSUSER);
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 		}
 	}
 
@@ -131,7 +131,7 @@ class User extends EntityType
 <<<<<<< HEAD
 =======
                 if($indiestorGroup==null) return;
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 		if($indiestorGroup->findMember($userName)!=null)
 		{
 			ActionEngine::error("indiestor user '$userName' exists already",
@@ -146,7 +146,7 @@ class User extends EntityType
 <<<<<<< HEAD
 =======
                 if($indiestorGroup==null) return;
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 		if($indiestorGroup->findMember($userName)==null)
 		{
 			ActionEngine::error("indiestor user '$userName' does not exist",
@@ -209,7 +209,7 @@ class User extends EntityType
 						ERRNUM_REMOVE_HOME_CONTENT_WITHOUT_DELETE);
 	}
 
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	static function addToGroup($commandAction)
 	{
 		$userName=ProgramActions::$entityName;
@@ -224,6 +224,7 @@ class User extends EntityType
 		self::shellExecAddUserToGroup(ActionEngine::sysGroupName($groupName),$userName);
 	}
 
+<<<<<<< HEAD
         static function groupNamesForUserName($userName)
         {
                 $groupNamesForUserName=shell_exec("id -nG $userName");
@@ -231,6 +232,8 @@ class User extends EntityType
                 return explode(' ',$groupNamesForUserName);
         }
 
+=======
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
         function removeGroupNameFromGroupNames($groupNames,$groupNameToRemove)
         {
                 $result=array();
@@ -244,7 +247,11 @@ class User extends EntityType
 
 	function newGroupNamesForUserName($userName,$groupNameToRemove)
 	{
+<<<<<<< HEAD
                 $groupNamesForUserName=self::groupNamesForUserName($userName);
+=======
+                $groupNamesForUserName=sysquery_id_nG($userName);
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
                 $newGroupNamesForUserName=self::removeGroupNameFromGroupnames(
 						$groupNamesForUserName,
 						$groupNameToRemove); 
@@ -378,6 +385,6 @@ class User extends EntityType
 		ActionEngine::error("-move-home-content only possible in -set-home action",
 						ERRNUM_MOVE_HOME_CONTENT_WITHOUT_SET_HOME);
 	}
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 }
 

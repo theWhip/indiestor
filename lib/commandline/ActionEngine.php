@@ -11,6 +11,10 @@ require_once('actions/EntityType.php');
 require_once('args/ProgramActions.php');
 require_once(dirname(dirname(__FILE__)).'/etcfiles/EtcGroup.php');
 require_once(dirname(dirname(__FILE__)).'/etcfiles/EtcPasswd.php');
+<<<<<<< HEAD
+=======
+require_once(dirname(dirname(__FILE__)).'/sysqueries/id.php');
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 
 define('ERRNUM_USER_EXISTS_ALREADY',50);
 define('ERRNUM_GROUP_EXISTS_ALREADY',51);
@@ -35,7 +39,7 @@ define('ERRNUM_CANNOT_MOVE_HOME_TO_NON_FOLDER',61);
 define('ERRNUM_HOME_FOLDER_MUST_BE_ABSOLUTE_PATH',62);
 define('ERRNUM_REMOVE_HOME_CONTENT_WITHOUT_DELETE',63);
 define('ERRNUM_HOME_FOLDER_ALREADY_BELONGS_TO_USER',64);
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 
 class ActionEngine
 {
@@ -44,7 +48,7 @@ class ActionEngine
 <<<<<<< HEAD
 =======
 	const indiestorSysUserName='indiestor';
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 
 	static function printStdErr($msg)
 	{
@@ -80,7 +84,7 @@ class ActionEngine
 		return $userName==self::indiestorSysUserName;
 	}
 
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
 	static function indiestorGroupName($sysGroupName)
 	{
 		$lenISGPrefix=strlen(self::indiestorGroupPrefix);
@@ -97,7 +101,7 @@ class ActionEngine
 		return preg_match('/^[a-z][-a-z0-9_]*$/',$name);
 	}
 
->>>>>>> added --user -expel and validation fixes
+>>>>>>> reorganized things by introducing folders: etcfiles sysqueries and syscommands
         static function execute()
         {
                 $className=self::actionCamelCaseName(ProgramActions::$entityType);
