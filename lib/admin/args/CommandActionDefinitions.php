@@ -16,12 +16,14 @@ class CommandActionDefinitions
         var $actionDefinitions=null;
 	var $incompatibleActions=null;
 	var $mandatoryActions=null;
+	var $singletonActions=null;
 
         function __construct()
         {
 		$this->configureActionDefinitions();
 		$this->configureIncompatibleActions();
 		$this->configureMandatoryActions();
+		$this->configureSingletonActions();
         }
 
 	function configureActionDefinitions()
@@ -107,10 +109,6 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair('user','delete','set-group');
 		$this->addIncompatibleActionPair('user','delete','set-quota');
 		$this->addIncompatibleActionPair('user','lock','set-passwd');
-		$this->addIncompatibleActionPair('user','remove-from-indiestor','add');
-		$this->addIncompatibleActionPair('user','remove-from-indiestor','delete');
-		$this->addIncompatibleActionPair('user','remove-from-indiestor','set-group');
-		$this->addIncompatibleActionPair('user','remove-from-indiestor','unset-group');
 		$this->addIncompatibleActionPair('user','move-home-content','add');
 		$this->addIncompatibleActionPair('user','move-home-content','delete');
 		$this->addIncompatibleActionPair('user','move-home-content','remove-home');
@@ -136,6 +134,24 @@ class CommandActionDefinitions
 			new CommandMandatoryActionPair($entityType,$action1,$action2);
 	}
 
+	function configureSingletonActions()
+	{
+		$this->singletonActions=array();
+		$this->addSingletonAction("user","remove-from-indiestor");
+	}
+
+	function addSingletonAction($entityType,$action)
+	{
+		$syntheticKey=$this->syntheticKey($entityType,$action);
+		$this->singletonActions[$syntheticKey]=$action;
+	}
+
+	function isSingletonAction($entityType,$action)
+	{
+		$syntheticKey=$this->syntheticKey($entityType,$action);
+		if(array_key_exists($syntheticKey,$this->singletonActions)) return true;
+		else return false;
+	}
 
 	function syntheticKey($entityType,$action)
 	{
@@ -232,7 +248,9 @@ class CommandActionDefinitions
 		$buffer='';
 		foreach($this->actionDefinitions as $actionDefinition)
 		{
-			if($actionDefinition->entityType==$entityType && !$actionDefinition->isOption)
+			if($actionDefinition->entityType==$entityType 
+				&& !$actionDefinition->isOption
+				&& !$this->isSingletonAction($entityType,$actionDefinition->action))
 			{
 				$buffer.='-'.$actionDefinition->action;
 				if($actionDefinition->hasArg) 
@@ -244,5 +262,26 @@ class CommandActionDefinitions
 		}
 		return $buffer;
 	}
+
+	function singletonCommandsForEntityType($entityType)
+	{
+		$actionDefs=array();
+		foreach($this->actionDefinitions as $actionDefinition)
+		{
+			if($actionDefinition->entityType==$entityType 
+				&& !$actionDefinition->isOption
+				&& $this->isSingletonAction($entityType,$actionDefinition->action))
+			{
+				$buffer='-'.$actionDefinition->action;
+				if($actionDefinition->hasArg) 
+				{
+					$buffer.=' <arg>';
+				}
+				$actionDefs[]=$buffer;
+			}
+		}
+		return $actionDefs;
+	}
+
 }
 

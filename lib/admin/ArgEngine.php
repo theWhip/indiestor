@@ -23,6 +23,7 @@ define('ERRNUM_INVALID_ACTION_ARGUMENT',18);
 define('ERRNUM_MISSING_ENTITY_NAME',19);
 define('ERRNUM_NO_ACTIONS',20);
 define('ERRNUM_MANDATORY_PREREQUISITE_ACTION_MISSING',21);
+define('ERRNUM_SINGLETON_ACTION',22);
 
 class ArgEngine
 {
@@ -72,9 +73,10 @@ class ArgEngine
 	{
 		$this->processEntityType();
 		$this->processActions();
+		$this->checkMandatoryActions();
+		$this->checkSingletonActions();
 		$this->checkEntity();
 		$this->checkActions();
-		$this->checkMandatoryActions();
 		ProgramActions::sortActionsByPriority();
 	}
 
@@ -245,6 +247,7 @@ class ArgEngine
 	function checkMandatoryActions()
 	{
 		//if there are no actions, there cannot be any missing mandatory prerequisite actions
+		if(ProgramActions::$actions==null) return;
 		if(count(ProgramActions::$actions)==0) return;
 
 		//check for the entity specified
@@ -265,6 +268,27 @@ class ArgEngine
 				}
 			}
 	        }
+	}
+
+	function checkSingletonActions()
+	{
+		//if there are no actions, there cannot be any singleton actions
+		if(ProgramActions::$actions==null) return;
+		if(count(ProgramActions::$actions)==0) return;
+
+		//check for the entity specified
+		$entityType=ProgramActions::$entityType;
+
+	        foreach(ProgramActions::$actions as $commandAction)
+	        {
+	                $action=$commandAction->action;
+			if($this->commandActionDefinitions->isSingletonAction($entityType,$action))
+			{
+					$this->argsError("Action '$action' for entity type '$entityType' can only be used alone,".
+							" and not in combination with other actions",
+							true, ERRNUM_SINGLETON_ACTION);
+			}
+		}
 	}
 
 
@@ -330,9 +354,12 @@ class ArgEngine
 		{
 			$entityType=$entityDefinition->entityType;
                         if($entityDefinition->hasArg) $hasArg=' <arg>'; else $hasArg='';
-			$commandActionDefs=
-				$this->commandActionDefinitions->commandsForEntityType($entityType);
+			$commandActionDefs=$this->commandActionDefinitions->commandsForEntityType($entityType);
 			$this->printStdErr("$scriptName --$entityType$hasArg $commandActionDefs\n");
+			foreach($this->commandActionDefinitions->singletonCommandsForEntityType($entityType) as $commandActionDef)
+			{
+				$this->printStdErr("$scriptName --$entityType$hasArg $commandActionDef\n");
+			}
 		}
 		$this->printStdErr("supported options: [-simulate] [-verbose]\n");
 	}
