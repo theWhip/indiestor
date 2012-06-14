@@ -13,74 +13,47 @@ class Volume extends EntityType
 	{
 		$device=ProgramActions::$entityName;
 		self::checkIfQuotaAlreadyOnForDevice($device);
-		$etcFstab=EtcFsTab::instance();
-		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-		self::validateFileSystem($fileSystem,$device);
-		if(!$fileSystem->hasQuotaEnabled())
-		{
-			$fileSystem->enableQuota();		
-			$etcFstab->writeFileSystem($fileSystem);
-		}
-		$mountPoint=$fileSystem->_2_fs_file; //mount point
-		ActionEngine::switchOnQuotaForMountPoint($mountPoint);
+		ActionEngine::switchOnQuotaForDevice($device);
 	}
 
 	static function quotaOff($commandAction)
 	{
 		$device=ProgramActions::$entityName;
 		self::checkIfQuotaAlreadyOffForDevice($device);
-		$etcFstab=EtcFsTab::instance();
-		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-		self::validateFileSystem($fileSystem,$device);
-		$mountPoint=$fileSystem->_2_fs_file; //mount point
-		ActionEngine::switchOffQuotaForMountPoint($mountPoint);
+		ActionEngine::switchOffQuotaForDevice($device);
 	}
 
 	static function quotaRemove($commandAction)
 	{
 		$device=ProgramActions::$entityName;
-		$etcFstab=EtcFsTab::instance();
-		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-		self::validateFileSystem($fileSystem,$device);
-		$mountPoint=$fileSystem->_2_fs_file; //mount point
-		ActionEngine::switchOffQuotaForMountPoint($mountPoint);
-		if(!$fileSystem->hasQuotaDisabled())
-		{
-			$fileSystem->disableQuota();		
-			$etcFstab->writeFileSystem($fileSystem);
-		}
+		self::checkIfQuotaAlreadyRemovedForDevice($device);
+		ActionEngine::removeQuotaForDevice($device);
 	}
 
 	static function checkIfQuotaAlreadyOnForDevice($device)
 	{
-		if(sysquery_quotaon_p($device))
+		if(sysquery_quotaon_p($device)===true)
 			ActionEngine::error("Quota already on for device '$device'",
 				ERRNUM_QUOTA_ALREADY_ON_FOR_DEVICE);
 	}
 
 	static function checkIfQuotaAlreadyOffForDevice($device)
 	{
-		if(!sysquery_quotaon_p($device))
+		if(sysquery_quotaon_p($device)===false)
 			ActionEngine::error("Quota already off for device '$device'",
 				ERRNUM_QUOTA_ALREADY_OFF_FOR_DEVICE);
 	}
-	
-	static function validateFileSystem($fileSystem,$device)
+
+	static function checkIfQuotaAlreadyRemovedForDevice($device)
 	{
-		switch($fileSystem)
+		$etcFstab=EtcFsTab::instance();
+		$fileSystem=$etcFstab->findFileSystemForDevice($device);
+		ActionEngine::validateFileSystem($fileSystem,$device);
+		if(!$fileSystem->hasQuotaEnabled())
 		{
-			case 'no-uuid':	
-				ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
-					"Can also not find a UUID for this device",
-					ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID);
-					break;
-			case 'no-filesystem-for-uuid':
-				ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
-					"Can also not find a 'UUID=$deviceUUID' entry ".
-					"in /etc/fstab for this device",
-					ERRNUM_VOLUME_CANNOT_FIND_DEVICE_NOR_UUID);
-					break;
-		}		
+			ActionEngine::error("Quota already removed for device '$device'",
+				ERRNUM_QUOTA_ALREADY_REMOVED_FOR_DEVICE);
+		}
 	}
 }
 

@@ -28,21 +28,7 @@ class EtcOneFileSystem
 	//----------------------------------------------
 	function hasQuotaEnabled()
 	{
-		$usrQuotaEnabled=$this->hasQuotaEnabledForType('usrquota');
-		$grpQuotaEnabled=$this->hasQuotaEnabledForType('grpquota');
-		if($usrQuotaEnabled && $grpQuotaEnabled) return true;
-		return false;
-	}
-
-	//----------------------------------------------
-	// HAS QUOTA DISABLED
-	//----------------------------------------------
-	function hasQuotaDisabled()
-	{
-		$usrQuotaEnabled=$this->hasQuotaEnabledForType('usrquota');
-		$grpQuotaEnabled=$this->hasQuotaEnabledForType('grpquota');
-		if($usrQuotaEnabled || $grpQuotaEnabled) return false;
-		return true;
+		return $this->hasQuotaEnabledForType('usrquota');
 	}
 
 	//----------------------------------------------
@@ -65,9 +51,7 @@ class EtcOneFileSystem
 	function enableQuota()
 	{
 		$usrQuotaEnabled=$this->hasQuotaEnabledForType('usrquota');
-		$grpQuotaEnabled=$this->hasQuotaEnabledForType('grpquota');
 		if(!$usrQuotaEnabled) $this->_4_fs_mntops[]='usrquota';
-		if(!$grpQuotaEnabled) $this->_4_fs_mntops[]='grpquota';
 	}
 
 	//----------------------------------------------
@@ -81,7 +65,6 @@ class EtcOneFileSystem
 			switch($mntop)
 			{
 				case 'usrquota': break;
-				case 'grpquota': break;
 				default: $newMntOps[]=$mntop;
 			}
 		}

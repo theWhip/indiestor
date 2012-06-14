@@ -11,7 +11,7 @@
 require_once('ShellQuery.php');
 
 =======
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 /*
 Returns all device-hosted filesystems on the system. Example:
 
@@ -29,7 +29,7 @@ class DFFileSystem
 <<<<<<< HEAD
 =======
 	var $quotaYN=null;
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 	var $storageGB=null;
 	var $usedGB=null;
 	var $availableGB=null;
@@ -61,10 +61,11 @@ function sysquery_df()
 
 			//check quota
 			$quotaEnabled=sysquery_quotaon_p($dfFileSystem->device);
-			if($quotaEnabled) $dfFileSystem->quotaYN='Y'; 
-			else $dfFileSystem->quotaYN='N';
+			if($quotaEnabled===true) $dfFileSystem->quotaYN='Y'; 
+			else if($quotaEnabled===false) $dfFileSystem->quotaYN='N';
+			else $dfFileSystem->quotaYN='?'; 
 
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 			$dfFileSystems[]=$dfFileSystem;
 		}
 	}
@@ -77,3 +78,16 @@ function strip_last_char($string)
 	return substr($string,0,-1);
 }
 
+<<<<<<< HEAD
+=======
+function sysquery_df_device_for_folder($folder)
+{
+	$fileSystemLine=sysquery('df $folder | tail -n +2');	
+	$fileSystemLine=preg_replace('/ +/',' ',$fileSystemLine);
+	$fileSystemLineFields=explode(' ',$fileSystemLine);
+	$device=$fileSystemLineFields[0];
+	return $device;
+}
+
+
+>>>>>>> removed the call to quotacheck

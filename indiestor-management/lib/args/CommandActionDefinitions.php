@@ -30,7 +30,7 @@ class CommandActionDefinitions
 <<<<<<< HEAD
 =======
 		$this->addPrimaryAction("volumes","purge-fstab-backups");
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 		$this->addExecOptionDefinitions("volumes");
 
 		//groups
@@ -49,7 +49,7 @@ class CommandActionDefinitions
 		$this->addPrimaryAction("volume","quota-remove");
 		$this->addExecOptionDefinitions("volume");
 
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 		//group
 		$this->addPrimaryAction("group","add");
 		$this->addPrimaryAction("group","delete");
@@ -65,6 +65,11 @@ class CommandActionDefinitions
 		$this->addSecondaryAction("user","move-home-content",false);
 		$this->addSecondaryAction("user","add-to-group",true);
 		$this->addSecondaryAction("user","remove-from-group",false);
+<<<<<<< HEAD
+=======
+		$this->addSecondaryAction("user","set-quota",true);
+		$this->addSecondaryAction("user","remove-quota",false);
+>>>>>>> removed the call to quotacheck
                 $this->addActionDefinition("user","set-passwd",true,2,false,false);
 		$this->addSecondaryAction("user","lock",false);
 		$this->addSecondaryAction("user","remove-from-indiestor",false);
@@ -91,7 +96,7 @@ class CommandActionDefinitions
 	}
 
 	function addSecondaryAction($entity,$action,$hasArg=false)
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 	{
                 $this->addActionDefinition($entity,$action,$hasArg,2,false);
 	}
@@ -110,7 +115,7 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair("volume","quota-on","quota-off");
 		$this->addIncompatibleActionPair("volume","quota-on","quota-remove");
 		$this->addIncompatibleActionPair("volume","quota-off","quota-remove");
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 		$this->addIncompatibleActionPair('group','add','delete');
 		$this->addIncompatibleActionPair('user','add','delete');
 		$this->addIncompatibleActionPair('user','add','remove-home');
@@ -118,6 +123,10 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair('user','delete','set-passwd');
 		$this->addIncompatibleActionPair('user','delete','set-home');
 		$this->addIncompatibleActionPair('user','delete','add-to-group');
+<<<<<<< HEAD
+=======
+		$this->addIncompatibleActionPair('user','delete','set-quota');
+>>>>>>> removed the call to quotacheck
 		$this->addIncompatibleActionPair('user','lock','set-passwd');
 		$this->addIncompatibleActionPair('user','remove-from-indiestor','add');
 		$this->addIncompatibleActionPair('user','remove-from-indiestor','delete');
@@ -126,6 +135,10 @@ class CommandActionDefinitions
 		$this->addIncompatibleActionPair('user','move-home-content','add');
 		$this->addIncompatibleActionPair('user','move-home-content','delete');
 		$this->addIncompatibleActionPair('user','move-home-content','remove-home');
+<<<<<<< HEAD
+=======
+		$this->addIncompatibleActionPair('user','set-quota','remove-quota');
+>>>>>>> removed the call to quotacheck
 	}
 
 	function syntheticKey($entityType,$action)

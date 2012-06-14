@@ -324,5 +324,61 @@ class User extends EntityType
 		ActionEngine::error("-move-home-content only possible in -set-home action",
 						ERRNUM_MOVE_HOME_CONTENT_WITHOUT_SET_HOME);
 	}
+<<<<<<< HEAD
+=======
+
+	static function	checkForValidQuota($GB)
+	{
+		if(!is_numeric($GB))
+		{
+			ActionEngine::error("the number of GB specified '$GB' is not numeric",
+						ERRNUM_QUOTA_NOT_NUMERIC);
+		}
+	}
+
+	static function setQuota($commandAction)
+	{
+		$userName=ProgramActions::$entityName;
+		//if user does not exists, abort
+		self::checkForValidUserName($userName);
+		//quota
+		$GB=$commandAction->actionArg;
+		//if quota invalid, abort
+		self::checkForValidQuota($GB);
+		//find user home folder
+		$etcPasswd=EtcPasswd::instance();
+		$user=$etcPasswd->findUserByName($userName);
+		$homeFolder=$user->homeFolder;
+		//find device for user home folder
+		$device=sysquery_df_device_for_folder($homeFolder);
+		//make sure quota is enabled
+		ActionEngine::switchOnQuotaForDevice($device);
+		//find the number of blocks for the GB of quota
+		$blocks=ActionEngine::deviceGBToBlocks($device,$GB);
+		//set the quota
+		syscommand_setquota_u($device,$userName,$blocks);
+	}
+
+	static function removeQuota($commandAction)
+	{
+		$userName=ProgramActions::$entityName;
+		//if user does not exists, abort
+		self::checkForValidUserName($userName);
+		//find user home folder
+		$etcPasswd=EtcPasswd::instance();
+		$user=$etcPasswd->findUserByName($userName);
+		$homeFolder=$user->homeFolder;
+		//find device for user home folder
+		$device=sysquery_df_device_for_folder($homeFolder);
+		//if quota not enabled for device, removal of quota for this user is not possible
+		if(sysquery_quotaon_p($device)!==true)
+		{
+			ActionEngine::error("Cannot remove quota for user '$userName' on device '$device' for which quota are not enabled ",
+						ERRNUM_REMOVE_USER_QUOTA_ON_DEVICE_QUOTA_NOT_ENABLED);
+		}
+		//set the quota to zero; which effectively removes the quota
+		syscommand_setquota_u($device,$userName,0);
+	}
+>>>>>>> removed the call to quotacheck
 }
 

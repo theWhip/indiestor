@@ -11,7 +11,7 @@
 require_once('ShellCommand.php');
 
 =======
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 /*
 
 Creates a directory. Example:

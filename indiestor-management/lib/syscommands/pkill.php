@@ -11,7 +11,7 @@
 require_once('ShellCommand.php');
 
 =======
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 /*
 
 Expels a user from the system, killing all its sessions:

@@ -7,18 +7,16 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('ShellCommand.php');
-
 /*
 
-Touches a file. Example:
+Dumps the blocksize for a filesystem. Example:
 
-$ touch myfile.txt
+$ rm myfile.*
 
 */
 
-function syscommand_touch($filePath)
+function syscommand_rm($filePath)
 {
-	ShellCommand::exec("touch $filePath");	
+	ShellCommand::exec("rm $filePath");	
 }
 

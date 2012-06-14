@@ -42,7 +42,7 @@ class CommandEntityDefinitions
 	{
 		$this->add($entityType,true,true);
 	}
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 
         function add($entityType,$hasArg,$mustHaveActions)
         {

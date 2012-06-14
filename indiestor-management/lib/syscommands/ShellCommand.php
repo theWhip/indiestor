@@ -23,7 +23,7 @@ class ShellCommand
 		$command=$command.' 2>&1 &';
 =======
 		if(!self::$verbose) $command=$command.' 2>&1';
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 		if(!self::$simulation)
 		{
 			$output=shell_exec($command);
@@ -33,4 +33,4 @@ class ShellCommand
 <<<<<<< HEAD
 =======
 
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck

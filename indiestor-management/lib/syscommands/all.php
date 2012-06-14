@@ -19,5 +19,5 @@ require_once('mv.php');
 require_once('cp.php');
 =======
 require_once_folder(dirname(__FILE__));
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 

@@ -35,7 +35,11 @@ define('ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID',65);
 define('ERRNUM_VOLUME_CANNOT_FIND_DEVICE_NOR_UUID',66);
 define('ERRNUM_QUOTA_ALREADY_ON_FOR_DEVICE',67);
 define('ERRNUM_QUOTA_ALREADY_OFF_FOR_DEVICE',68);
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+define('ERRNUM_CANNOT_FIND_BLOCKSIZE_FOR_DEVICE',69);
+define('ERRNUM_QUOTA_NOT_NUMERIC',70);
+define('ERRNUM_REMOVE_USER_QUOTA_ON_DEVICE_QUOTA_NOT_ENABLED',71);
+define('ERRNUM_QUOTA_ALREADY_REMOVED_FOR_DEVICE',72);
+>>>>>>> removed the call to quotacheck
 
 class ActionEngine
 {
@@ -91,22 +95,104 @@ class ActionEngine
 
 <<<<<<< HEAD
 =======
-	static function switchOnQuotaForMountPoint($mountPoint)
+	static function switchOnQuotaForDevice($device)
 	{
-		syscommand_touch("$mountPoint/quota.user");
-		syscommand_touch("$mountPoint/quota.group");
-		syscommand_chmod_numeric("$mountPoint/quota.*",'600');
-		syscommand_mount_remount($mountPoint);
-//XXX		syscommand_quotacheck_mountpoint($mountPoint);
+		$etcFstab=EtcFsTab::instance();
+		$fileSystem=$etcFstab->findFileSystemForDevice($device);
+		self::validateFileSystem($fileSystem,$device);
+		$mountPoint=$fileSystem->_2_fs_file; //mount point
+		if(!$fileSystem->hasQuotaEnabled())
+		{
+			//enable quota on filesystem
+			$fileSystem->enableQuota();		
+			$etcFstab->writeFileSystem($fileSystem);
+			syscommand_mount_remount($mountPoint);
+		}
+		//enable quota on mount point
+		if(!file_exists("$mountPoint/quota.user"))
+		{
+			syscommand_touch("$mountPoint/quota.user");
+		}
+		syscommand_chmod_numeric("$mountPoint/quota.user",'600');
 		syscommand_quotaon($mountPoint);
 	}
 
-	static function switchOffQuotaForMountPoint($mountPoint)
+	static function switchOffQuotaForDevice($device)
 	{
+		$etcFstab=EtcFsTab::instance();
+		$fileSystem=$etcFstab->findFileSystemForDevice($device);
+		self::validateFileSystem($fileSystem,$device);
+		$mountPoint=$fileSystem->_2_fs_file; //mount point
+		//switch off quote for mount point
 		syscommand_quotaoff($mountPoint);
 	}
 
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+	static function removeQuotaForDevice($device)
+	{
+		$etcFstab=EtcFsTab::instance();
+		$fileSystem=$etcFstab->findFileSystemForDevice($device);
+		self::validateFileSystem($fileSystem,$device);
+		self::switchOffQuotaForDevice($device);
+		$mountPoint=$fileSystem->_2_fs_file; //mount point
+		if($fileSystem->hasQuotaEnabled())
+		{
+			$fileSystem->disableQuota();
+			$etcFstab->writeFileSystem($fileSystem);
+			syscommand_mount_remount($mountPoint);
+		}
+		if(file_exists("$mountPoint/quota.user"))
+		{
+			syscommand_rm("$mountPoint/quota.user");
+		}
+	}
+
+	static function validateFileSystem($fileSystem,$device)
+	{
+		switch($fileSystem)
+		{
+			case 'no-uuid':	
+				self::error("Cannot find device '$device' in /etc/fstab. ".
+					"Can also not find a UUID for this device",
+					ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID);
+					break;
+			case 'no-filesystem-for-uuid':
+				self::error("Cannot find device '$device' in /etc/fstab. ".
+					"Can also not find a 'UUID=$deviceUUID' entry ".
+					"in /etc/fstab for this device",
+					ERRNUM_VOLUME_CANNOT_FIND_DEVICE_NOR_UUID);
+					break;
+		}		
+	}
+
+
+	static function deviceBlockSize($device)
+	{
+		$blockSize=sysquery_dumpe2fs_blocksize($device);
+		if($blockSize==null)
+		{
+			self::error("Cannot find block size for device '$device'",ERRNUM_CANNOT_FIND_BLOCKSIZE_FOR_DEVICE);
+		}
+		return $blockSize;
+	}
+
+	static function deviceGBToBlocks($device,$GB)
+	{
+		$blockSize=self::deviceBlockSize($device);
+		$numBytesInGB=1024*1024*1024;
+		$blocksInGB=$GB*$numBytesInGB/$blockSize;
+		return $blocksInGB;
+	}
+
+	static function deviceBlocksToGB($device,$blocks)
+	{
+		$blockSize=self::deviceBlockSize($device);
+		$numBytesInGB=1024*1024*1024;
+		$totalNumBytes=$blocks*$blockSize;
+		$GB=$totalNumBytes/$numBytesInGB;
+		return $GB;
+	}
+
+>>>>>>> removed the call to quotacheck
         static function execute()
         {
                 $className=self::actionCamelCaseName(ProgramActions::$entityType);

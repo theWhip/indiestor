@@ -11,7 +11,7 @@
 <<<<<<< HEAD
 =======
 require_once('lib/require_once_folder.php');
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 require_once('lib/args/ProgramActions.php');
 require_once('lib/args/ProgramOptions.php');
 require_once('lib/ArgEngine.php');

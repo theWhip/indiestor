@@ -11,7 +11,7 @@
 require_once('ShellQuery.php');
 
 =======
->>>>>>> added --volume -quota-remove --volumes -purge-fstab-backups
+>>>>>>> removed the call to quotacheck
 /*
 
 Returns all groups in which a user is member. Example:
