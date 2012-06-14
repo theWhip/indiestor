@@ -36,7 +36,8 @@ function sysquery_quota_u($userName)
 	{
 	 	return null;
 	}
-	$result=sysquery("quota --no-wrap --show-mntpoint --hide-device -u $userName $hideStdErrOutput | tail -n +3");
+	//watch out --show-mntpoint and --hide-device is not supported in older versions of the quota package
+	$result=sysquery("quota --no-wrap -u $userName $hideStdErrOutput | tail -n +3");
 	$result=preg_replace('/ +/',' ',$result);
 	$fields=explode(' ',$result);
 

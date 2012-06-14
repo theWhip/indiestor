@@ -204,6 +204,7 @@ class ActionEngine
 		$etcFstab=EtcFsTab::instance();
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
 		self::validateFileSystem($fileSystem,$device);
+              	if(sysquery_quotaon_p($device)) return;
 		$mountPoint=$fileSystem->_2_fs_file; //mount point
 		if(!$fileSystem->hasQuotaEnabled())
 		{
