@@ -17,8 +17,8 @@ class Volumes extends EntityType
 
         static function show($commandAction)
         {
-		$format1="%-20s %-7s %-5s %7s %7s %10s %3s  %-s\n";
-		$format2="%-20s %-7s %-5s %7d %7d %10d %3d  %-s\n";
+		$format1="%-20s %-10s %-5s %7s %7s %10s %3s  %-s\n";
+		$format2="%-20s %-10s %-5s %7d %7d %10d %3d  %-s\n";
 		printf($format1,'device (in GB)','type','quota','total','used','avail','%','mounted on');
 		$dfFileSystems=sysquery_df();
 		if(count($dfFileSystems>0))

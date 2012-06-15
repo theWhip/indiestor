@@ -32,16 +32,32 @@ class DFFileSystem
 function sysquery_df()
 {
 	$dfFileSystems=array();
-	$fileSystemLines=ShellCommand::query_fail_if_error('df -T -BG | grep -v tmpfs | tail -n +2');
+	$fileSystemLines=ShellCommand::query_fail_if_error('df -BG -T | grep -v tmpfs | tail -n +2');
 	$fileSystemArray=explode("\n",$fileSystemLines);
-	foreach($fileSystemArray as $fileSystemLine)
+	
+	for($i=0; $i<count($fileSystemArray); $i++)
 	{
+		$fileSystemLine=$fileSystemArray[$i];
+
 		if($fileSystemLine!='')
 		{
 			$fileSystemLine=preg_replace('/ +/',' ',$fileSystemLine);
 			$fileSystemLineFields=explode(' ',$fileSystemLine);
+
 			$dfFileSystem=new DFFileSystem();
+
 			$dfFileSystem->device=$fileSystemLineFields[0];
+
+			if(count($fileSystemLineFields)!=7)
+			{
+				//the row is spread over two lines
+				//we now read the second line for the remainder of the fields
+				$i++;
+				$fileSystemLine=$fileSystemArray[$i];
+				$fileSystemLine=preg_replace('/ +/',' ',$fileSystemLine);
+				$fileSystemLineFields=explode(' ',$fileSystemLine);
+			}
+
 			$dfFileSystem->type=$fileSystemLineFields[1];
 			$dfFileSystem->storageGB=strip_last_char($fileSystemLineFields[2]);
 			$dfFileSystem->usedGB=strip_last_char($fileSystemLineFields[3]);
