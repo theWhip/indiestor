@@ -10,6 +10,7 @@
 require_once('CommandActionDefinition.php');
 require_once('CommandIncompatibleActionPair.php');
 require_once('CommandMandatoryActionPair.php');
+require_once('DefinitionFile.php');
 
 class CommandActionDefinitions
 {
@@ -29,102 +30,51 @@ class CommandActionDefinitions
 	function configureActionDefinitions()
 	{
                 $this->actionDefinitions=array();
-		
-		//volumes
-		$this->addOutputAction("volumes","show");
-		$this->addPrimaryAction("volumes","purge-fstab-backups");
-		$this->addExecOptionDefinitions("volumes");
-
-		//groups
-		$this->addOutputAction("groups","show");
-		$this->addExecOptionDefinitions("groups");
-
-		//users
-		$this->addOutputAction("users","show");
-		$this->addExecOptionDefinitions("users");
-
-		//volume
-		$this->addPrimaryAction("volume","quota-on");
-		$this->addPrimaryAction("volume","quota-off");
-		$this->addPrimaryAction("volume","quota-remove");
-		$this->addExecOptionDefinitions("volume");
-
-		//group
-		$this->addPrimaryAction("group","add");
-		$this->addPrimaryAction("group","delete");
-		$this->addOutputAction("group","show-members");
-		$this->addExecOptionDefinitions("group");
-
-		//user
-		$this->addPrimaryAction("user","add");
-		$this->addPrimaryAction("user","delete");
-		$this->addPrimaryAction("user","expel");
-		$this->addSecondaryAction("user","set-home",true);
-		$this->addSecondaryAction("user","remove-home",false);
-		$this->addSecondaryAction("user","move-home-content",false);
-		$this->addSecondaryAction("user","set-group",true);
-		$this->addSecondaryAction("user","unset-group",false);
-		$this->addSecondaryAction("user","set-quota",true);
-		$this->addSecondaryAction("user","remove-quota",false);
-                $this->addActionDefinition("user","set-passwd",true,2,false,false);
-		$this->addSecondaryAction("user","lock",false);
-		$this->addSecondaryAction("user","remove-from-indiestor",false);
-		$this->addOutputAction("user","show");
-		$this->addExecOptionDefinitions("user");
+		$rows=DefinitionFile::parse('entityActions',array('entityType','action','hasArg','priority','isOption'));
+		foreach($rows as $row)
+		{
+			$this->addActionDefinition($row['entityType'],$row['action'],$row['hasArg'],$row['priority'],$row['isOption']);
+		}
 	}
 
-	function addOutputAction($entity,$action)
-	{
-                $this->addActionDefinition($entity,$action,false,9,false);
-	}
+        function addActionDefinition($entityType,$action,$hasArg,$priority,$isOption)
+        {
+                $this->actionDefinitions[$this->syntheticKey($entityType,$action)]=
+			new CommandActionDefinition($entityType,$action,$hasArg,
+					$priority,$isOption);
+        }
 
-	function addPrimaryAction($entity,$action,$hasArg=false)
-	{
-                $this->addActionDefinition($entity,$action,$hasArg,1,false);
-	}
-
-	function addSecondaryAction($entity,$action,$hasArg=false)
-	{
-                $this->addActionDefinition($entity,$action,$hasArg,2,false);
-	}
-
-	function addExecOptionDefinitions($entity)
-	{
-                $this->addActionDefinition($entity,"simulate",false,9,true);
-                $this->addActionDefinition($entity,"verbose",false,9,true);
-	}
 
 	function configureIncompatibleActions()
 	{
                 $this->incompatibleActions=array();
-		$this->addIncompatibleActionPair("volume","quota-on","quota-off");
-		$this->addIncompatibleActionPair("volume","quota-on","quota-remove");
-		$this->addIncompatibleActionPair("volume","quota-off","quota-remove");
-		$this->addIncompatibleActionPair('group','add','delete');
-		$this->addIncompatibleActionPair('user','add','delete');
-		$this->addIncompatibleActionPair('user','add','remove-home');
-		$this->addIncompatibleActionPair('user','add','unset-group');
-		$this->addIncompatibleActionPair('user','delete','set-passwd');
-		$this->addIncompatibleActionPair('user','delete','set-home');
-		$this->addIncompatibleActionPair('user','delete','set-group');
-		$this->addIncompatibleActionPair('user','delete','set-quota');
-		$this->addIncompatibleActionPair('user','lock','set-passwd');
-		$this->addIncompatibleActionPair('user','move-home-content','add');
-		$this->addIncompatibleActionPair('user','move-home-content','delete');
-		$this->addIncompatibleActionPair('user','move-home-content','remove-home');
-		$this->addIncompatibleActionPair('user','set-quota','remove-quota');
-		$this->addIncompatibleActionPair('user','delete','unset-group');
-		$this->addIncompatibleActionPair('user','delete','remove-quota');
-		$this->addIncompatibleActionPair('user','delete','lock');
-		$this->addIncompatibleActionPair('user','set-home','remove-home');
-		$this->addIncompatibleActionPair('user','set-group','unset-group');
+		$rows=DefinitionFile::parse('incompatibleActions',array('entityType','action1','action2'));
+		foreach($rows as $row)
+		{
+			$this->addIncompatibleActionPair($row['entityType'],$row['action1'],$row['action2']);
+		}
+	}
+
+	function addIncompatibleActionPair($entityType,$action1,$action2)
+	{
+		$incompatibleSyntheticKey=$this->incompatibleSyntheticKey($entityType,$action1,$action2);
+		$this->incompatibleActions[$incompatibleSyntheticKey]=
+			new CommandIncompatibleActionPair($entityType,$action1,$action2);
+	}
+
+	function incompatibleSyntheticKey($entityType,$action1,$action2)
+	{
+		return $entityType.'|'.$action1.'|'.$action2;
 	}
 
 	function configureMandatoryActions()
 	{
                 $this->mandatoryActions=array();
-		$this->addMandatoryActionPair("user",'remove-home','delete');
-		$this->addMandatoryActionPair("user",'move-home-content','set-home');
+		$rows=DefinitionFile::parse('mandatoryPrequisiteActions',array('entityType','action','prerequisite'));
+		foreach($rows as $row)
+		{
+			$this->addMandatoryActionPair($row['entityType'],$row['action'],$row['prerequisite']);
+		}
 	}
 
 	function addMandatoryActionPair($entityType,$action1,$action2)
@@ -137,7 +87,11 @@ class CommandActionDefinitions
 	function configureSingletonActions()
 	{
 		$this->singletonActions=array();
-		$this->addSingletonAction("user","remove-from-indiestor");
+		$rows=DefinitionFile::parse('singletonActions',array('entityType','action'));
+		foreach($rows as $row)
+		{
+			$this->addSingletonAction($row['entityType'],$row['action']);
+		}
 	}
 
 	function addSingletonAction($entityType,$action)
@@ -158,29 +112,10 @@ class CommandActionDefinitions
 		return $entityType.'|'.$action;
 	}
 
-	function incompatibleSyntheticKey($entityType,$action1,$action2)
-	{
-		return $entityType.'|'.$action1.'|'.$action2;
-	}
-
 	function mandatorySyntheticKey($entityType,$action1,$action2)
 	{
 		return $entityType.'|'.$action1.'|'.$action2;
 	}
-
-	function addIncompatibleActionPair($entityType,$action1,$action2)
-	{
-		$incompatibleSyntheticKey=$this->incompatibleSyntheticKey($entityType,$action1,$action2);
-		$this->incompatibleActions[$incompatibleSyntheticKey]=
-			new CommandIncompatibleActionPair($entityType,$action1,$action2);
-	}
-
-        function addActionDefinition($entityType,$action,$hasArg,$priority,$isOption)
-        {
-                $this->actionDefinitions[$this->syntheticKey($entityType,$action)]=
-			new CommandActionDefinition($entityType,$action,$hasArg,
-					$priority,$isOption);
-        }
 
 	function firstIncompatibleAction($entityType,$actions,$newAction)
 	{

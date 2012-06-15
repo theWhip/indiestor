@@ -8,6 +8,7 @@
 */
 
 require_once('CommandEntityDefinition.php');
+require_once('DefinitionFile.php');
 
 class CommandEntityDefinitions
 {
@@ -16,24 +17,12 @@ class CommandEntityDefinitions
         function __construct()
         {
                 $this->entityDefinitions=array();
-                $this->add("help",false,false);
-                $this->addPluralEntityType("volumes");
-                $this->addSingularEntityType("volume");
-                $this->addPluralEntityType("groups");
-                $this->addSingularEntityType("group");
-                $this->addPluralEntityType("users");
-                $this->addSingularEntityType("user");
+		$rows=DefinitionFile::parse('entityTypes',array('entityType','hasArg','mustHaveActions'));
+		foreach($rows as $row)
+		{
+			$this->add($row['entityType'],$row['hasArg'],$row['mustHaveActions']);
+		}
         }
-
-	function addPluralEntityType($entityType)
-	{
-		$this->add($entityType,false,true);
-	}
-
-	function addSingularEntityType($entityType)
-	{
-		$this->add($entityType,true,true);
-	}
 
         function add($entityType,$hasArg,$mustHaveActions)
         {
