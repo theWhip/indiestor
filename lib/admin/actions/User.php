@@ -73,8 +73,8 @@ class User extends EntityType
 	{
 		if(sysquery_passwd_S_locked($userName))
 		{
-			ActionEngine::error("user '$userName' already locked",
-					ERRNUM_USER_ALREADY_LOCKED);
+			ActionEngine::warning("user '$userName' already locked",
+					WARNING_USER_ALREADY_LOCKED);
 		}
 	}
 
@@ -227,8 +227,8 @@ class User extends EntityType
 		$group=$etcGroup->findGroupForUserName($userName);
 		if($group==null)
 		{
-			ActionEngine::error("user '$userName' is not member of any group",
-						ERRNUM_USER_NOT_MEMBER_OF_ANY_GROUP);
+			ActionEngine::warning("user '$userName' is not member of any group",
+						WARNING_USER_NOT_MEMBER_OF_ANY_GROUP);
 		}
 		self::removeFromISGroup($userName);
 	}
@@ -390,8 +390,8 @@ class User extends EntityType
 		//if quota not enabled for device, removal of quota for this user is not possible
 		if(sysquery_quotaon_p($device)!==true)
 		{
-			ActionEngine::error("Cannot remove quota for user '$userName' on device '$device' for which quota are not enabled ",
-						ERRNUM_REMOVE_USER_QUOTA_ON_DEVICE_QUOTA_NOT_ENABLED);
+			ActionEngine::warning("Cannot remove quota for user '$userName' on device '$device' for which quota are not enabled ",
+						WARNING_REMOVE_USER_QUOTA_ON_DEVICE_QUOTA_NOT_ENABLED);
 		}
 		//set the quota to zero; which effectively removes the quota
 		syscommand_setquota_u($device,$userName,0);

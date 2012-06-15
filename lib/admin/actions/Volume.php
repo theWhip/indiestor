@@ -45,15 +45,15 @@ class Volume extends EntityType
 	static function checkIfQuotaAlreadyOnForDevice($device)
 	{
 		if(sysquery_quotaon_p($device)===true)
-			ActionEngine::error("Quota already on for device '$device'",
-				ERRNUM_QUOTA_ALREADY_ON_FOR_DEVICE);
+			ActionEngine::warning("Quota already on for device '$device'",
+				WARNING_QUOTA_ALREADY_ON_FOR_DEVICE);
 	}
 
 	static function checkIfQuotaAlreadyOffForDevice($device)
 	{
 		if(sysquery_quotaon_p($device)===false)
-			ActionEngine::error("Quota already off for device '$device'",
-				ERRNUM_QUOTA_ALREADY_OFF_FOR_DEVICE);
+			ActionEngine::warning("Quota already off for device '$device'",
+				WARNING_QUOTA_ALREADY_OFF_FOR_DEVICE);
 	}
 
 	static function checkIfQuotaAlreadyRemovedForDevice($device)
@@ -63,8 +63,8 @@ class Volume extends EntityType
 		ActionEngine::validateFileSystem($fileSystem,$device);
 		if(!$fileSystem->hasQuotaEnabled())
 		{
-			ActionEngine::error("Quota already removed for device '$device'",
-				ERRNUM_QUOTA_ALREADY_REMOVED_FOR_DEVICE);
+			ActionEngine::warning("Quota already removed for device '$device'",
+				WARNING_QUOTA_ALREADY_REMOVED_FOR_DEVICE);
 		}
 	}
 }
