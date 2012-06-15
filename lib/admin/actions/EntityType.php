@@ -11,10 +11,11 @@ class EntityType
 {
         static function execute()
         {
+	      	$className=get_called_class();
+
 		if(ProgramActions::$actions==null)
 		{
 			$function='default_action';
-	                $className=get_called_class();
 
 			if(method_exists($className,$function))
 			{
@@ -28,6 +29,11 @@ class EntityType
 		}
 		else
 		{
+			if(method_exists($className,'validateUpFront'))
+			{
+		                $className::validateUpFront();
+			}
+
 		        foreach(ProgramActions::$actions as $commandAction)
 		        {
 		                $action=$commandAction->action;
