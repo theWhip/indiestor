@@ -23,6 +23,7 @@ function syscommand_quotacheck_new_quota_file($mountPoint)
 	//watch out for those horrible Gnome virtual file system .gvfs
 	//we will try to unmount them
 	unclusterFuckTheHorribleGnome_gvfs($mountPoint);
+	ShellCommand::warnLongTime('quotacheck');
 	ShellCommand::exec_fail_if_error("quotacheck --format=vfsold -ucm $mountPoint");
 }
 
@@ -32,6 +33,7 @@ function syscommand_quotacheck_existing_quota_file($mountPoint)
 	//watch out for those horrible Gnome virtual file system .gvfs
 	//we will try to unmount them
 	unclusterFuckTheHorribleGnome_gvfs($mountPoint);
+	ShellCommand::warnLongTime('quotacheck');
 	ShellCommand::exec_fail_if_error("quotacheck --format=vfsold -um $mountPoint");
 }
 

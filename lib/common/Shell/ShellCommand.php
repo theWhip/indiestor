@@ -25,6 +25,12 @@ class ProcessOutput
 class ShellCommand
 {
 
+	function warnLongTime($command)
+	{
+		echo "running the '$command' command\n";
+		echo "this may take a long time ...\n";
+	}
+
 	function printCommand($command)
 	{
 		if(ProgramOptions::$verbose || ProgramOptions::$simulation)

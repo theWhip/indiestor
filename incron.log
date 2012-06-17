@@ -1,0 +1,16 @@
+pid=11597 folder='A2' type='A1' object='A3' events='A4'
+====>pid=11597 decision=ERROR:unknown watch type 'A1'
+pid=11654 folder='/home/erik' type='MAIN' object='numbers.shared' events='IN_MOVED_TO,IN_ISDIR'
+====>pid=11654 decision=DELAYED
+pid=11656 folder='/home/erik/Dropbox/alex/indiestor-dev/indiestor/in_move_pending' type='IMP' object='755f5bf1b166a9fc3bede8394ae7f43a' events='IN_CREATE'
+====>pid=11656 decision=SHARE
+pid=11664 folder='/home/erik' type='MAIN' object='numbers.shared' events='IN_MOVED_TO,IN_ISDIR'
+====>pid=11664 decision=DELAYED
+pid=11666 folder='/home/erik/Dropbox/alex/indiestor-dev/indiestor/in_move_pending' type='IMP' object='755f5bf1b166a9fc3bede8394ae7f43a' events='IN_CREATE'
+====>pid=11666 decision=SHARE
+pid=11844 folder='/home/erik' type='MAIN' object='numbers.abc' events='IN_MOVED_FROM,IN_ISDIR'
+pid=11845 folder='/home/erik' type='MAIN' object='numbers.shared' events='IN_MOVED_TO,IN_ISDIR'
+====>pid=11844 decision=DELAYED
+====>pid=11845 decision=SHARE
+pid=11848 folder='/home/erik/Dropbox/alex/indiestor-dev/indiestor/in_move_pending' type='IMP' object='755f5bf1b166a9fc3bede8394ae7f43a' events='IN_CREATE'
+====>pid=11848 decision=IGNORE

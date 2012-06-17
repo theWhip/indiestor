@@ -60,11 +60,6 @@ class Group extends EntityType
 		}
 	}
 
-	static function noMembers($groupName)
-	{
-		echo "no members for group $groupName\n";
-	}
-
 	static function showMembers($commandAction)
 	{
 		$ISGroupName=ProgramActions::$entityName;
@@ -72,26 +67,8 @@ class Group extends EntityType
 		$etcGroup=EtcGroup::instance();
 		$group=$etcGroup->findGroup($ISGroupName);
 
-		if($group->members==null) 
-		{
-			self::noMembers($ISGroupName);
-			return;
-		}
-
-		if(count($group->members)==0) 
-		{
-			self::noMember($ISGroupName);
-			return;
-		}
-
-		$userRecords=array();
-                foreach($group->members as $member)
-                {
-			$userRecord=new UserReportRecord($member);
-			$userRecords[]=$userRecord;
-                }
-
-		ActionEngine::printUserRecords($userRecords);
+		$userReportRecords=new UserReportRecords($group->members);
+		$userReportRecords->output();
 	}
 }
 

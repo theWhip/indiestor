@@ -1,18 +1,45 @@
 #!/usr/bin/php
 <?php
-/*
-        Indiestor simulation program
+echo "executing indiestor-inotify...\n";
 
-	Written by Erik Poupaert, erik@sankuru.biz
-        Commissioned at peopleperhour.com 
-        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
-*/
+$outputFileName=dirname(__FILE__).'/incron.log';
+$outputFile=fopen($outputFileName,'a');
 
-require_once('lib/inotify/JSONFile.php');
-require_once('lib/inotify/groupdefinitions/GroupDefinitions.php');
+ini_set('display_errors','On');
 
-$groups=JSONFile::load('etc/groups.json');
-$memberFolders=JSONFile::load('etc/member-folders.json');
-$groupDefinitions=new GroupDefinitions($groups,$memberFolders);
-$groupDefinitions->FSPaths->dump();
+$date=date(DATE_RFC822);
+$watchType=$argv[1];
+$folderWatched=$argv[2];
+$fsObject=$argv[3];
+$events=$argv[4];
+
+require_once('lib/inotify/InotifyEventHandler.php');
+
+$inMovePendingPath=dirname(__FILE__).'/in_move_pending';
+if(!is_dir($inMovePendingPath)) mkdir($inMovePendingPath);
+$inotifyEventHandler=new InotifyEventHandler($inMovePendingPath);
+
+//process number
+$pid=getmypid();
+
+fputs($outputFile,"pid=$pid folder='$folderWatched' type='$watchType' object='$fsObject' events='$events'\n");
+
+try
+{
+	$decision=$inotifyEventHandler->decision($watchType,$folderWatched,$fsObject,$events);
+}
+catch(Exception $e)
+{
+	$decision='ERROR:'.$e->getMessage();
+}
+
+if($decision instanceof RenameOperation)
+{
+	$from=$decision->from;
+	$to=$decision->to;
+	$decision="RENAME '$from' TO '$to'";
+}
+
+fputs($outputFile,"====>pid=$pid decision=$decision\n");
+fclose($outputFile);
 

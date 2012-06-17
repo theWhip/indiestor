@@ -115,6 +115,7 @@ class User extends EntityType
 	static function validateSetQuota($userName)
 	{
 		//quota
+		$commandAction=ProgramActions::findByName('set-quota');
 		$GB=$commandAction->actionArg;
 		self::checkForValidQuota($GB);
 		//device for user
@@ -472,6 +473,15 @@ class User extends EntityType
 			ActionEngine::error("indiestor group '$groupName' does not exist",
 						ERRNUM_GROUP_DOES_NOT_EXIST);
 		}
+	}
+
+	static function afterCommand()
+	{
+		if(ProgramActions::actionExists('add') ||
+				ProgramActions::actionExists('delete') ||
+				ProgramActions::actionExists('set-home') ||
+				ProgramActions::actionExists('remove-from-indiestor'))
+			ActionEngine::regenerateIncrontab();			
 	}
 }
 

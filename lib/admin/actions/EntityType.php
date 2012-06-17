@@ -7,6 +7,8 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+require_once(dirname(dirname(__FILE__)).'/ActionNamingConvention.php');
+
 class EntityType
 {
         static function execute()
@@ -37,10 +39,15 @@ class EntityType
 		        foreach(ProgramActions::$actions as $commandAction)
 		        {
 		                $action=$commandAction->action;
-		                $function=ActionEngine::actionCamelCaseNameWithFirstLowerCase($action);
+		                $function=actionCamelCaseNameWithFirstLowerCase($action);
 		                $className=get_called_class();
 		                $className::$function($commandAction);
 		        }
+
+			if(method_exists($className,'afterCommand'))
+			{
+		                $className::afterCommand();
+			}
 		}
         }
 }

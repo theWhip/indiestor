@@ -1,0 +1,18 @@
+#!/usr/bin/php
+<?php
+/*
+        Indiestor simulation program
+
+	Written by Erik Poupaert, erik@sankuru.biz
+        Commissioned at peopleperhour.com 
+        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
+*/
+
+require_once('lib/sharing/JSONFile.php');
+require_once('lib/sharing/groupdefinitions/GroupDefinitions.php');
+
+$groups=JSONFile::load('etc/groups.json');
+$memberFolders=JSONFile::load('etc/member-folders.json');
+$groupDefinitions=new GroupDefinitions($groups,$memberFolders);
+$groupDefinitions->FSPaths->dump();
+
