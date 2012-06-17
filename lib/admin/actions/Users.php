@@ -17,5 +17,10 @@ class Users extends EntityType
 		$userReportRecords=new UserReportRecords($indiestorGroup->members);
 		$userReportRecords->output();
        }
+
+        static function showIncrontab($commandAction)
+        {
+		syscommand_incrontab_show();		
+      	}
 }
 
