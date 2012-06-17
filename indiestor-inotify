@@ -1,9 +1,12 @@
 #!/usr/bin/php
 <?php
-echo "executing indiestor-inotify...\n";
-
-$outputFileName=dirname(__FILE__).'/incron.log';
-$outputFile=fopen($outputFileName,'a');
+fclose(STDIN);
+fclose(STDOUT);
+fclose(STDERR);
+$outputFile=dirname(__FILE__).'/incron.log';
+$STDIN = fopen('/dev/null', 'r');
+$STDOUT = fopen($outputFile,'a');
+$STDERR = fopen($outputFile,'a');
 
 ini_set('display_errors','On');
 
@@ -22,7 +25,7 @@ $inotifyEventHandler=new InotifyEventHandler($inMovePendingPath);
 //process number
 $pid=getmypid();
 
-fputs($outputFile,"pid=$pid folder='$folderWatched' type='$watchType' object='$fsObject' events='$events'\n");
+echo "pid=$pid folder='$folderWatched' type='$watchType' object='$fsObject' events='$events'\n";
 
 try
 {
@@ -40,6 +43,6 @@ if($decision instanceof RenameOperation)
 	$decision="RENAME '$from' TO '$to'";
 }
 
-fputs($outputFile,"====>pid=$pid decision=$decision\n");
-fclose($outputFile);
+echo "====>pid=$pid decision=$decision\n";
+
 
