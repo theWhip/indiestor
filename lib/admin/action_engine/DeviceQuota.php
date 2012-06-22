@@ -80,16 +80,40 @@ class DeviceQuota
 		switch($fileSystem)
 		{
 			case 'no-uuid':	
-				ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
-					"Can also not find a UUID for this device",
-					ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID);
-					break;
+				if($device='/dev/simfs')
+				{
+					ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
+						"Can also not find a UUID for this device. ".
+						"This is apparently a VPS running in a Virtuozzo container. ".
+						"You may need to enable second-level (per-user) Virtuozzo quota at the VPS level",
+						ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID);
+				}
+				else
+				{
+					ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
+						"Can also not find a UUID for this device.",
+						ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID);
+				}
+				break;
 			case 'no-filesystem-for-uuid':
-				ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
-					"Can also not find a 'UUID=$deviceUUID' entry ".
-					"in /etc/fstab for this device",
-					ERRNUM_VOLUME_CANNOT_FIND_DEVICE_NOR_UUID);
-					break;
+			case 'no-uuid':	
+				if($device='/dev/simfs')
+				{
+					ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
+						"Can also not find a 'UUID=$deviceUUID' entry ".
+						"in /etc/fstab for this device.".
+						"This is apparently a VPS running in a Virtuozzo container. ".
+						"You may need to enable second-level (per-user) Virtuozzo quota at the VPS level",
+						ERRNUM_VOLUME_CANNOT_FIND_DEVICE_NOR_UUID);
+				}
+				else
+				{
+					ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
+						"Can also not find a 'UUID=$deviceUUID' entry ".
+						"in /etc/fstab for this device",
+						ERRNUM_VOLUME_CANNOT_FIND_DEVICE_NOR_UUID);
+				}
+				break;
 		}		
 	}
 
