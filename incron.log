@@ -1,0 +1,432 @@
+pid=12428 folder='/home/erik' type='MAIN' object='.compiz' events='IN_CREATE,IN_ISDIR'
+====>pid=12428 decision=IGNORE
+pid=12444 folder='/home/erik' type='MAIN' object='.goutputstream-S02MFW' events='IN_ATTRIB'
+====>pid=12444 decision=IGNORE
+pid=12443 folder='/home/erik' type='MAIN' object='.goutputstream-S02MFW' events='IN_CREATE'
+====>pid=12443 decision=IGNORE
+pid=12449 folder='/home/erik' type='MAIN' object='.goutputstream-S02MFW' events='IN_MOVED_FROM'
+pid=12450 folder='/home/erik' type='MAIN' object='.Xauthority' events='IN_MOVED_TO'
+====>pid=12450 decision=IGNORE
+====>pid=12449 decision=IGNORE
+pid=1449 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_DELETE'
+pid=1446 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_CREATE'
+pid=1376 folder='/home/erik' type='MAIN' object='.Xauthority' events='IN_MOVED_TO'
+pid=1268 folder='/home/erik' type='MAIN' object='.dmrc.BBI0FW' events='IN_MOVED_FROM'
+pid=1370 folder='/home/erik' type='MAIN' object='.goutputstream-1EHXFW' events='IN_CREATE'
+pid=1379 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_CREATE'
+pid=1262 folder='/home/erik' type='MAIN' object='.dmrc.BBI0FW' events='IN_CREATE'
+pid=1372 folder='/home/erik' type='MAIN' object='.goutputstream-1EHXFW' events='IN_ATTRIB'
+pid=1378 folder='/home/erik' type='MAIN' object='.xsession-errors.old' events='IN_MOVED_TO'
+pid=1269 folder='/home/erik' type='MAIN' object='.dmrc' events='IN_MOVED_TO'
+pid=1377 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_MOVED_FROM'
+pid=1371 folder='/home/erik' type='MAIN' object='.goutputstream-1EHXFW' events='IN_ATTRIB'
+pid=1374 folder='/home/erik' type='MAIN' object='.goutputstream-1EHXFW' events='IN_MOVED_FROM'
+pid=1447 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_CREATE'
+pid=1448 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_DELETE'
+====>pid=1449 decision=IGNORE
+====>pid=1446 decision=IGNORE
+====>pid=1376 decision=IGNORE
+====>pid=1268 decision=IGNORE
+====>pid=1370 decision=IGNORE
+====>pid=1379 decision=IGNORE
+====>pid=1262 decision=IGNORE
+====>pid=1372 decision=IGNORE
+====>pid=1378 decision=IGNORE
+====>pid=1269 decision=IGNORE
+====>pid=1377 decision=IGNORE
+====>pid=1371 decision=IGNORE
+====>pid=1374 decision=IGNORE
+====>pid=1447 decision=IGNORE
+====>pid=1448 decision=IGNORE
+pid=1871 folder='/home/erik' type='MAIN' object='.compiz' events='IN_DELETE,IN_ISDIR'
+====>pid=1871 decision=IGNORE
+pid=1925 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1925 decision=IGNORE
+pid=1926 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1926 decision=IGNORE
+pid=1934 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1934 decision=IGNORE
+pid=1945 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1945 decision=IGNORE
+pid=1944 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1944 decision=IGNORE
+pid=1947 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1947 decision=IGNORE
+pid=1948 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1948 decision=IGNORE
+pid=1946 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1946 decision=IGNORE
+pid=1968 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1968 decision=IGNORE
+pid=1970 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1970 decision=IGNORE
+pid=1971 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1971 decision=IGNORE
+pid=1972 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1972 decision=IGNORE
+pid=2063 folder='/home/erik' type='MAIN' object='.dropbox' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2063 decision=IGNORE
+pid=2075 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2075 decision=IGNORE
+pid=2076 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2076 decision=IGNORE
+pid=4098 folder='/home/erik' type='MAIN' object='.org.chromium.Chromium.WTlGiR' events='IN_CREATE'
+====>pid=4098 decision=IGNORE
+pid=4105 folder='/home/erik' type='MAIN' object='.org.chromium.Chromium.WTlGiR' events='IN_MOVED_FROM'
+====>pid=4105 decision=IGNORE
+pid=4909 folder='/home/erik' type='MAIN' object='.compiz' events='IN_CREATE,IN_ISDIR'
+====>pid=4909 decision=IGNORE
+pid=4926 folder='/home/erik' type='MAIN' object='.goutputstream-FXXQFW' events='IN_ATTRIB'
+pid=4925 folder='/home/erik' type='MAIN' object='.goutputstream-FXXQFW' events='IN_CREATE'
+====>pid=4925 decision=IGNORE
+====>pid=4926 decision=IGNORE
+pid=4936 folder='/home/erik' type='MAIN' object='.goutputstream-FXXQFW' events='IN_MOVED_FROM'
+====>pid=4936 decision=IGNORE
+pid=4937 folder='/home/erik' type='MAIN' object='.Xauthority' events='IN_MOVED_TO'
+====>pid=4937 decision=IGNORE
+pid=1277 folder='/home/erik' type='MAIN' object='.dmrc.6MENFW' events='IN_MOVED_FROM'
+pid=1383 folder='/home/erik' type='MAIN' object='.goutputstream-EKV0FW' events='IN_CREATE'
+pid=1272 folder='/home/erik' type='MAIN' object='.dmrc.6MENFW' events='IN_CREATE'
+pid=1385 folder='/home/erik' type='MAIN' object='.goutputstream-EKV0FW' events='IN_ATTRIB'
+pid=1278 folder='/home/erik' type='MAIN' object='.dmrc' events='IN_MOVED_TO'
+pid=1384 folder='/home/erik' type='MAIN' object='.goutputstream-EKV0FW' events='IN_ATTRIB'
+====>pid=1277 decision=IGNORE
+====>pid=1383 decision=IGNORE
+====>pid=1272 decision=IGNORE
+====>pid=1385 decision=IGNORE
+====>pid=1384 decision=IGNORE
+====>pid=1278 decision=IGNORE
+pid=1396 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_CREATE'
+====>pid=1396 decision=IGNORE
+pid=1392 folder='/home/erik' type='MAIN' object='.Xauthority' events='IN_MOVED_TO'
+====>pid=1392 decision=IGNORE
+pid=1394 folder='/home/erik' type='MAIN' object='.xsession-errors.old' events='IN_MOVED_TO'
+====>pid=1394 decision=IGNORE
+pid=1391 folder='/home/erik' type='MAIN' object='.goutputstream-EKV0FW' events='IN_MOVED_FROM'
+====>pid=1391 decision=IGNORE
+pid=1393 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_MOVED_FROM'
+====>pid=1393 decision=IGNORE
+pid=1460 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_CREATE'
+====>pid=1460 decision=IGNORE
+pid=1465 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_DELETE'
+====>pid=1465 decision=IGNORE
+pid=1464 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_DELETE'
+====>pid=1464 decision=IGNORE
+pid=1461 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_CREATE'
+====>pid=1461 decision=IGNORE
+pid=1818 folder='/home/erik' type='MAIN' object='.compiz' events='IN_DELETE,IN_ISDIR'
+====>pid=1818 decision=IGNORE
+pid=1825 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1825 decision=IGNORE
+pid=1826 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1826 decision=IGNORE
+pid=1832 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1832 decision=IGNORE
+pid=1845 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1845 decision=IGNORE
+pid=1847 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+pid=1846 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1846 decision=IGNORE
+====>pid=1847 decision=IGNORE
+pid=1864 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1864 decision=IGNORE
+pid=1868 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1868 decision=IGNORE
+pid=1869 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1869 decision=IGNORE
+pid=1867 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1867 decision=IGNORE
+pid=1966 folder='/home/erik' type='MAIN' object='.dropbox' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1966 decision=IGNORE
+pid=1975 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1975 decision=IGNORE
+pid=1976 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1976 decision=IGNORE
+pid=4654 folder='/home/erik' type='MAIN' object='.org.chromium.Chromium.os85x9' events='IN_CREATE'
+====>pid=4654 decision=IGNORE
+pid=4656 folder='/home/erik' type='MAIN' object='.org.chromium.Chromium.os85x9' events='IN_MOVED_FROM'
+====>pid=4656 decision=IGNORE
+pid=13652 folder='/home/erik' type='MAIN' object='.compiz' events='IN_CREATE,IN_ISDIR'
+====>pid=13652 decision=IGNORE
+pid=13668 folder='/home/erik' type='MAIN' object='.goutputstream-A6EGGW' events='IN_CREATE'
+====>pid=13668 decision=IGNORE
+pid=13669 folder='/home/erik' type='MAIN' object='.goutputstream-A6EGGW' events='IN_ATTRIB'
+====>pid=13669 decision=IGNORE
+pid=1257 folder='/home/erik' type='MAIN' object='.dmrc.NE1QGW' events='IN_MOVED_FROM'
+pid=1258 folder='/home/erik' type='MAIN' object='.dmrc' events='IN_MOVED_TO'
+pid=1242 folder='/home/erik' type='MAIN' object='.dmrc.NE1QGW' events='IN_CREATE'
+====>pid=1257 decision=IGNORE
+====>pid=1258 decision=IGNORE
+====>pid=1242 decision=IGNORE
+pid=1395 folder='/home/erik' type='MAIN' object='.goutputstream-YXBEGW' events='IN_ATTRIB'
+====>pid=1395 decision=IGNORE
+pid=1394 folder='/home/erik' type='MAIN' object='.goutputstream-YXBEGW' events='IN_CREATE'
+====>pid=1394 decision=IGNORE
+pid=1396 folder='/home/erik' type='MAIN' object='.goutputstream-YXBEGW' events='IN_ATTRIB'
+====>pid=1396 decision=IGNORE
+pid=1403 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_MOVED_FROM'
+====>pid=1403 decision=IGNORE
+pid=1404 folder='/home/erik' type='MAIN' object='.xsession-errors.old' events='IN_MOVED_TO'
+====>pid=1404 decision=IGNORE
+pid=1402 folder='/home/erik' type='MAIN' object='.Xauthority' events='IN_MOVED_TO'
+====>pid=1402 decision=IGNORE
+pid=1401 folder='/home/erik' type='MAIN' object='.goutputstream-YXBEGW' events='IN_MOVED_FROM'
+====>pid=1401 decision=IGNORE
+pid=1407 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_CREATE'
+====>pid=1407 decision=IGNORE
+pid=1477 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_CREATE'
+====>pid=1477 decision=IGNORE
+pid=1476 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_CREATE'
+====>pid=1476 decision=IGNORE
+pid=1480 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_DELETE'
+====>pid=1480 decision=IGNORE
+pid=1481 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_DELETE'
+====>pid=1481 decision=IGNORE
+pid=1912 folder='/home/erik' type='MAIN' object='.compiz' events='IN_DELETE,IN_ISDIR'
+====>pid=1912 decision=IGNORE
+pid=1916 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1916 decision=IGNORE
+pid=1917 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1917 decision=IGNORE
+pid=1922 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1922 decision=IGNORE
+pid=1934 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1934 decision=IGNORE
+pid=1952 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1952 decision=IGNORE
+pid=1951 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1951 decision=IGNORE
+pid=1954 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1954 decision=IGNORE
+pid=1955 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1955 decision=IGNORE
+pid=1956 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1956 decision=IGNORE
+pid=2049 folder='/home/erik' type='MAIN' object='.dropbox' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2049 decision=IGNORE
+pid=2065 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2065 decision=IGNORE
+pid=2066 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2066 decision=IGNORE
+pid=3603 folder='/home/erik' type='MAIN' object='.Skype' events='IN_ATTRIB,IN_ISDIR'
+====>pid=3603 decision=IGNORE
+pid=3602 folder='/home/erik' type='MAIN' object='.Skype' events='IN_ATTRIB,IN_ISDIR'
+====>pid=3602 decision=IGNORE
+pid=3709 folder='/home/erik' type='MAIN' object='.org.chromium.Chromium.7BBSRr' events='IN_CREATE'
+====>pid=3709 decision=IGNORE
+pid=3711 folder='/home/erik' type='MAIN' object='.org.chromium.Chromium.7BBSRr' events='IN_MOVED_FROM'
+====>pid=3711 decision=IGNORE
+pid=3801 folder='/home/erik' type='MAIN' object='.org.chromium.Chromium.sUEriX' events='IN_CREATE'
+====>pid=3801 decision=IGNORE
+pid=3803 folder='/home/erik' type='MAIN' object='.org.chromium.Chromium.sUEriX' events='IN_MOVED_FROM'
+====>pid=3803 decision=IGNORE
+pid=4429 folder='/home/erik' type='MAIN' object='.compiz' events='IN_CREATE,IN_ISDIR'
+====>pid=4429 decision=IGNORE
+pid=4450 folder='/home/erik' type='MAIN' object='.goutputstream-FTNGGW' events='IN_ATTRIB'
+====>pid=4450 decision=IGNORE
+pid=4449 folder='/home/erik' type='MAIN' object='.goutputstream-FTNGGW' events='IN_CREATE'
+====>pid=4449 decision=IGNORE
+pid=4454 folder='/home/erik' type='MAIN' object='.goutputstream-FTNGGW' events='IN_MOVED_FROM'
+====>pid=4454 decision=IGNORE
+pid=4455 folder='/home/erik' type='MAIN' object='.Xauthority' events='IN_MOVED_TO'
+====>pid=4455 decision=IGNORE
+pid=1504 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_DELETE'
+pid=1430 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_MOVED_FROM'
+pid=1400 folder='/home/erik' type='MAIN' object='.goutputstream-VDOJGW' events='IN_ATTRIB'
+pid=1431 folder='/home/erik' type='MAIN' object='.xsession-errors.old' events='IN_MOVED_TO'
+pid=1433 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_CREATE'
+pid=1503 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_DELETE'
+pid=1427 folder='/home/erik' type='MAIN' object='.goutputstream-VDOJGW' events='IN_MOVED_FROM'
+pid=1305 folder='/home/erik' type='MAIN' object='.dmrc.8ESDGW' events='IN_CREATE'
+pid=1399 folder='/home/erik' type='MAIN' object='.goutputstream-VDOJGW' events='IN_ATTRIB'
+pid=1398 folder='/home/erik' type='MAIN' object='.goutputstream-VDOJGW' events='IN_CREATE'
+pid=1501 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_CREATE'
+pid=1429 folder='/home/erik' type='MAIN' object='.Xauthority' events='IN_MOVED_TO'
+pid=1315 folder='/home/erik' type='MAIN' object='.dmrc.8ESDGW' events='IN_MOVED_FROM'
+pid=1502 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_CREATE'
+pid=1316 folder='/home/erik' type='MAIN' object='.dmrc' events='IN_MOVED_TO'
+====>pid=1504 decision=IGNORE
+====>pid=1430 decision=IGNORE
+====>pid=1400 decision=IGNORE
+====>pid=1431 decision=IGNORE
+====>pid=1433 decision=IGNORE
+====>pid=1503 decision=IGNORE
+====>pid=1427 decision=IGNORE
+====>pid=1399 decision=IGNORE
+====>pid=1398 decision=IGNORE
+====>pid=1429 decision=IGNORE
+====>pid=1315 decision=IGNORE
+====>pid=1502 decision=IGNORE
+====>pid=1501 decision=IGNORE
+====>pid=1316 decision=IGNORE
+====>pid=1305 decision=IGNORE
+pid=1947 folder='/home/erik' type='MAIN' object='.compiz' events='IN_DELETE,IN_ISDIR'
+====>pid=1947 decision=IGNORE
+pid=1951 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1951 decision=IGNORE
+pid=1953 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1953 decision=IGNORE
+pid=1963 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1963 decision=IGNORE
+pid=1966 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1966 decision=IGNORE
+pid=1962 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1962 decision=IGNORE
+pid=1964 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1964 decision=IGNORE
+pid=1965 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1965 decision=IGNORE
+pid=1990 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1990 decision=IGNORE
+pid=1993 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1993 decision=IGNORE
+pid=1994 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1994 decision=IGNORE
+pid=1992 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1992 decision=IGNORE
+pid=1996 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1996 decision=IGNORE
+pid=2085 folder='/home/erik' type='MAIN' object='.dropbox' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2085 decision=IGNORE
+pid=2100 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2100 decision=IGNORE
+pid=3427 folder='/home/erik' type='MAIN' object='.org.chromium.Chromium.PB8dXF' events='IN_CREATE'
+====>pid=3427 decision=IGNORE
+pid=3429 folder='/home/erik' type='MAIN' object='.org.chromium.Chromium.PB8dXF' events='IN_MOVED_FROM'
+====>pid=3429 decision=IGNORE
+pid=3827 folder='/home/erik' type='MAIN' object='.Skype' events='IN_ATTRIB,IN_ISDIR'
+====>pid=3827 decision=IGNORE
+pid=3826 folder='/home/erik' type='MAIN' object='.Skype' events='IN_ATTRIB,IN_ISDIR'
+====>pid=3826 decision=IGNORE
+pid=1364 folder='/home/erik' type='MAIN' object='.dmrc' events='IN_MOVED_TO'
+====>pid=1364 decision=IGNORE
+pid=1347 folder='/home/erik' type='MAIN' object='.dmrc.YHRGGW' events='IN_CREATE'
+pid=1363 folder='/home/erik' type='MAIN' object='.dmrc.YHRGGW' events='IN_MOVED_FROM'
+====>pid=1363 decision=IGNORE
+====>pid=1347 decision=IGNORE
+pid=1482 folder='/home/erik' type='MAIN' object='.goutputstream-KOXBGW' events='IN_CREATE'
+====>pid=1482 decision=IGNORE
+pid=1484 folder='/home/erik' type='MAIN' object='.goutputstream-KOXBGW' events='IN_ATTRIB'
+====>pid=1484 decision=IGNORE
+pid=1483 folder='/home/erik' type='MAIN' object='.goutputstream-KOXBGW' events='IN_ATTRIB'
+====>pid=1483 decision=IGNORE
+pid=1512 folder='/home/erik' type='MAIN' object='.xsession-errors.old' events='IN_MOVED_TO'
+====>pid=1512 decision=IGNORE
+pid=1511 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_MOVED_FROM'
+====>pid=1511 decision=IGNORE
+pid=1508 folder='/home/erik' type='MAIN' object='.goutputstream-KOXBGW' events='IN_MOVED_FROM'
+====>pid=1508 decision=IGNORE
+pid=1510 folder='/home/erik' type='MAIN' object='.Xauthority' events='IN_MOVED_TO'
+====>pid=1510 decision=IGNORE
+pid=1516 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_CREATE'
+====>pid=1516 decision=IGNORE
+pid=1633 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_CREATE'
+====>pid=1633 decision=IGNORE
+pid=1632 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_CREATE'
+====>pid=1632 decision=IGNORE
+pid=1637 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_DELETE'
+====>pid=1637 decision=IGNORE
+pid=1636 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_DELETE'
+====>pid=1636 decision=IGNORE
+pid=1939 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1939 decision=IGNORE
+pid=1949 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1949 decision=IGNORE
+pid=1948 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1948 decision=IGNORE
+pid=1959 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1959 decision=IGNORE
+pid=1960 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+pid=1957 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1957 decision=IGNORE
+pid=1958 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1958 decision=IGNORE
+====>pid=1960 decision=IGNORE
+pid=1962 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1962 decision=IGNORE
+pid=1963 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1963 decision=IGNORE
+pid=1982 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1982 decision=IGNORE
+pid=1992 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1992 decision=IGNORE
+pid=1995 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1995 decision=IGNORE
+pid=1996 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1996 decision=IGNORE
+pid=2047 folder='/home/erik' type='MAIN' object='.dropbox' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2047 decision=IGNORE
+pid=2061 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2061 decision=IGNORE
+pid=2062 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2062 decision=IGNORE
+pid=8373 folder='/home/erik' type='MAIN' object='.compiz' events='IN_CREATE,IN_ISDIR'
+====>pid=8373 decision=IGNORE
+pid=8393 folder='/home/erik' type='MAIN' object='.goutputstream-XOKKGW' events='IN_ATTRIB'
+====>pid=8393 decision=IGNORE
+pid=8392 folder='/home/erik' type='MAIN' object='.goutputstream-XOKKGW' events='IN_CREATE'
+====>pid=8392 decision=IGNORE
+pid=1381 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_MOVED_FROM'
+pid=1378 folder='/home/erik' type='MAIN' object='.goutputstream-U9ZBGW' events='IN_MOVED_FROM'
+pid=1292 folder='/home/erik' type='MAIN' object='.dmrc.14HKGW' events='IN_MOVED_FROM'
+pid=1374 folder='/home/erik' type='MAIN' object='.goutputstream-U9ZBGW' events='IN_CREATE'
+pid=1464 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_CREATE'
+pid=1463 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_CREATE'
+pid=1375 folder='/home/erik' type='MAIN' object='.goutputstream-U9ZBGW' events='IN_ATTRIB'
+pid=1380 folder='/home/erik' type='MAIN' object='.Xauthority' events='IN_MOVED_TO'
+pid=1293 folder='/home/erik' type='MAIN' object='.dmrc' events='IN_MOVED_TO'
+pid=1465 folder='/home/erik' type='MAIN' object='.ICEauthority-c' events='IN_DELETE'
+pid=1283 folder='/home/erik' type='MAIN' object='.dmrc.14HKGW' events='IN_CREATE'
+pid=1382 folder='/home/erik' type='MAIN' object='.xsession-errors.old' events='IN_MOVED_TO'
+pid=1466 folder='/home/erik' type='MAIN' object='.ICEauthority-l' events='IN_DELETE'
+pid=1383 folder='/home/erik' type='MAIN' object='.xsession-errors' events='IN_CREATE'
+====>pid=1381 decision=IGNORE
+====>pid=1378 decision=IGNORE
+====>pid=1292 decision=IGNORE
+====>pid=1374 decision=IGNORE
+====>pid=1375 decision=IGNORE
+====>pid=1380 decision=IGNORE
+====>pid=1293 decision=IGNORE
+====>pid=1465 decision=IGNORE
+====>pid=1464 decision=IGNORE
+====>pid=1463 decision=IGNORE
+====>pid=1283 decision=IGNORE
+====>pid=1466 decision=IGNORE
+====>pid=1383 decision=IGNORE
+====>pid=1382 decision=IGNORE
+pid=1853 folder='/home/erik' type='MAIN' object='.compiz' events='IN_DELETE,IN_ISDIR'
+====>pid=1853 decision=IGNORE
+pid=1887 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1887 decision=IGNORE
+pid=1888 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1888 decision=IGNORE
+pid=1897 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1897 decision=IGNORE
+pid=1917 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1917 decision=IGNORE
+pid=1920 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1920 decision=IGNORE
+pid=1963 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1963 decision=IGNORE
+pid=1967 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1967 decision=IGNORE
+pid=1966 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1966 decision=IGNORE
+pid=1969 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1969 decision=IGNORE
+pid=1968 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=1968 decision=IGNORE
+pid=2057 folder='/home/erik' type='MAIN' object='.dropbox' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2057 decision=IGNORE
+pid=2070 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2070 decision=IGNORE
+pid=2071 folder='/home/erik' type='MAIN' object='.pulse' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2071 decision=IGNORE
+pid=2575 folder='/home/erik' type='MAIN' object='.Skype' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2575 decision=IGNORE
+pid=2574 folder='/home/erik' type='MAIN' object='.Skype' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2574 decision=IGNORE
+pid=2577 folder='/home/erik' type='MAIN' object='.Skype' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2577 decision=IGNORE
+pid=2576 folder='/home/erik' type='MAIN' object='.Skype' events='IN_ATTRIB,IN_ISDIR'
+====>pid=2576 decision=IGNORE

@@ -21,7 +21,7 @@ class User extends EntityType
 		}
 		else
 		{
-			self::validateAdd($userName);
+			self::validateAddAction($userName);
 		}
 
 		if(ProgramActions::actionExists('set-home')) self::validateSetHome($userName);
@@ -33,7 +33,7 @@ class User extends EntityType
 		if(ProgramActions::actionExists('remove-quota')) self::validateRemoveQuota($userName);
 	}
 
-	static function validateAdd($userName)
+	static function validateAddAction($userName)
 	{
 		self::checkForIndiestorSysUserName($userName);	
 		self::checkForDuplicateIndiestorUser($userName);
@@ -378,6 +378,7 @@ class User extends EntityType
 		$otherUser=$etcPasswd->findUserByHomeFolder($homeFolder);
 		if($otherUser==null) return; //nobody owns this folder as home folder
 		$otherUserName=$otherUser->name;
+		if($otherUserName==$userName) return; //the user already owns the folder; no problem
 		ActionEngine::error("home folder '$homeFolder' already belongs".
 			" to user '$otherUserName'",
 			ERRNUM_HOME_FOLDER_ALREADY_BELONGS_TO_USER);

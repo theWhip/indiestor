@@ -7,8 +7,6 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once(dirname(dirname(__FILE__)).'/ActionNamingConvention.php');
-
 class EntityType
 {
         static function execute()

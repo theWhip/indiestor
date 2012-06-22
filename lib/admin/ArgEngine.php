@@ -270,6 +270,16 @@ class ArgEngine
 	        }
 	}
 
+	function countOptions()
+	{
+		$count=0;
+	        foreach(ProgramActions::$actions as $commandAction)
+	        {
+                        if($commandAction->isOption) $count++;
+		}
+		return $count;
+	}
+
 	function checkSingletonActions()
 	{
 		//if there are no actions, there cannot be any singleton actions
@@ -279,11 +289,15 @@ class ArgEngine
 		//check for the entity specified
 		$entityType=ProgramActions::$entityType;
 
+		//count non-option actions
+		$countNonOptionActions=count(ProgramActions::$actions)-self::countOptions();
+
 	        foreach(ProgramActions::$actions as $commandAction)
 	        {
 	                $action=$commandAction->action;
 			if($this->commandActionDefinitions->isSingletonAction($entityType,$action))
 			{
+				if($countNonOptionActions>1)
 					$this->argsError("Action '$action' for entity type '$entityType' can only be used alone,".
 							" and not in combination with other actions",
 							true, ERRNUM_SINGLETON_ACTION);
