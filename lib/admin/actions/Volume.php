@@ -28,6 +28,7 @@ class Volume extends EntityType
 	static function quotaRemove($commandAction)
 	{
 		$device=ProgramActions::$entityName;
+		ActionEngine::failOnOpenVZ($device);
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyRemovedForDevice($device);
 		ActionEngine::removeQuotaForDevice($device);
@@ -44,14 +45,14 @@ class Volume extends EntityType
 
 	static function checkIfQuotaAlreadyOnForDevice($device)
 	{
-		if(sysquery_quotaon_p($device)===true)
+		if($device!='/dev/simfs' && sysquery_quotaon_p($device)===true)
 			ActionEngine::warning("Quota already on for device '$device'",
 				WARNING_QUOTA_ALREADY_ON_FOR_DEVICE);
 	}
 
 	static function checkIfQuotaAlreadyOffForDevice($device)
 	{
-		if(sysquery_quotaon_p($device)===false)
+		if($device!='/dev/simfs' && sysquery_quotaon_p($device)===false)
 			ActionEngine::warning("Quota already off for device '$device'",
 				WARNING_QUOTA_ALREADY_OFF_FOR_DEVICE);
 	}
@@ -60,7 +61,7 @@ class Volume extends EntityType
 	{
 		$etcFstab=EtcFsTab::instance();
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-		ActionEngine::validateFileSystem($fileSystem,$device);
+		DeviceQuota::validateFileSystem($fileSystem,$device);
 		if(!$fileSystem->hasQuotaEnabled())
 		{
 			ActionEngine::warning("Quota already removed for device '$device'",

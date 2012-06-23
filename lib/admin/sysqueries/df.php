@@ -66,10 +66,18 @@ function sysquery_df()
 			$dfFileSystem->mountedOn=$fileSystemLineFields[6];
 
 			//check quota
-			$quotaEnabled=sysquery_quotaon_p($dfFileSystem->device);
-			if($quotaEnabled===true) $dfFileSystem->quotaYN='Y'; 
-			else if($quotaEnabled===false) $dfFileSystem->quotaYN='N';
-			else $dfFileSystem->quotaYN='?'; 
+			if($dfFileSystem->device=='/dev/simfs')
+			{
+				//openvz/virtuozzo unsupported
+				$dfFileSystem->quotaYN='N';
+			}
+			else
+			{
+				$quotaEnabled=sysquery_quotaon_p($dfFileSystem->device);
+				if($quotaEnabled===true) $dfFileSystem->quotaYN='Y'; 
+				else if($quotaEnabled===false) $dfFileSystem->quotaYN='N';
+				else $dfFileSystem->quotaYN='?'; 
+			}
 
 			$dfFileSystems[]=$dfFileSystem;
 		}

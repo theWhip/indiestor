@@ -100,6 +100,14 @@ class ActionEngine
 		DeviceQuota::switchOff($device);
 	}
 
+	static function failOnOpenVZ($device)
+	{
+		if($device=='/dev/simfs')
+			ActionEngine::error("Device '$device' is an openvz/virtuozzo filesystem. ".
+				"We do not support the openvz/virtuozzo second-level user quota system",
+				ERRNUM_VOLUME_OPENVZ_UNSUPPORTED);
+	}
+
 	static function removeQuotaForDevice($device)
 	{
 		DeviceQuota::remove($device);
