@@ -33,6 +33,7 @@ class UserReportRecord
 		if($group==null) $this->groupName=null;
 		else $this->groupName=$group->name;
 		$quotaRecord=sysquery_quota_u($userName);
+
 		if($quotaRecord!=null)
 		{
 			$this->hasQuotaRecord=true;
