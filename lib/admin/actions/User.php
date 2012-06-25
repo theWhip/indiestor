@@ -293,7 +293,8 @@ class User extends EntityType
 			if(!file_exists($homeFolder))
 			{
 				syscommand_mkdir($homeFolder);
-				syscommand_cp_aR('/etc/skel/*',$homeFolder);
+				//http://superuser.com/questions/61611/how-to-copy-with-cp-to-include-hidden-files-and-hidden-directories-and-their-con
+				syscommand_cp_aR('/etc/skel/.',$homeFolder);
 				syscommand_chown_R($homeFolder,$userName,$userName);
 			}
 			else
