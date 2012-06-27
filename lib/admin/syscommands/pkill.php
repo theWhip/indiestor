@@ -17,6 +17,6 @@ $ pkill -KILL -u carl
 
 function syscommand_pkill_u($userName)
 {
-	ShellCommand::exec_fail_if_error("pkill -KILL -u $userName");
+	ShellCommand::exec("pkill -KILL -u $userName");
 }
 
