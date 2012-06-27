@@ -106,7 +106,8 @@ class User extends EntityType
 	{
 		$etcPasswd=EtcPasswd::instance();
 		$user=$etcPasswd->findUserByName($userName);
-		return $user->homeFolder;
+		if($user==null) return null;
+		else return $user->homeFolder;
 	}	
 
 	static function deviceForUser($userName)
@@ -173,6 +174,12 @@ class User extends EntityType
 		syscommand_usermod_aG($userName,ActionEngine::indiestorUserGroup);
 		EtcPasswd::reset();
 		EtcGroup::reset();
+		if(!ProgramActions::actionExists('set-quota'))
+		{
+			$device=self::deviceForUser($userName);
+			if(sysquery_quotaon_p($device)===true)
+				syscommand_setquota_u($device,$userName,0);
+		}
         }
 
         static function delete($commandAction)

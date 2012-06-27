@@ -45,14 +45,14 @@ class Volume extends EntityType
 
 	static function checkIfQuotaAlreadyOnForDevice($device)
 	{
-		if($device!='/dev/simfs' && sysquery_quotaon_p($device)===true)
+		if(sysquery_quotaon_p($device)===true)
 			ActionEngine::warning("Quota already on for device '$device'",
 				WARNING_QUOTA_ALREADY_ON_FOR_DEVICE);
 	}
 
 	static function checkIfQuotaAlreadyOffForDevice($device)
 	{
-		if($device!='/dev/simfs' && sysquery_quotaon_p($device)===false)
+		if(sysquery_quotaon_p($device)===false)
 			ActionEngine::warning("Quota already off for device '$device'",
 				WARNING_QUOTA_ALREADY_OFF_FOR_DEVICE);
 	}
