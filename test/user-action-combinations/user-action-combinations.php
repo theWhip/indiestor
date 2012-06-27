@@ -8,7 +8,6 @@ $actions=array(
 	,'delete'
 	,'set-home'
 	,'remove-home'
-	,'move-home-content'
 	,'set-group'
 //	,'unset-group'
 	,'set-quota'
@@ -22,10 +21,8 @@ $actions=array(
 $forbidden=array(
 	array('add','delete'),
 	array('add','remove-home'), 
-	array('add','move-home-content'), 
 	array('add','unset-group'), 
 	array('delete','set-home'),
-	array('delete','move-home-content'),
 	array('delete','set-group'),
 	array('delete','unset-group'),
 	array('delete','set-quota'),
@@ -37,12 +34,10 @@ $forbidden=array(
 	array('set-quota','remove-quota'),
 	array('set-passwd','lock'),
 	array('remove-from-indiestor','add'),
-	array('move-home-content','remove-home')
 );
 
 $mandatory=array(
 	array('remove-home','delete'),
-	array('move-home-content','set-home')
 );
 
 $singletons=array('remove-from-indiestor','show');
