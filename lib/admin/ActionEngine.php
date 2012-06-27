@@ -42,6 +42,10 @@ class ActionEngine
 		self::printStdErr("WARNING-$errNum: $msg.\n");
 	}
 
+	static function notify($msg)
+	{
+		echo "$msg\n";
+	}
 
 	static function sysGroupName($indieStorGroupName)
 	{

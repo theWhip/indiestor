@@ -43,6 +43,11 @@ class User extends EntityType
 			self::checkParentNewHomeIsFolder($userName,"/home/$userName");
 			self::checkNewHomeNotOwnedAlready($userName,"/home/$userName");
 		}
+		if(!ProgramActions::actionExists('set-passwd'))
+		{
+			ActionEngine::warning("Adding user without password will leave user account locked",
+						WARNING_ADDING_USER_WITHOUT_PASSWORD);
+		}
 	}
 
 	static function validateSetHome($userName)
