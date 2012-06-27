@@ -285,46 +285,19 @@ class User extends EntityType
 		//if the add action is present, the set-home action has already been executed
 		if(ProgramActions::actionExists('add')) return;
 		$homeFolder=$commandAction->actionArg;
-		if(ProgramActions::actionExists('move-home-content'))
+		if(!file_exists($homeFolder))
 		{
-			$etcPasswd=EtcPasswd::instance();
-			$user=$etcPasswd->findUserByName($userName);
-			$oldHomeFolder=$user->homeFolder;
-			$userShell=$user->shell;
-			//expel user
-			syscommand_pkill_u($userName);
-			//prevent login
-			syscommand_chsh($userName,'/bin/false');
-			//move the folder
-			syscommand_mv($oldHomeFolder,$homeFolder);
-			//reallow login
-			syscommand_chsh($userName,$userShell);
+			syscommand_mkdir($homeFolder);
+			syscommand_cp_aR('/etc/skel/.',$homeFolder);
+			syscommand_chown_R($homeFolder,$userName,$userName);
 		}
 		else
 		{
-			if(!file_exists($homeFolder))
-			{
-				syscommand_mkdir($homeFolder);
-				//http://superuser.com/questions/61611/how-to-copy-with-cp-to-include-hidden-files-and-hidden-directories-and-their-con
-				syscommand_cp_aR('/etc/skel/.',$homeFolder);
-				syscommand_chown_R($homeFolder,$userName,$userName);
-			}
-			else
-			{
-				syscommand_chown_R($homeFolder,$userName,$userName);
-			}
+			syscommand_chown_R($homeFolder,$userName,$userName);
 		}
 		syscommand_usermod_home($userName,$homeFolder);
 		EtcPasswd::reset();
 		EtcGroup::reset();
-	}
-
-	static function moveHomeContent($commandAction)
-	{
-		//if the add action is present, the set-home action has already been executed
-		if(ProgramActions::actionExists('set-home')) return;
-		ActionEngine::error("-move-home-content only possible in -set-home action",
-						ERRNUM_MOVE_HOME_CONTENT_WITHOUT_SET_HOME);
 	}
 
 	static function setQuota($commandAction)
