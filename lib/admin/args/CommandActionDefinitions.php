@@ -30,18 +30,20 @@ class CommandActionDefinitions
 	function configureActionDefinitions()
 	{
                 $this->actionDefinitions=array();
-		$rows=DefinitionFile::parse('entityActions',array('entityType','action','hasArg','priority','isOption'));
+		$rows=DefinitionFile::parse('entityActions',array('entityType','action','hasArg',
+						'priority','isOption','mustNotify'));
 		foreach($rows as $row)
 		{
-			$this->addActionDefinition($row['entityType'],$row['action'],$row['hasArg'],$row['priority'],$row['isOption']);
+			$this->addActionDefinition($row['entityType'],$row['action'],$row['hasArg'],
+						$row['priority'],$row['isOption'],$row['mustNotify']);
 		}
 	}
 
-        function addActionDefinition($entityType,$action,$hasArg,$priority,$isOption)
+        function addActionDefinition($entityType,$action,$hasArg,$priority,$isOption,$mustNotify)
         {
                 $this->actionDefinitions[$this->syntheticKey($entityType,$action)]=
 			new CommandActionDefinition($entityType,$action,$hasArg,
-					$priority,$isOption);
+					$priority,$isOption,$mustNotify);
         }
 
 
@@ -166,7 +168,8 @@ class CommandActionDefinitions
 			throw new Exception(
 				"invalid action '$action' for entity type '$entityType'");		
 		$actionDefinition=$this->actionDefinitions[$this->syntheticKey($entityType,$action)];
-		return $actionDefinition->newCommandAction($action,$actionArg);
+		$commandAction=$actionDefinition->newCommandAction($action,$actionArg);
+		return $commandAction;
 	}
 
 	function actionPriority($entityType,$action)

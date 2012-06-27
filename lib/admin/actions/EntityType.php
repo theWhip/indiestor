@@ -40,6 +40,8 @@ class EntityType
 		                $function=actionCamelCaseNameWithFirstLowerCase($action);
 		                $className=get_called_class();
 		                $className::$function($commandAction);
+				if($commandAction->mustNotify)
+					ActionEngine::notify($className,$function);					
 		        }
 
 			if(method_exists($className,'afterCommand'))

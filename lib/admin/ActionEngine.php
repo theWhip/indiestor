@@ -42,9 +42,10 @@ class ActionEngine
 		self::printStdErr("WARNING-$errNum: $msg.\n");
 	}
 
-	static function notify($msg)
+	static function notify($entityType,$actionDone)
 	{
-		echo "$msg\n";
+		$entityType=strtolower($entityType);
+		echo "$entityType/$actionDone executed.\n";
 	}
 
 	static function sysGroupName($indieStorGroupName)
