@@ -172,7 +172,7 @@ class ArgEngine
 			$this->argsError('ARGS_DUPLICATE_ACTION', array('action'=>$action));
 		//check if it is allowed for the current entity type
 		if(!$this->commandActionDefinitions->isValidActionForEntityType($entityType,$action))
-			$this->argsUsageError('ARGS_INVALID_ACTION_FOR_ENTITYTYPE', 
+			$this->argsUsageError('ARGS_INVALID_ACTION_FOR_ENTITY_TYPE', 
 				array('action'=>$action,'entityType'=>$entityType));
 		//check if the action not incompatible with another action
 		$firstIncompatibleAction=$this->commandActionDefinitions->firstIncompatibleAction(
