@@ -8,7 +8,7 @@
 */
 
 //action definition folder
-define('COMMAND_ARGS_DEFINITIONS_FOLDER', folderParentAtLevel(__FILE__,4).'/etc/command-args-definitions.d');
+define('COMMAND_ARGS_DEFINITIONS_FOLDER', folderParentAtLevel(__FILE__,3).'/etc/command-args-definitions.d');
 
 function folderParentAtLevel($file,$level)
 {
@@ -45,11 +45,12 @@ class DefinitionFile
 
 	function parseLineFields($line,$columnDefinitions,$filePath,$lineNumber)
 	{
-		//split according to word boundaries
-		$fields=preg_split("/[\s]+/",$line);
-		//we must have the same field count in the line as in the columnDefinitions
-		$countFields=count($fields);
+		//count column definitions
 		$countColumnDefinitions=count($columnDefinitions);
+		//split according to word boundaries, with maximum the number of columns defined
+		$fields=preg_split("/[\s]+/",$line,$countColumnDefinitions);
+		//we must have the same field count in the line as in the columnDefinitions (not fewer)
+		$countFields=count($fields);
 		if($countFields!=$countColumnDefinitions)
 			throw new Exception("Error parsing file '$filePath' in line $lineNumber. ".
 				"Fields expected: $countColumnDefinitions. Fields counted: $countFields.");

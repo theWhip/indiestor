@@ -82,16 +82,12 @@ class DeviceQuota
 		switch($fileSystem)
 		{
 			case 'no-uuid':	
-				ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
-					"Can also not find a UUID for this device",
-					ERRNUM_VOLUME_DEVICE_CANNOT_FIND_UUID);
+				ActionEngine::error(AE_ERR_VOLUME_CANNOT_FIND_UUID,array('volume'=>$device));
 				break;
 			case 'no-filesystem-for-uuid':
 			case 'no-uuid':	
-				ActionEngine::error("Cannot find device '$device' in /etc/fstab. ".
-					"Can also not find a 'UUID=$deviceUUID' entry ".
-					"in /etc/fstab for this device",
-					ERRNUM_VOLUME_CANNOT_FIND_DEVICE_NOR_UUID);
+				ActionEngine::error(AE_ERR_VOLUME_CANNOT_FIND_VOLUME_NOR_UUID,
+					array('volume'=>$device,'uuid'=>$deviceUUID));
 				break;
 		}		
 	}
@@ -99,12 +95,9 @@ class DeviceQuota
 	static function endMountPointWithSlash($mountPoint)
 	{
 		if(strlen($mountPoint)==0)
-		{
-			ActionEngine::error("invalid mount point folder '$mountPoint'",
-				ERRNUM_INVALID_MOUNT_POINT_FOLDER);			
-		}
+			ActionEngine::error(AE_ERR_VOLUME_INVALID_MOUNTPOINT,array('mountPoint'=>$mountPoint));
 		if(substr($mountPoint,-1)=='/') return $mountPoint;
-		return $mountPoint.'/';
+		else return $mountPoint.'/';
 	}
 }
 

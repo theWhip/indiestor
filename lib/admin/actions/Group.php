@@ -24,20 +24,14 @@ class Group extends EntityType
 	static function checkValidCharactersInGroupName($groupName)
 	{
 		if(!ActionEngine::isValidCharactersInName($groupName))
-		{
-			ActionEngine::error("'$groupName' contains invalid characters",
-						ERRNUM_GROUPNAME_INVALID_CHARACTERS);
-		}
+			ActionEngine::error(AE_ERR_GROUP_INVALID_CHARACTERS,array('group'=>$groupName));
 	}
 
 	static function checkDuplicateGroup($ISGroupName)
 	{
 		$etcGroup=EtcGroup::instance();
 		if($etcGroup->exists($ISGroupName))
-		{
-			ActionEngine::error("group '$ISGroupName' exists already",
-						ERRNUM_GROUP_EXISTS_ALREADY);
-		}
+			ActionEngine::error(AE_ERR_GROUP_EXISTS_ALREADY,array('group'=>$ISGroupName));
 	}
 
         static function delete($commandAction)
@@ -54,10 +48,7 @@ class Group extends EntityType
 	{
 		$etcGroup=EtcGroup::instance();
 		if(!$etcGroup->exists($ISGroupName))
-		{
-			ActionEngine::error("group '$ISGroupName' does not exist",
-						ERRNUM_GROUP_DOES_NOT_EXISTS);
-		}
+			ActionEngine::error(AE_ERR_GROUP_DOES_NOT_EXISTS,array('group'=>$ISGroupName));
 	}
 
 	static function showMembers($commandAction)

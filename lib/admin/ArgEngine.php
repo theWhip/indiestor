@@ -12,19 +12,6 @@ require_once('args/CommandActionDefinitions.php');
 require_once('args/CommandAction.php');
 require_once('args/ProgramActions.php');
 
-define('ERRNUM_INVALID_ENTITY_TYPE',11);
-define('ERRNUM_MISSING_ENTITY_TYPE',12);
-define('ERRNUM_UNEXPECTED_ENTITY_TYPE',13);
-define('ERRNUM_DUPLICATE_ACTION',14);
-define('ERRNUM_INVALID_ACTION_FOR_ENTITY_TYPE',15);
-define('ERRNUM_INCOMPATIBLE_ACTIONS',16);
-define('ERRNUM_MISSING_ACTION_ARGUMENT',17);
-define('ERRNUM_INVALID_ACTION_ARGUMENT',18);
-define('ERRNUM_MISSING_ENTITY_NAME',19);
-define('ERRNUM_NO_ACTIONS',20);
-define('ERRNUM_MANDATORY_PREREQUISITE_ACTION_MISSING',21);
-define('ERRNUM_SINGLETON_ACTION',22);
-
 class ArgEngine
 {
 	var $scriptName=null;
@@ -57,16 +44,16 @@ class ArgEngine
 		else return 'parameter';
 	}
 
-	function printStdErr($msg)
+	function argsUsageError($messageCode,$parameters=array())
 	{
-		file_put_contents('php://stderr',$msg);
+		$errNum=NoticeDefinitions::instance()->usageError($messageCode,$parameters);
+		$this->usage();
+		exit($errNum);
 	}
 
-	function argsError($msg,$printUsage,$errNum)
+	function argsError($messageCode,$parameters=array())
 	{
-		$this->printStdErr("Error $errNum: $msg.\n");
-		if($printUsage) $this->usage();
-		exit($errNum);
+		NoticeDefinitions::instance()->error($messageCode,$parameters);
 	}
 
 	function process()
@@ -89,15 +76,14 @@ class ArgEngine
 			{
 				$entityType=$this->entityTypeFromCurrentArg();
 				if(!$this->commandEntityDefinitions->exists($entityType))
-					$this->argsError("Invalid entity type '$entityType'. ",
-						true, ERRNUM_INVALID_ENTITY_TYPE);
+					$this->argsUsageError('ARGS_INVALID_ENTITY_TYPE',array('entityType'=>$entityType));
 				ProgramActions::$entityType=$entityType;
 				$this->removeCurrentArg();
 				return;
 			}
 			$this->moveNext();
 		}        
-		$this->argsError("Missing entity type",true, ERRNUM_MISSING_ENTITY_TYPE);
+		$this->argsUsageError('ARGS_MISSING_ENTITY_TYPE');
 	}
 
 	function currentArg()
@@ -162,10 +148,8 @@ class ArgEngine
 		{
 				//error: we are already processing an entity type
 				$entityType=$this->EntityTypeFromCurrentArg();
-				$this->argsError("Unexpected entity type '$entityType'. ".
-					"Already processing entity type '".
-					ProgramActions::$entityType."'",false, 
-					ERRNUM_UNEXPECTED_ENTITY_TYPE);
+				$this->argsError('ARGS_UNEXPECTED_ENTITY_TYPE', array('unexpectedEntityType'=>$entityType,
+							'currentEntityType'=>ProgramActions::$entityType));
 		}
 		else if($this->currentArgTypeIsAction())
 		{
@@ -185,33 +169,28 @@ class ArgEngine
 		$action=$this->actionFromCurrentArg();
 		//check if it is a duplicate
 		if(ProgramActions::actionExists($action))
-			$this->argsError("duplicate action '$action'",false,ERRNUM_DUPLICATE_ACTION);
+			$this->argsError('ARGS_DUPLICATE_ACTION', array('action'=>$action));
 		//check if it is allowed for the current entity type
 		if(!$this->commandActionDefinitions->isValidActionForEntityType($entityType,$action))
-			$this->argsError("Invalid action '$action' for entity type '$entityType'",
-				true, ERRNUM_INVALID_ACTION_FOR_ENTITY_TYPE);
+			$this->argsUsageError('ARGS_INVALID_ACTION_FOR_ENTITYTYPE', 
+				array('action'=>$action,'entityType'=>$entityType));
 		//check if the action not incompatible with another action
 		$firstIncompatibleAction=$this->commandActionDefinitions->firstIncompatibleAction(
 						$entityType,ProgramActions::actionArray(),$action);
 		if($firstIncompatibleAction!=null)
-			$this->argsError("Action '$action' incompatible with '$firstIncompatibleAction' ".
-				"for entity type '$entityType'",false,
-				ERRNUM_INCOMPATIBLE_ACTIONS);
+			$this->argsError('ARGS_INCOMPATIBLE_ACTIONS',
+				array('entityType'=>$entityType,'action'=>$action,'incompatibleWith'=>$firstIncompatibleAction));
 		//check if action has argument
 		$hasArg=$this->commandActionDefinitions->actionHasArg($entityType,$action);
 		if($hasArg)
 		{
 			$this->moveNext();
 			if($this->EOArgs())
-				$this->argsError(
-					"argument expected for action '$action' ".
-					"for entity type '$entityType'", true,
-					ERRNUM_MISSING_ACTION_ARGUMENT);
+				$this->argsUsageError('ARGS_MISSING_ACTION_ARGUMENT',
+					array('entityType'=>$entityType,'action'=>$action));
 			if(!$this->currentArgTypeIsParameter())
-				$this->argsError("invalid argument '".$this->currentArg().
-					"' for action '$action'".
-					"for entity type '$entityType'", true,
-					ERRNUM_INVALID_ACTION_ARGUMENT);
+				$this->argsUsageError('ARGS_UNEXPECTED_ACTION_ARGUMENT',
+					array('entityType'=>$entityType,'action'=>$action,'argument'=>$this->currentArg()));
 			$actionArg=$this->currentArg();
 		}
 		else
@@ -231,8 +210,7 @@ class ArgEngine
 		$entityName=ProgramActions::$entityName;
 		if($entityName!=null) return;
 		if($this->commandEntityDefinitions->hasArg($entityType))
-			$this->argsError("Missing entity name for entity type '$entityType'",true,
-					ERRNUM_MISSING_ENTITY_NAME);
+				$this->argsUsageError('ARGS_MISSING_ENTITY',array('entityType'=>$entityType));
 	}
 
 	function checkActions()
@@ -240,8 +218,7 @@ class ArgEngine
 		$entityType=ProgramActions::$entityType;		
 		if(!$this->commandEntityDefinitions->mustHaveActions($entityType)) return;
 		if(ProgramActions::$actions==null)
-			$this->argsError("No action specified for entity type '$entityType'",true,
-					ERRNUM_NO_ACTIONS);
+			$this->argsUsageError('ARGS_ENTITYPE_MISSING_ACTIONS',array('entityType'=>$entityType));
 	}
 
 	function checkMandatoryActions()
@@ -262,9 +239,9 @@ class ArgEngine
 				//check if the mandatory prerequisite action is present
 				if(!array_key_exists($mandatoryPrerequisiteAction,ProgramActions::$actions))
 				{
-					$this->argsError("Action '$action' for entity type '$entityType' can only be used along ".
-							"with '$mandatoryPrerequisiteAction'",
-							true, ERRNUM_MANDATORY_PREREQUISITE_ACTION_MISSING);
+					$this->argsError('ARGS_MANDATORY_PREREQUISITE_ACTION_MISSING',
+						array('entityType'=>$entityType,'action'=>$action,
+							'prerequisiteAction'=>$mandatoryPrerequisiteAction));
 				}
 			}
 	        }
@@ -298,9 +275,8 @@ class ArgEngine
 			if($this->commandActionDefinitions->isSingletonAction($entityType,$action))
 			{
 				if($countNonOptionActions>1)
-					$this->argsError("Action '$action' for entity type '$entityType' can only be used alone,".
-							" and not in combination with other actions",
-							true, ERRNUM_SINGLETON_ACTION);
+					$this->argsError('ARGS_SINGLETON_ACTION',
+						array('entityType'=>$entityType,'action'=>$action));
 			}
 		}
 	}
@@ -312,14 +288,11 @@ class ArgEngine
 		//check if entity type expects an entity name
 		$entityType=ProgramActions::$entityType;
 		if(!$this->commandEntityDefinitions->hasArg($entityType))
-			$this->argsError("Unexpected entity '$entityName'. ".
-				"Entity type '$entityType' does not take arguments",
-				true,ERRNUM_UNEXPECTED_ENTITY_TYPE);			
+			$this->argsUsageError('ARGS_UNEXPECTED_ENTITY',array('entityType'=>$entityType,'entity'=>$entityName));
 		//check if entity name has already been processed
 		if(ProgramActions::$entityName!=null)
-			$this->argsError("Unexpected entity '$entityName'. ".
-				"Already processing entity ".ProgramActions::$entityName,
-				true,ERRNUM_UNEXPECTED_ENTITY_TYPE);
+			$this->argsUsageError('ARGS_DUPLICATE_ENTITY',array('entityType'=>$entityType,
+				'unexpectedEntity'=>$entityName,'currentEntity'=>ProgramActions::$entityName));
 		ProgramActions::$entityName=$entityName;
 	}
 
@@ -358,6 +331,11 @@ class ArgEngine
 	function usage()
 	{
 		$this->showCommands();
+	}
+
+	function printStdErr($message)
+	{
+		file_put_contents('php://stderr',$message);
 	}
 
 	function showCommands()

@@ -10,7 +10,6 @@
 require_once('CommandActionDefinition.php');
 require_once('CommandIncompatibleActionPair.php');
 require_once('CommandMandatoryActionPair.php');
-require_once('DefinitionFile.php');
 
 class CommandActionDefinitions
 {

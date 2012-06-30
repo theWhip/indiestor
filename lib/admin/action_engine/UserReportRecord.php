@@ -37,8 +37,8 @@ class UserReportRecord
 		if($quotaRecord!=null)
 		{
 			$this->hasQuotaRecord=true;
-			$this->quotaTotalGB=ActionEngine::deviceBlocksToGB($this->device,$quotaRecord['quotaTotalBlocks']);
-			$this->quotaUsedGB=ActionEngine::deviceBlocksToGB($this->device,$quotaRecord['quotaUsedBlocks']);
+			$this->quotaTotalGB=BlockGBConvertor::deviceBlocksToGB($this->device,$quotaRecord['quotaTotalBlocks']);
+			$this->quotaUsedGB=BlockGBConvertor::deviceBlocksToGB($this->device,$quotaRecord['quotaUsedBlocks']);
 			$this->quotaUsedPerc=$quotaRecord['quotaUsedPerc'];
 		}
 		else

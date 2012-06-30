@@ -23,8 +23,7 @@ class EntityType
 			}
 			else
 			{
-				ActionEngine::error('no actions specified, just options',
-					ERRNUM_NO_ACTIONS_JUST_OPTIONS_SPECIFIED);
+				ActionEngine::error('AE_ERR_NO_ACTIONS_JUST_OPTIONS');
 			}
 		}
 		else

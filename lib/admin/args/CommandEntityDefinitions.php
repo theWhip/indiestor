@@ -8,7 +8,6 @@
 */
 
 require_once('CommandEntityDefinition.php');
-require_once('DefinitionFile.php');
 
 class CommandEntityDefinitions
 {

@@ -28,7 +28,6 @@ class User extends EntityType
 		if(ProgramActions::actionExists('set-group')) self::validateSetGroup($userName);
 		if(ProgramActions::actionExists('unset-group')) self::validateUnsetGroup($userName);
 		if(ProgramActions::actionExists('lock')) self::validateLock($userName);
-		if(ProgramActions::actionExists('move-home-content')) self::validateMoveHomeContent($userName);
 		if(ProgramActions::actionExists('set-quota')) self::validateSetQuota($userName);
 		if(ProgramActions::actionExists('remove-quota')) self::validateRemoveQuota($userName);
 	}
@@ -44,10 +43,7 @@ class User extends EntityType
 			self::checkNewHomeNotOwnedAlready($userName,"/home/$userName");
 		}
 		if(!ProgramActions::actionExists('set-passwd') && !ProgramActions::actionExists('lock'))
-		{
-			ActionEngine::warning("Adding user without password will leave user account locked",
-						WARNING_ADDING_USER_WITHOUT_PASSWORD);
-		}
+			ActionEngine::warning(AE_WARN_USER_NO_PASSWORD,array('userName'=>$userName));
 	}
 
 	static function validateSetHome($userName)
@@ -62,9 +58,8 @@ class User extends EntityType
 		if(!ProgramActions::actionExists('move-home-content'))
 			if(file_exists($homeFolder))
 				if(!is_dir($homeFolder))
-					ActionEngine::error("cannot set home content to '$homeFolder';".
-					"it is not a folder",
-					ERRNUM_CANNOT_MOVE_HOME_TO_NON_FOLDER);
+					ActionEngine::error(AE_ERR_USER_HOME_NOT_FOLDER,
+						array('userName'=>$userName,'homeFolder'=>$homeFolder));
 	}
 
 	static function validateSetGroup($userName)
@@ -79,27 +74,13 @@ class User extends EntityType
                 $etcGroup=EtcGroup::instance();
 		$group=$etcGroup->findGroupForUserName($userName);
 		if($group==null)
-		{
-			ActionEngine::warning("user '$userName' is not member of any group",
-						WARNING_USER_NOT_MEMBER_OF_ANY_GROUP);
-		}
+			ActionEngine::warning(AE_WARN_USER_NOT_MEMBER_OF_ANY_GROUP,
+						array('userName'=>$userName));
 	}
 
 	static function validateLock($userName)
 	{
 		self::checkIfUserAlreadyLocked($userName);
-	}
-
-	static function validateMoveHomeContent($userName)
-	{
-		$commandAction=ProgramActions::findByName('set-home');
-		$homeFolder=$commandAction->actionArg;
-		if(file_exists($homeFolder))
-		{
-			ActionEngine::error("cannot move home content to folder '$homeFolder';".
-				"the folder exists already",
-				ERRNUM_CANNOT_MOVE_HOME_CONTENT_TO_EXISTING_FOLDER);
-		}
 	}
 
 	static function homeFolderForUser($userName)
@@ -127,7 +108,7 @@ class User extends EntityType
 		//device for user
 		$device=self::deviceForUser($userName);
 		//make sure quota is enabled
-		ActionEngine::switchOnQuotaForDevice($device);
+		DeviceQuota::switchOn($device);
 		//check if it worked
 		$homeFolder=self::homeFolderForUser($userName);
 		self::checkQuotaSwitchedOn($device,$device,$homeFolder);
@@ -139,10 +120,8 @@ class User extends EntityType
 		$device=self::deviceForUser($userName);
 		//make sure it's on
 		if(sysquery_quotaon_p($device)!==true)
-		{
-			ActionEngine::warning("Cannot remove quota for user '$userName' on device '$device' for which quota are not enabled ",
-						WARNING_REMOVE_USER_QUOTA_ON_DEVICE_QUOTA_NOT_ENABLED);
-		}
+			ActionEngine::warning(AE_WARN_USER_REMOVE_QUOTA_ON_DEVICE_QUOTA_NOT_ENABLED,
+						array('userName'=>$userName,'volume'=>$device));
 	}
 
         static function add($commandAction)
@@ -191,10 +170,7 @@ class User extends EntityType
 
 	static function removeHome($commandAction)
 	{
-		//if the delete action is present, the remove-home action has already been executed
-		if(ProgramActions::actionExists('delete')) return;
-		ActionEngine::error("-remove-home only possible in -delete action",
-						ERRNUM_REMOVE_HOME_CONTENT_WITHOUT_DELETE);
+		/* handled in the delete action already */
 	}
 
 	static function setGroup($commandAction)
@@ -308,7 +284,7 @@ class User extends EntityType
 		//find device for user
 		$device=self::deviceForUser($userName);
 		//find the number of blocks for the GB of quota
-		$blocks=ActionEngine::deviceGBToBlocks($device,$GB);
+		$blocks=BlockGBConvertor::deviceGBToBlocks($device,$GB);
 		//set the quota
 		syscommand_setquota_u($device,$userName,$blocks);
 	}
@@ -334,28 +310,23 @@ class User extends EntityType
 	static function	checkForValidQuota($GB)
 	{
 		if(!is_numeric($GB))
-		{
-			ActionEngine::error("the number of GB specified '$GB' is not numeric",
-						ERRNUM_QUOTA_NOT_NUMERIC);
-		}
+			ActionEngine::error(AE_ERR_USER_QUOTA_NOT_NUMERIC,array('GB'=>$BG));
 	}
 
 	static function	checkQuotaSwitchedOn($device,$device,$homeFolder)
 	{
+		$userName=ProgramActions::$entityName;
 		if(sysquery_quotaon_p($device)!==true)
-		{
-			ActionEngine::error("Cannot switch on quota for user '$userName' ".
-						"on device '$device' for home folder '$homeFolder' ",
-						ERRNUM_CANNOT_SWITCH_ON_QUOTA_FOR_DEVICE);
-		}
+			ActionEngine::error(AE_ERR_USER_QUOTA_CANNOT_SWITCH_ON_FOR_VOLUME,
+					array('userName'=>$userName,'volume'=>$device,'homeFolder'=>$homeFolder));
 	}
 
 	static function checkParentNewHomeIsFolder($userName,$homeFolder)
 	{
 		$parentFolder=dirname($homeFolder);
 		if(!is_dir($parentFolder))
-			ActionEngine::error("The parent folder of '$homeFolder' is not a folder",
-			ERRNUM_PARENT_OF_HOME_NOT_FOLDER);
+			ActionEngine::error(AE_ERR_USER_PARENT_OF_HOME_NOT_FOLDER,
+				array('userName'=>$userName,'parentFolder'=>$parentFolder,'homeFolder'=>$homeFolder));
 	}
 
 	static function checkNewHomeNotOwnedAlready($userName,$homeFolder)
@@ -365,46 +336,34 @@ class User extends EntityType
 		if($otherUser==null) return; //nobody owns this folder as home folder
 		$otherUserName=$otherUser->name;
 		if($otherUserName==$userName) return; //the user already owns the folder; no problem
-		ActionEngine::error("home folder '$homeFolder' already belongs".
-			" to user '$otherUserName'",
-			ERRNUM_HOME_FOLDER_ALREADY_BELONGS_TO_USER);
+		ActionEngine::error(AE_ERR_USER_HOME_FOLDER_ALREADY_BELONGS_TO_OTHER_USER,
+				array('userName'=>$userName,'homeFolder'=>$homeFolder,'otherUserName'=>$otherUserName));
 	}
 
 	static function checkHomeFolderIsAbsolutePath($homeFolder)
 	{
+		$userName=ProgramActions::$entityName;
 		if(substr($homeFolder,0,1)!='/')
-		{
-			ActionEngine::error("home folder '$homeFolder' must be absolute path".
-					" (starting with a '/' character)",
-					ERRNUM_HOME_FOLDER_MUST_BE_ABSOLUTE_PATH);
-		}
+			ActionEngine::error(AE_ERR_USER_HOME_FOLDER_MUST_BE_ABSOLUTE_PATH,
+				array('userName'=>$userName,'homeFolder'=>$homeFolder));
 	}
 
 	static function checkIfUserAlreadyLocked($userName)
 	{
 		if(sysquery_passwd_S_locked($userName))
-		{
-			ActionEngine::warning("user '$userName' already locked",
-					WARNING_USER_ALREADY_LOCKED);
-		}
+			ActionEngine::warning(AE_WARN_USER_ALREADY_LOCKED,array('userName'=>$userName));
 	}
 
 	static function checkValidCharactersInUserName($userName)
 	{
 		if(!ActionEngine::isValidCharactersInName($userName))
-		{
-			ActionEngine::error("'$userName' contains invalid characters",
-						ERRNUM_USERNAME_INVALID_CHARACTERS);
-		}
+			ActionEngine::error(AE_ERR_USER_INVALID_CHARACTERS,array('userName'=>$userName));
 	}
 
 	static function checkValidCharactersInFolderName($folderName)
 	{
 		if(!ActionEngine::isValidCharactersInFolderName($folderName))
-		{
-			ActionEngine::error("'$folderName' contains invalid characters",
-						ERRNUM_FOLDERNAME_INVALID_CHARACTERS);
-		}
+			ActionEngine::error(AE_ERR_USER_HOME_FOLDER_INVALID_CHARACTERS,array('homeFolder'=>$folderName));
 	}
 
 	static function ensureIndiestorGroupExists()
@@ -421,10 +380,7 @@ class User extends EntityType
 	static function checkForIndiestorSysUserName($userName)
 	{
 		if(ActionEngine::isIndiestorSysUserName($userName))
-		{
-			ActionEngine::error("Cannot add '$userName' system user as indiestor user",
-						ERRNUM_CANNOT_ADD_INDIESTOR_SYSUSER);
-		}
+			ActionEngine::error(AE_ERR_USER_CANNOT_ADD_INDIESTOR_SYSUSER,array('userName'=>$userName));
 	}
 
 	static function checkForDuplicateIndiestorUser($userName)
@@ -433,10 +389,7 @@ class User extends EntityType
 		$indiestorGroup=$etcGroup->indiestorGroup;
                 if($indiestorGroup==null) return;
 		if($indiestorGroup->findMember($userName)!=null)
-		{
-			ActionEngine::error("indiestor user '$userName' exists already",
-						ERRNUM_USER_EXISTS_ALREADY);
-		}
+			ActionEngine::error(AE_ERR_USER_EXISTS_ALREADY,array('userName'=>$userName));
 	}
 
 	static function checkForValidUserName($userName)
@@ -445,10 +398,7 @@ class User extends EntityType
 		$indiestorGroup=$etcGroup->indiestorGroup;
                 if($indiestorGroup==null) return;
 		if($indiestorGroup->findMember($userName)==null)
-		{
-			ActionEngine::error("indiestor user '$userName' does not exist",
-						ERRNUM_USER_DOES_NOT_EXIST);
-		}
+			ActionEngine::error(AE_ERR_USER_DOES_NOT_EXIST,array('userName'=>$userName));
 	}
 
 	static function checkForValidGroupName($groupName)
@@ -456,10 +406,7 @@ class User extends EntityType
                 $etcGroup=EtcGroup::instance();
 		$group=$etcGroup->findGroup($groupName);
 		if($group==null)
-		{
-			ActionEngine::error("indiestor group '$groupName' does not exist",
-						ERRNUM_GROUP_DOES_NOT_EXIST);
-		}
+			ActionEngine::error(AE_ERR_USER_GROUP_DOES_NOT_EXIST,array('group'=>$groupName));
 	}
 
 	static function afterCommand()

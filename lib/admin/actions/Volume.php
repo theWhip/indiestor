@@ -14,7 +14,7 @@ class Volume extends EntityType
 		$device=ProgramActions::$entityName;
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyOnForDevice($device);
-		ActionEngine::switchOnQuotaForDevice($device);
+		DeviceQuota::switchOn($device);
 	}
 
 	static function quotaOff($commandAction)
@@ -22,7 +22,7 @@ class Volume extends EntityType
 		$device=ProgramActions::$entityName;
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyOffForDevice($device);
-		ActionEngine::switchOffQuotaForDevice($device);
+		DeviceQuota::switchOff($device);
 	}
 
 	static function quotaRemove($commandAction)
@@ -31,30 +31,25 @@ class Volume extends EntityType
 		ActionEngine::failOnOpenVZ($device);
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyRemovedForDevice($device);
-		ActionEngine::removeQuotaForDevice($device);
+		DeviceQuota::remove($device);
 	}
 
 	static function checkValidCharactersInVolumeName($device)
 	{
 		if(!ActionEngine::isValidCharactersInVolume($device))
-		{
-			ActionEngine::error("'$device' contains invalid characters",
-						ERRNUM_VOLUMENAME_INVALID_CHARACTERS);
-		}
+			ActionEngine::error('AE_ERR_VOLUME_INVALID_CHARACTERS',array('volume'=>$device));
 	}
 
 	static function checkIfQuotaAlreadyOnForDevice($device)
 	{
 		if(sysquery_quotaon_p($device)===true)
-			ActionEngine::warning("Quota already on for device '$device'",
-				WARNING_QUOTA_ALREADY_ON_FOR_DEVICE);
+			ActionEngine::warning('AE_WARN_QUOTA_ALREADY_ON_FOR_VOLUME',array('volume'=>$device));
 	}
 
 	static function checkIfQuotaAlreadyOffForDevice($device)
 	{
 		if(sysquery_quotaon_p($device)===false)
-			ActionEngine::warning("Quota already off for device '$device'",
-				WARNING_QUOTA_ALREADY_OFF_FOR_DEVICE);
+			ActionEngine::warning('AE_WARN_QUOTA_ALREADY_OFF_FOR_VOLUME',array('volume'=>$device));
 	}
 
 	static function checkIfQuotaAlreadyRemovedForDevice($device)
@@ -63,10 +58,7 @@ class Volume extends EntityType
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
 		DeviceQuota::validateFileSystem($fileSystem,$device);
 		if(!$fileSystem->hasQuotaEnabled())
-		{
-			ActionEngine::warning("Quota already removed for device '$device'",
-				WARNING_QUOTA_ALREADY_REMOVED_FOR_DEVICE);
-		}
+			ActionEngine::warning('AE_WARN_QUOTA_ALREADY_REMOVED_FOR_VOLUME',array('volume'=>$device));
 	}
 }
 

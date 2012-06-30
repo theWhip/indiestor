@@ -67,7 +67,7 @@ class ShellCommand
 
 	function fail($command,$processOutput,$commandType)
 	{
-		self::printStdErr("ERR-$commandType-1: the following command failed\n");
+		self::printStdErr("ERR-$commandType: the following command failed\n");
 		self::printStdErr("# $command\n");
 		self::printStdErr(self::processOutputString($processOutput));
 		exit(1);

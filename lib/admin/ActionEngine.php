@@ -13,7 +13,6 @@ require_once(dirname(dirname(__FILE__)).'/common/etcfiles/all.php');
 require_once('syscommands/all.php');
 require_once('sysqueries/all.php');
 require_once('action_engine/ActionNamingConvention.php');
-require_once('action_engine/ActionErrors.php');
 require_once('action_engine/UserReportRecord.php');
 require_once('action_engine/UserReportRecords.php');
 require_once('action_engine/DeviceQuota.php');
@@ -26,20 +25,14 @@ class ActionEngine
 	const indiestorUserGroup='indiestor-users';
 	const indiestorSysUserName='indiestor';
 
-	static function printStdErr($msg)
+	static function error($messageCode,$parameters=array())
 	{
-		file_put_contents('php://stderr',$msg);
+		NoticeDefinitions::instance()->error($messageCode,$parameters);
 	}
 
-	static function error($msg,$errNum)
+	static function warning($messageCode,$parameters=array())
 	{
-		self::printStdErr("ERR-VALIDATION-$errNum: $msg.\n");
-		exit($errNum);
-	}
-
-	static function warning($msg,$errNum)
-	{
-		self::printStdErr("WARNING-$errNum: $msg.\n");
+		NoticeDefinitions::instance()->warning($messageCode,$parameters);
 	}
 
 	static function notify($entityType,$actionDone)
@@ -95,42 +88,12 @@ class ActionEngine
 		return preg_match('/^[-a-z0-9_\/]*$/',$folder);
 	}
 
-	static function switchOnQuotaForDevice($device)
-	{
-		DeviceQuota::switchOn($device);
-	}
-
-	static function switchOffQuotaForDevice($device)
-	{
-		DeviceQuota::switchOff($device);
-	}
-
 	static function failOnOpenVZ($device)
 	{
 		if($device=='/dev/simfs')
 			ActionEngine::error("Device '$device' is an openvz/virtuozzo filesystem. ".
 				"We do not support the openvz/virtuozzo second-level user quota system",
 				ERRNUM_VOLUME_OPENVZ_UNSUPPORTED);
-	}
-
-	static function removeQuotaForDevice($device)
-	{
-		DeviceQuota::remove($device);
-	}
-
-	static function deviceBlockSize($device)
-	{
-		return BlockGBConvertor::deviceBlockSize($device);
-	}
-
-	static function deviceGBToBlocks($device,$GB)
-	{
-		return BlockGBConvertor::deviceGBToBlocks($device,$GB);
-	}
-
-	static function deviceBlocksToGB($device,$blocks)
-	{
-		return BlockGBConvertor::deviceBlocksToGB($device,$blocks);
 	}
 
         static function execute()

@@ -192,7 +192,8 @@ class EtcFsTab
 		$currentDateTime=date('Y-m-d_g-i-s');
 		$backupFileName="/etc/fstab.backup.$currentDateTime";
 		copy('/etc/fstab',$backupFileName);
-		echo "created backup for /etc/fstab in $backupFileName\n";
+		NoticeDefinitions::instance()->notice(
+			'ETC_FSTAB_BACKUP_CREATED',array('backupFileName'=>$backupFileName));
 	}
 	//----------------------------------------------
 	// WRITE FILE SYSTEM

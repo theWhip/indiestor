@@ -8,18 +8,27 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+require_once('lib/common/require_once_folder.php');
+require_once('lib/admin/args/ProgramActions.php');
+require_once('lib/admin/args/ProgramOptions.php');
+require_once('lib/admin/ArgEngine.php');
+require_once('lib/admin/ActionEngine.php');
+require_once('lib/common/Shell/ShellCommand.php');
+require_once('lib/common/DefinitionFile.php');
+require_once('lib/common/NoticeDefinitions.php');
+
 //check that the user is root
 $processUser = posix_getpwuid(posix_geteuid());
 $processUserName=$processUser['name'];
 if($processUserName!='root')
 {
-	die("Only root can run this program\n");
+	NoticeDefinitions::instance()->error('EXEC_ROOT_ONLY');
 }
 
 //check that shell_exec is allowed
 if(false !== strpos(ini_get('disable_functions'), 'shell_exec'))
 {
-	die("The shell_exec() is has been disabled in php.ini. You cannot run this program without it.\n");
+	NoticeDefinitions::instance()->error('SHELL_EXEC_DISABLED');
 }
 
 //check that the quota commands are installed
@@ -30,19 +39,11 @@ foreach($quotaCommands as $quotaCommand)
 	$location=trim(shell_exec("which $quotaCommand"));
 	if(strlen($location)==0) 
 	{
-		echo "'$quotaCommand' command not installed\n";
+		NoticeDefinitions::instance()->warning('QUOTA_COMMAND_NOT_INSTALLED',array('command'=>$quotaCommand));
 		$quotaInstalled=false;
 	}
 }
-if(!$quotaInstalled) die("The quota package does not seem to be installed properly.\n".
-		" Use apt-get quota to install it first.\n");
-
-require_once('lib/common/require_once_folder.php');
-require_once('lib/admin/args/ProgramActions.php');
-require_once('lib/admin/args/ProgramOptions.php');
-require_once('lib/admin/ArgEngine.php');
-require_once('lib/admin/ActionEngine.php');
-require_once('lib/common/Shell/ShellCommand.php');
+if(!$quotaInstalled) NoticeDefinitions::instance()->error('QUOTA_PACKAGE_NOT_INSTALLED');
 
 $argEngine=new ArgEngine($argv);
 $argEngine->process();
