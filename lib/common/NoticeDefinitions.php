@@ -55,7 +55,7 @@ class NoticeDefinitions
 
 	function warning($messageCode,$parameters=array(),$errorStage='VALIDATION')
 	{
-		$this->output($messageCode,$parameters=array(),'stderr',$errorStage,'WARNING');
+		$this->output($messageCode,$parameters,'stderr',$errorStage,'WARNING');
 	}
 
 	function error($messageCode,$parameters=array(),$errorStage='VALIDATION')

@@ -91,9 +91,7 @@ class ActionEngine
 	static function failOnOpenVZ($device)
 	{
 		if($device=='/dev/simfs')
-			ActionEngine::error("Device '$device' is an openvz/virtuozzo filesystem. ".
-				"We do not support the openvz/virtuozzo second-level user quota system",
-				ERRNUM_VOLUME_OPENVZ_UNSUPPORTED);
+			ActionEngine::error('AE_ERR_VOLUME_OPENVZ_NOT_SUPPORTED',array('volume'=>$device));
 	}
 
         static function execute()
