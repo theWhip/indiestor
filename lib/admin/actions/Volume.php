@@ -9,9 +9,11 @@
 
 class Volume extends EntityType
 {
+
 	static function quotaOn($commandAction)
 	{
 		$device=ProgramActions::$entityName;
+		self::checkIfQuotaPackageInstalled();
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyOnForDevice($device);
 		DeviceQuota::switchOn($device);
@@ -20,6 +22,7 @@ class Volume extends EntityType
 	static function quotaOff($commandAction)
 	{
 		$device=ProgramActions::$entityName;
+		self::checkIfQuotaPackageInstalled();
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyOffForDevice($device);
 		DeviceQuota::switchOff($device);
@@ -28,10 +31,17 @@ class Volume extends EntityType
 	static function quotaRemove($commandAction)
 	{
 		$device=ProgramActions::$entityName;
+		self::checkIfQuotaPackageInstalled();
 		ActionEngine::failOnOpenVZ($device);
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyRemovedForDevice($device);
 		DeviceQuota::remove($device);
+	}
+
+	static function checkIfQuotaPackageInstalled()
+	{
+		if(!sysquery_which('setquota'))
+			ActionEngine::error('AE_ERR_VOLUME_QUOTA_PACKAGE_NOT_INSTALLED',array());
 	}
 
 	static function checkValidCharactersInVolumeName($device)
