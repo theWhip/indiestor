@@ -30,6 +30,7 @@ class User extends EntityType
 		if(ProgramActions::actionExists('lock')) self::validateLock($userName);
 		if(ProgramActions::actionExists('set-quota')) self::validateSetQuota($userName);
 		if(ProgramActions::actionExists('remove-quota')) self::validateRemoveQuota($userName);
+		if(ProgramActions::actionExists('set-passwd')) self::validateSetPasswd($userName);
 	}
 
 	static function validateAddAction($userName)
@@ -112,6 +113,43 @@ class User extends EntityType
 		//check if it worked
 		$homeFolder=self::homeFolderForUser($userName);
 		self::checkQuotaSwitchedOn($device,$device,$homeFolder);
+	}
+
+	static function cracklibActive()
+	{
+		//first check: package installed
+		if(!sysquery_dpkg_get_selections('crack')) return false;
+
+		//second check: check if the cracklib-check executable is installed
+		if(!sysquery_which('cracklib-check')) return false;
+
+		//third check: check if cracklib is /etc/pam.d/common-password
+		if(!sysquery_grep('/etc/pam.d/common-password','cracklib')) return false;
+
+		//all checks conclusive, cracklib is considered active
+		return true;
+	}
+
+	static function validateSetPasswd($userName)
+	{
+		$commandAction=ProgramActions::findByName('set-passwd');
+		$passwd=$commandAction->actionArg;
+		if(self::cracklibActive())
+		{
+			$processOutput=sysquery_cracklib_check($passwd);
+			if($processOutput->returnCode!=0)
+			{
+				$errmsg=trim($processOutput->stdout);
+				$fields=explode(':',$errmsg);
+				$countFields=count($fields);
+				if($countFields>0)
+					$cracklibErrMsg=trim($fields[count($fields)-1]);
+				else
+					$cracklibErrMsg='unknown';			
+				ActionEngine::error('AE_ERR_USER_PASSWD_REJECTED_BY_CRACKLIB',
+					array('passwd'=>$passwd,'cracklib-errmsg'=>$cracklibErrMsg));
+			}
+		}
 	}
 
 	static function validateRemoveQuota($userName)
