@@ -100,8 +100,16 @@ class User extends EntityType
 		return sysquery_df_device_for_folder($homeFolder);
 	}
 
+	static function checkIfQuotaPackageInstalled()
+	{
+		if(!sysquery_which('setquota'))
+			ActionEngine::error('AE_ERR_USER_QUOTA_PACKAGE_NOT_INSTALLED',array());
+	}
+
 	static function validateSetQuota($userName)
 	{
+		//check if quota package is installed
+		self::checkIfQuotaPackageInstalled();
 		//quota
 		$commandAction=ProgramActions::findByName('set-quota');
 		$GB=$commandAction->actionArg;
@@ -154,6 +162,8 @@ class User extends EntityType
 
 	static function validateRemoveQuota($userName)
 	{
+		//check if quota package is installed
+		self::checkIfQuotaPackageInstalled();
 		//device for user
 		$device=self::deviceForUser($userName);
 		//make sure it's on
