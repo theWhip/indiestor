@@ -112,7 +112,7 @@ class User extends EntityType
 		DeviceQuota::switchOn($device);
 		//check if it worked
 		$homeFolder=self::homeFolderForUser($userName);
-		self::checkQuotaSwitchedOn($device,$device,$homeFolder);
+		self::checkQuotaSwitchedOn($device,$homeFolder);
 	}
 
 	static function cracklibActive()
@@ -348,10 +348,10 @@ class User extends EntityType
 	static function	checkForValidQuota($GB)
 	{
 		if(!is_numeric($GB))
-			ActionEngine::error('AE_ERR_USER_QUOTA_NOT_NUMERIC',array('GB'=>$BG));
+			ActionEngine::error('AE_ERR_USER_QUOTA_NOT_NUMERIC',array('GB'=>$GB));
 	}
 
-	static function	checkQuotaSwitchedOn($device,$device,$homeFolder)
+	static function	checkQuotaSwitchedOn($$device,$homeFolder)
 	{
 		$userName=ProgramActions::$entityName;
 		if(sysquery_quotaon_p($device)!==true)
