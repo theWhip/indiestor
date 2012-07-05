@@ -351,7 +351,7 @@ class User extends EntityType
 			ActionEngine::error('AE_ERR_USER_QUOTA_NOT_NUMERIC',array('GB'=>$GB));
 	}
 
-	static function	checkQuotaSwitchedOn($$device,$homeFolder)
+	static function	checkQuotaSwitchedOn($device,$homeFolder)
 	{
 		$userName=ProgramActions::$entityName;
 		if(sysquery_quotaon_p($device)!==true)
