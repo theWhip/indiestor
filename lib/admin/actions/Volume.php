@@ -13,6 +13,7 @@ class Volume extends EntityType
 	static function quotaOn($commandAction)
 	{
 		$device=ProgramActions::$entityName;
+		ActionEngine::failOnOpenVZ($device);
 		self::checkIfQuotaPackageInstalled();
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyOnForDevice($device);
@@ -22,6 +23,7 @@ class Volume extends EntityType
 	static function quotaOff($commandAction)
 	{
 		$device=ProgramActions::$entityName;
+		ActionEngine::failOnOpenVZ($device);
 		self::checkIfQuotaPackageInstalled();
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyOffForDevice($device);
@@ -31,8 +33,8 @@ class Volume extends EntityType
 	static function quotaRemove($commandAction)
 	{
 		$device=ProgramActions::$entityName;
-		self::checkIfQuotaPackageInstalled();
 		ActionEngine::failOnOpenVZ($device);
+		self::checkIfQuotaPackageInstalled();
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyRemovedForDevice($device);
 		DeviceQuota::remove($device);

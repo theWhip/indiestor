@@ -117,6 +117,7 @@ class User extends EntityType
 		//device for user
 		$device=self::deviceForUser($userName);
 		//make sure quota is enabled
+		ActionEngine::failOnOpenVZ($device);
 		DeviceQuota::switchOn($device);
 		//check if it worked
 		$homeFolder=self::homeFolderForUser($userName);
@@ -167,6 +168,7 @@ class User extends EntityType
 		//device for user
 		$device=self::deviceForUser($userName);
 		//make sure it's on
+		ActionEngine::failOnOpenVZ($device);
 		if(sysquery_quotaon_p($device)!==true)
 			ActionEngine::warning('AE_WARN_USER_REMOVE_QUOTA_ON_DEVICE_QUOTA_NOT_ENABLED',
 						array('userName'=>$userName,'volume'=>$device));
