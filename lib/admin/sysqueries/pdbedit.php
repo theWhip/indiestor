@@ -19,12 +19,23 @@ ben:1006:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:[U   
 
 */
 
-function sysquery_pdbedit_list()
+function sysquery_pdbedit_user($userName)
+{
+	$sambaUsers=sysquery_pdbedit_list($userName);
+	if(array_key_exists($userName,$sambaUsers)) return $sambaUsers[$userName];
+	else return null;
+}
+
+
+function sysquery_pdbedit_list($userName=null)
 {
 	$users=array();
 	if(!sysquery_which('pdbedit')) return $users;
-	$result=ShellCommand::query("pdbedit --list --smbpasswd-style");	
-	$lines=explode("\n",$result);
+	if($userName!=null) $userClause="--user $userName"; else $userClause=''; 
+	$result=ShellCommand::query("pdbedit --list --smbpasswd-style $userClause",true);
+	if($result->returnCode!=0) return $users;
+	
+	$lines=explode("\n",$result->stdout);
 	foreach($lines as $line)
 	{
 		if(trim($line)!='')
@@ -53,4 +64,5 @@ function sambaFlagArray($flags)
 	}
 	return $individualFlags;
 }
+
 

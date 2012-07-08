@@ -203,12 +203,15 @@ class User extends EntityType
 		syscommand_usermod_aG($userName,ActionEngine::indiestorUserGroup);
 		EtcPasswd::reset();
 		EtcGroup::reset();
+		//set quota to infinite by default
 		if(!ProgramActions::actionExists('set-quota'))
 		{
 			$device=self::deviceForUser($userName);
 			if(sysquery_quotaon_p($device)===true)
 				syscommand_setquota_u($device,$userName,0);
 		}
+		//add samba user
+		syscommand_smbpasswd_a($userName);
         }
 
         static function delete($commandAction)
@@ -216,6 +219,7 @@ class User extends EntityType
 		$userName=ProgramActions::$entityName;
 		syscommand_deluser($userName,ProgramActions::actionExists('remove-home'));
 		EtcPasswd::reset();
+		syscommand_pdbedit_delete($userName);
         }
 
 	static function removeHome($commandAction)
@@ -279,6 +283,7 @@ class User extends EntityType
 		$passwd=$commandAction->actionArg;
 		syscommand_usermod_password($userName,$passwd);
 		EtcPasswd::reset();
+		syscommand_smbpasswd($userName,$passwd);
 	}
 
 	static function lock($commandAction)
@@ -286,6 +291,7 @@ class User extends EntityType
 		$userName=ProgramActions::$entityName;
 		syscommand_usermod_lock($userName);
 		EtcPasswd::reset();
+		syscommand_smbpasswd_d($userName);
 	}
 
 	static function expel($commandAction)
@@ -303,6 +309,22 @@ class User extends EntityType
 		$groupNames=self::newGroupNamesForUserName($userName,ActionEngine::indiestorUserGroup);
 		syscommand_usermod_G($userName,$groupNames);
 		EtcGroup::reset();
+	}
+
+	static function removeFromSamba($commandAction)
+	{
+		$userName=ProgramActions::$entityName;
+		if(sysquery_pdbedit_user($userName)==null)
+			ActionEngine::warning('AE_WARN_USER_ALREADY_REMOVED_FROM_SAMBA',array('userName'=>$userName));
+		syscommand_pdbedit_delete($userName);
+	}
+
+	static function addToSamba($commandAction)
+	{
+		$userName=ProgramActions::$entityName;
+		if(sysquery_pdbedit_user($userName)!=null)
+			ActionEngine::warning('AE_WARN_USER_ALREADY_ADDED_TO_SAMBA',array('userName'=>$userName));
+		syscommand_smbpasswd_a($userName);
 	}
 
 	static function setHome($commandAction)
