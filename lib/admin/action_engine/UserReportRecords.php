@@ -32,8 +32,8 @@ class UserReportRecords
 
 		$sambaUsers=sysquery_pdbedit_list();
 
-		$format1="%-10s %-20s %-7s %-10s %10s %10s %10s %-7s %-7s\n";
-		$format2="%-10s %-20s %-7s %-10s %10s %10s %10s %-7s %-7s\n";
+		$format1="%-10s %-20s %-6s %-10s %5s %5s %5s %-5s %-5s\n";
+		$format2="%-10s %-20s %-6s %-10s %5s %5s %5s %-5s %-5s\n";
 		printf($format1,'user','home','locked','group','quota','used','%used','samba','flags');
 		foreach($this->records as $userReportRecord)
 		{
