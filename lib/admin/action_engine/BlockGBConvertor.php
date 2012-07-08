@@ -13,7 +13,7 @@ class BlockGBConvertor
 	{
 		$blockSize=sysquery_dumpe2fs_blocksize($device);
 		if($blockSize==null)
-			ActionEngine::error('AE_ERR_VOLUME_CANNOT_FIND_BLOCKSIZE', array('volume'=>$device));
+			ActionEngine::error('SYS_ERR_VOLUME_CANNOT_FIND_BLOCKSIZE', array('volume'=>$device));
 		return $blockSize;
 	}
 

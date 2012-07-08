@@ -82,11 +82,11 @@ class DeviceQuota
 		switch($fileSystem)
 		{
 			case 'no-uuid':	
-				ActionEngine::error('AE_ERR_VOLUME_CANNOT_FIND_UUID',array('volume'=>$device));
+				ActionEngine::error('SYS_ERR_VOLUME_CANNOT_FIND_UUID',array('volume'=>$device));
 				break;
 			case 'no-filesystem-for-uuid':
 			case 'no-uuid':	
-				ActionEngine::error('AE_ERR_VOLUME_CANNOT_FIND_VOLUME_NOR_UUID',
+				ActionEngine::error('SYS_ERR_VOLUME_CANNOT_FIND_VOLUME_NOR_UUID',
 					array('volume'=>$device,'uuid'=>$deviceUUID));
 				break;
 		}		
@@ -95,7 +95,7 @@ class DeviceQuota
 	static function endMountPointWithSlash($mountPoint)
 	{
 		if(strlen($mountPoint)==0)
-			ActionEngine::error('AE_ERR_VOLUME_INVALID_MOUNTPOINT',array('mountPoint'=>$mountPoint));
+			ActionEngine::error('SYS_ERR_VOLUME_INVALID_MOUNTPOINT',array('mountPoint'=>$mountPoint));
 		if(substr($mountPoint,-1)=='/') return $mountPoint;
 		else return $mountPoint.'/';
 	}

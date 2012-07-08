@@ -367,7 +367,7 @@ class User extends EntityType
 	{
 		$userName=ProgramActions::$entityName;
 		if(sysquery_quotaon_p($device)!==true)
-			ActionEngine::error('AE_ERR_USER_QUOTA_CANNOT_SWITCH_ON_FOR_VOLUME',
+			ActionEngine::error('SYS_ERR_USER_QUOTA_CANNOT_SWITCH_ON_FOR_VOLUME',
 					array('userName'=>$userName,'volume'=>$device,'homeFolder'=>$homeFolder));
 	}
 

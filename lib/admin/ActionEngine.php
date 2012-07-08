@@ -91,7 +91,7 @@ class ActionEngine
 	static function failOnOpenVZ($device)
 	{
 		if($device=='/dev/simfs')
-			ActionEngine::error('AE_ERR_VOLUME_OPENVZ_NOT_SUPPORTED',array('volume'=>$device));
+			ActionEngine::error('SYS_ERR_VOLUME_OPENVZ_NOT_SUPPORTED',array('volume'=>$device));
 	}
 
         static function execute()

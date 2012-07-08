@@ -28,7 +28,7 @@ if($processUserName!='root')
 //check that shell_exec is allowed
 if(false !== strpos(ini_get('disable_functions'), 'shell_exec'))
 {
-	NoticeDefinitions::instance()->error('SHELL_EXEC_DISABLED');
+	NoticeDefinitions::instance()->error('SYS_ERR_SHELL_EXEC_DISABLED');
 }
 
 $argEngine=new ArgEngine($argv);
