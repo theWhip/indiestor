@@ -30,9 +30,11 @@ class UserReportRecords
 			return;
 		}
 
-		$format1="%-10s %-20s %-7s %-10s %10s %10s %10s\n";
-		$format2="%-10s %-20s %-7s %-10s %10s %10s %10s\n";
-		printf($format1,'user','home','locked','group','quota','used','%used');
+		$sambaUsers=sysquery_pdbedit_list();
+
+		$format1="%-10s %-20s %-7s %-10s %10s %10s %10s %-7s %-7s\n";
+		$format2="%-10s %-20s %-7s %-10s %10s %10s %10s %-7s %-7s\n";
+		printf($format1,'user','home','locked','group','quota','used','%used','samba','flags');
 		foreach($this->records as $userReportRecord)
 		{
 			//locked
@@ -57,6 +59,18 @@ class UserReportRecords
 				$quotaUsedPerc='-';
 			}
 
+			if(array_key_exists($userReportRecord->userName,$sambaUsers))
+			{
+				$sambaUser=$sambaUsers[$userReportRecord->userName];
+				$samba='Y';
+				$flags=implode('',$sambaUser['sambaFlagArray']);
+			}
+			else
+			{
+				$samba='N';
+				$flags='-';
+			}
+
 			printf($format2,
 				$userReportRecord->userName,
 				$userReportRecord->homeFolder,
@@ -64,7 +78,9 @@ class UserReportRecords
 				$groupName,
 				$quotaTotalGB,
 				$quotaUsedGB,
-				$quotaUsedPerc);  
+				$quotaUsedPerc,
+				$samba,
+				$flags);  
 		}
 	}
 }
