@@ -33,7 +33,10 @@ function syscommand_smbpasswd($userName,$passwd)
 	if(sysquery_which('smbpasswd'))
 	{
 		if(sysquery_pdbedit_user($userName)!=null)	
-			ShellCommand::exec_fail_if_error("(echo '$passwd';echo '$passwd') | smbpasswd -e $userName ");
+		{
+			ShellCommand::exec_fail_if_error("smbpasswd -e $userName ");
+			ShellCommand::exec_fail_if_error("(echo '$passwd';echo '$passwd') | smbpasswd -s $userName ");
+		}
 	}
 }
 
