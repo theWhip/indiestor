@@ -45,8 +45,8 @@ function sysquery_quota_u($userName)
 
 	//match the result fields into a quota record
 	$quotaRecord=array();
-	$quotaRecord['quotaUsedBlocks']=floatval($fields[2]);
-	$quotaRecord['quotaTotalBlocks']=floatval($fields[3]);
+	$quotaRecord['quotaUsedBlocks']=floatval($fields[1]);
+	$quotaRecord['quotaTotalBlocks']=floatval($fields[2]);
 
 	if($quotaRecord['quotaTotalBlocks']!=0)
 	{

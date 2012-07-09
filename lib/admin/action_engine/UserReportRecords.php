@@ -48,8 +48,8 @@ class UserReportRecords
 			//quota
 			if($userReportRecord->hasQuotaRecord)
 			{
-				$quotaTotalGB=number_format($userReportRecord->quotaTotalGB,2).'G';
-				$quotaUsedGB=number_format($userReportRecord->quotaUsedGB,2).'G';
+				$quotaTotalGB=number_format($userReportRecord->quotaTotalGB,0).'G';
+				$quotaUsedGB=number_format($userReportRecord->quotaUsedGB,0).'G';
 				$quotaUsedPerc=number_format($userReportRecord->quotaUsedPerc,0).'%';
 			}
 			else
