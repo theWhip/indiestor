@@ -31,6 +31,8 @@ class User extends EntityType
 		if(ProgramActions::actionExists('set-quota')) self::validateSetQuota($userName);
 		if(ProgramActions::actionExists('remove-quota')) self::validateRemoveQuota($userName);
 		if(ProgramActions::actionExists('set-passwd')) self::validateSetPasswd($userName);
+		if(ProgramActions::actionExists('add-to-samba')) self::validateAddToSamba($userName);
+		if(ProgramActions::actionExists('remove-from-samba')) self::validateRemoveFromSamba($userName);
 	}
 
 	static function validateAddAction($userName)
@@ -82,6 +84,22 @@ class User extends EntityType
 	static function validateLock($userName)
 	{
 		self::checkIfUserAlreadyLocked($userName);
+	}
+
+	static function validateAddToSamba($userName)
+	{
+		self::checkIfSambaInstalled();
+	}
+
+	static function validateRemoveFromSamba($userName)
+	{
+		self::checkIfSambaInstalled();
+	}
+
+	static function checkIfSambaInstalled()
+	{
+		if(!sysquery_which('smbpasswd'))
+			ActionEngine::error('AE_ERR_USER_SAMBA_NOT_INSTALLED',array());
 	}
 
 	static function homeFolderForUser($userName)
@@ -323,8 +341,15 @@ class User extends EntityType
 	{
 		$userName=ProgramActions::$entityName;
 		if(sysquery_pdbedit_user($userName)!=null)
+		{
 			ActionEngine::warning('AE_WARN_USER_ALREADY_ADDED_TO_SAMBA',array('userName'=>$userName));
-		syscommand_smbpasswd_a($userName);
+		}
+		else
+		{
+			if(!ProgramActions::actionExists('set-passwd') && !ProgramActions::actionExists('lock'))
+				ActionEngine::warning('AE_WARN_USER_ADD_TO_SAMBA_NO_PASSWORD',array('userName'=>$userName));
+			syscommand_smbpasswd_a($userName);
+		}
 	}
 
 	static function setHome($commandAction)
