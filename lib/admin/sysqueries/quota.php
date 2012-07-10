@@ -37,7 +37,7 @@ function sysquery_quota_u($userName)
 	}
 	//watch out --show-mntpoint and --hide-device is not supported in older versions of the quota package
 	$result=ShellCommand::query_fail_if_error("quota --no-wrap -u $userName | tail -n +3");
-	$result=preg_replace('/ +/',' ',$result);
+	$result=preg_replace('/ +/',' ',trim($result));
 	$fields=explode(' ',$result);
 
 	//there must be at least 3 fields in the result

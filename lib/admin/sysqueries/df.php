@@ -93,7 +93,7 @@ function strip_last_char($string)
 
 function sysquery_df_device_for_folder($folder)
 {
-	$fileSystemLine=ShellCommand::query_fail_if_error('df $folder | tail -n +2');	
+	$fileSystemLine=ShellCommand::query_fail_if_error("df $folder | tail -n +2");	
 	$fileSystemLine=preg_replace('/ +/',' ',$fileSystemLine);
 	$fileSystemLineFields=explode(' ',$fileSystemLine);
 	$device=$fileSystemLineFields[0];
