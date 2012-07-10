@@ -41,13 +41,16 @@ function sysquery_pdbedit_list($userName=null)
 		if(trim($line)!='')
 		{
 			$fields=explode(':',$line);
-			$user=array();
-			$name=$fields[0];
-			$flags=$fields[4];
-			$user['name']=$name;
-			$user['flags']=$flags;
-			$user['sambaFlagArray']=sambaFlagArray($flags);
-			$users[$name]=$user;
+			if(count($fields)>=5)
+			{
+				$user=array();
+				$name=$fields[0];
+				$flags=$fields[4];
+				$user['name']=$name;
+				$user['flags']=$flags;
+				$user['sambaFlagArray']=sambaFlagArray($flags);
+				$users[$name]=$user;
+			}
 		}
 	}
 	return $users;

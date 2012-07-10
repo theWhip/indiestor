@@ -24,6 +24,7 @@ class User extends EntityType
 			self::validateAddAction($userName);
 		}
 
+		if(ProgramActions::actionExists('delete')) self::validateDelete($userName);
 		if(ProgramActions::actionExists('set-home')) self::validateSetHome($userName);
 		if(ProgramActions::actionExists('set-group')) self::validateSetGroup($userName);
 		if(ProgramActions::actionExists('unset-group')) self::validateUnsetGroup($userName);
@@ -49,8 +50,17 @@ class User extends EntityType
 			ActionEngine::warning('AE_WARN_USER_NO_PASSWORD',array('userName'=>$userName));
 	}
 
+	static function validateDelete($userName)
+	{
+		if(ps_is_logged_in($userName))
+			ActionEngine::error('AE_ERR_USER_DELETE_LOGGED_IN',array('userName'=>$userName));
+	}
+
 	static function validateSetHome($userName)
 	{
+		if(ps_is_logged_in($userName))
+			ActionEngine::error('AE_ERR_USER_SET_HOME_LOGGED_IN',array('userName'=>$userName));
+
 		$commandAction=ProgramActions::findByName('set-home');
 		$homeFolder=$commandAction->actionArg;
 		self::checkHomeFolderIsAbsolutePath($homeFolder);
