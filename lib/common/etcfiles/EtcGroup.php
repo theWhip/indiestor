@@ -66,6 +66,8 @@ class EtcGroup
 		//group_name:password:GID:user_list
 		//user_list: a list of the usernames that are members of this group, separated by commas.
                 $this->groups=array();
+		//initialize the indiestor group to an empty array instead of null
+		$this->indiestorGroup=array();
 		$etcGroupFile=file_get_contents('/etc/group');
 		$groups=$this->parseEtcGroupFile($etcGroupFile);
 		$this->findIndiestorUserGroup($groups);
