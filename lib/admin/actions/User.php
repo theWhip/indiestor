@@ -356,7 +356,6 @@ class User extends EntityType
 	{
 		$skelFolder=trim(ShellCommand::query("cat /etc/adduser.conf | grep 'SKEL=' | sed 's/.*SKEL=\\([^ #]*\\).*/\\1/'"));
 		syscommand_cp_aR("$skelFolder/.",$homeFolder);
-		syscommand_chown_R($homeFolder,$userName,$userName);
 	}
 
 	static function setHome($commandAction)
@@ -366,8 +365,11 @@ class User extends EntityType
 		if(ProgramActions::actionExists('add')) return;
 		$homeFolder=$commandAction->actionArg;
 		if(!file_exists($homeFolder))
+		{
 			syscommand_mkdir($homeFolder);
-		self::setHomeSetSkelFolder($userName,$homeFolder);
+			self::setHomeSetSkelFolder($userName,$homeFolder);
+		}
+		syscommand_chown_R($homeFolder,$userName,$userName);
 		syscommand_usermod_home($userName,$homeFolder);
 		EtcPasswd::reset();
 		EtcGroup::reset();
