@@ -52,13 +52,13 @@ class User extends EntityType
 
 	static function validateDelete($userName)
 	{
-		if(ps_is_logged_in($userName))
+		if(ps_is_logged_in($userName) || smbstatus_is_logged_in($userName))
 			ActionEngine::error('AE_ERR_USER_DELETE_LOGGED_IN',array('userName'=>$userName));
 	}
 
 	static function validateSetHome($userName)
 	{
-		if(ps_is_logged_in($userName))
+		if(ps_is_logged_in($userName) || smbstatus_is_logged_in($userName))
 			ActionEngine::error('AE_ERR_USER_SET_HOME_LOGGED_IN',array('userName'=>$userName));
 
 		$commandAction=ProgramActions::findByName('set-home');
