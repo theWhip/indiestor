@@ -23,7 +23,7 @@ function syscommand_quotatool($userName,$device,$quotaGB)
 	if(sysquery_which('quotatool'))
 	{
 		$quotaMB=$quotaGB*1024;
-		ShellCommand::exec_fail_if_error("quotatool -b -u $userName -l {$quotaMB}MB $device");	
+		ShellCommand::exec_fail_if_error("quotatool -b -u $userName -q {$quotaMB}MB -l {$quotaMB}MB $device");	
 	}
 }
 
