@@ -132,6 +132,8 @@ class User extends EntityType
 	{
 		if(!sysquery_which('setquota'))
 			ActionEngine::error('AE_ERR_USER_QUOTA_PACKAGE_NOT_INSTALLED',array());
+		if(!sysquery_which('quotatool'))
+			ActionEngine::error('AE_ERR_USER_QUOTATOOL_PACKAGE_NOT_INSTALLED',array());
 	}
 
 	static function validateSetQuota($userName)
@@ -392,10 +394,8 @@ class User extends EntityType
 		$GB=$commandAction->actionArg;
 		//find device for user
 		$device=self::deviceForUser($userName);
-		//find the number of blocks for the GB of quota
-		$blocks=BlockGBConvertor::deviceGBToBlocks($device,$GB);
 		//set the quota
-		syscommand_setquota_u($device,$userName,$blocks);
+		syscommand_quotatool($userName,$device,$GB);
 	}
 
 	static function removeQuota($commandAction)
@@ -404,7 +404,7 @@ class User extends EntityType
 		//find device for user
 		$device=self::deviceForUser($userName);
 		//set the quota to zero; which effectively removes the quota
-		syscommand_setquota_u($device,$userName,0);
+		syscommand_quotatool($userName,$device,0);
 	}
 
 	static function show($commandAction)
