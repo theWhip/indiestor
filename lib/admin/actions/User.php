@@ -146,12 +146,28 @@ class User extends EntityType
 		self::checkForValidQuota($GB);
 		//device for user
 		$device=self::deviceForUser($userName);
-		//make sure quota is enabled
+		//fail on openVZ
 		ActionEngine::failOnOpenVZ($device);
-		DeviceQuota::switchOn($device);
 		//check if it worked
 		$homeFolder=self::homeFolderForUser($userName);
+		//do not exceed the maximum available for the device
+		self::checkIfQuotaNotOverMaximumAvailable($userName,$homeFolder,$device,$GB);
+		//make sure quota is enabled
+		DeviceQuota::switchOn($device);
 		self::checkQuotaSwitchedOn($device,$homeFolder);
+	}
+
+	static function checkIfQuotaNotOverMaximumAvailable($userName,$homeFolder,$device,$GB)
+	{
+		$dfFileSystem=sysquery_df_device($device);
+		if($dfFileSystem==null) 
+			ActionEngine::error('SYS_ERR_USER_QUOTA_VOLUME_DOES_NOT_EXIST',
+						array('userName'=>$userName,'homeFolder'=>$homeFolder,'volume'=>$device));
+		$maxGB=$dfFileSystem->storageGB;
+		if($GB>$maxGB)
+			ActionEngine::error('AE_ERR_USER_QUOTA_OVER_MAXSIZE_VOLUME',
+						array('volume'=>$device,'maxGB'=>$maxGB,'quota'=>$GB));
+
 	}
 
 	static function cracklibActive()

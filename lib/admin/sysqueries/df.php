@@ -29,6 +29,13 @@ class DFFileSystem
 	var $mountedOn=null;
 }
 
+function sysquery_df_device($device)
+{
+	$dfFileSystems=sysquery_df();
+	if(array_key_exists($device,$dfFileSystems)) return $dfFileSystems[$device];
+	else return null;
+}
+
 function sysquery_df()
 {
 	$dfFileSystems=array();
@@ -79,7 +86,7 @@ function sysquery_df()
 				else $dfFileSystem->quotaYN='?'; 
 			}
 
-			$dfFileSystems[]=$dfFileSystem;
+			$dfFileSystems[$dfFileSystem->device]=$dfFileSystem;
 		}
 	}
 	return $dfFileSystems;

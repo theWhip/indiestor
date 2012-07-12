@@ -73,6 +73,7 @@ function sysquery_repquota($device)
 	if($result->returnCode!=0) return null;
 	$lines=explode("\n",$result->stdout);
 
+	$users=array();
 	foreach($lines as $line)
 	{
 		if(trim($line)!='')
