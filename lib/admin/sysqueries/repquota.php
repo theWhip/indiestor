@@ -58,6 +58,8 @@ zombie 28K 7834M
 
 */
 
+$cached_reqquota=null;
+
 function sysquery_repquota_for_user($device,$user)
 {
 	$userQuotas=sysquery_repquota($device);
@@ -68,11 +70,21 @@ function sysquery_repquota_for_user($device,$user)
 
 function sysquery_repquota($device)
 {
+	global $cached_repquota;
+
 	if(!sysquery_which('repquota')) return null;
+
+	//check if we can serve from cache
+	if($cached_repquota!=null)
+		if(array_key_exists($device,$cached_repquota))
+			return $cached_repquota[$device];
+
+	//query
 	$result=ShellCommand::query("repquota -s $device | tail -n +6 | awk '{ print  $1,$3,$5}'",true);	
 	if($result->returnCode!=0) return null;
 	$lines=explode("\n",$result->stdout);
 
+	//compile array
 	$users=array();
 	foreach($lines as $line)
 	{
@@ -90,6 +102,10 @@ function sysquery_repquota($device)
 			}
 		}
 	}
+
+	//store repquota report in cache
+	if($cached_repquota==null) $cached_repquota=array();
+	$cached_repquota[$device]=$users;
 	return $users;	
 }
 
