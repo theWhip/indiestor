@@ -31,10 +31,11 @@ class UserReportRecords
 		}
 
 		$sambaUsers=sysquery_pdbedit_list();
+		$sambaConnectedUsers=sysquery_smbstatus_processes();
 
-		$format1="%-10s %-20s %-6s %-10s %5s %5s %5s %-5s %-5s\n";
-		$format2="%-10s %-20s %-6s %-10s %5s %5s %5s %-5s %-5s\n";
-		printf($format1,'user','home','locked','group','quota','used','%used','samba','flags');
+		$format1="%-10s %-20s %-6s %-10s %5s %5s %5s %-5s %-5s %-5s\n";
+		$format2="%-10s %-20s %-6s %-10s %5s %5s %5s %-5s %-5s %-5s\n";
+		printf($format1,'user','home','locked','group','quota','used','%used','samba','flags','conn.');
 		foreach($this->records as $userReportRecord)
 		{
 			//locked
@@ -71,6 +72,15 @@ class UserReportRecords
 				$flags='-';
 			}
 
+			if(array_key_exists($userReportRecord->userName,$sambaConnectedUsers))
+			{
+				$sambaConnected='Y';
+			}
+			else
+			{
+				$sambaConnected='N';
+			}
+
 			printf($format2,
 				$userReportRecord->userName,
 				$userReportRecord->homeFolder,
@@ -80,7 +90,8 @@ class UserReportRecords
 				$quotaUsedGB,
 				$quotaUsedPerc,
 				$samba,
-				$flags);  
+				$flags,
+				$sambaConnected);  
 		}
 	}
 }
