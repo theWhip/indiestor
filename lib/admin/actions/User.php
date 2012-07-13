@@ -254,7 +254,7 @@ class User extends EntityType
 		{
 			$device=self::deviceForUser($userName);
 			if(sysquery_quotaon_p($device)===true)
-				syscommand_setquota_u($device,$userName,0);
+				syscommand_quotatool($userName,$device,0);
 		}
 		//add samba user
 		syscommand_smbpasswd_a($userName);
