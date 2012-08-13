@@ -7,7 +7,11 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('InotifyEventHandlerDecisions.php');
+define('DECISION_IGNORE','IGNORE');
+define('DECISION_SHARE','SHARE');
+define('DECISION_RENAME','RENAME');
+define('DECISION_UNSHARE','UNSHARE');
+define('DECISION_DELAYED','DELAYED');
 
 class RenameOperation
 {
@@ -150,7 +154,7 @@ class InotifyEventHandler
 
 	function isProjectFolder($folder)
 	{
-		return self::endsWith($folder,'.shared');
+		return self::endsWith($folder,'.shared') || self::endsWith($folder,'.avid') ;
 	}
 
 	function queueItemFilePath()

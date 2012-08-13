@@ -8,7 +8,7 @@
 */
 
 //action definition folder
-define('COMMAND_ARGS_DEFINITIONS_FOLDER', folderParentAtLevel(__FILE__,3).'/etc/command-args-definitions.d');
+define('COMMAND_ARGS_DEFINITIONS_FOLDER', folderParentAtLevel(__FILE__,3).'/lib/admin/arg-definitions');
 
 function folderParentAtLevel($file,$level)
 {

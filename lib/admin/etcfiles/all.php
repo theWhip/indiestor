@@ -7,9 +7,8 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-define('DECISION_IGNORE','IGNORE');
-define('DECISION_SHARE','SHARE');
-define('DECISION_RENAME','RENAME');
-define('DECISION_UNSHARE','UNSHARE');
-define('DECISION_DELAYED','DELAYED');
+//if needed;
+require_once(dirname(dirname(__FILE__)).'/require_once_folder.php');
+
+require_once_folder(dirname(__FILE__));
 

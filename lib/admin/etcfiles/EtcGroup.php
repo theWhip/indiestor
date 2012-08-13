@@ -80,6 +80,10 @@ class EtcGroup
 
 	function findIndiestorUserGroup($groups)
 	{
+
+		//load ActionEngine, if needed
+		require_once(dirname(dirname(__FILE__)).'/ActionEngine.php');
+
 		foreach($groups as $group)
 		{
 			if($group->name==ActionEngine::indiestorUserGroup)

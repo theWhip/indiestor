@@ -8,14 +8,14 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('lib/common/require_once_folder.php');
+require_once('lib/admin/require_once_folder.php');
 require_once('lib/admin/args/ProgramActions.php');
 require_once('lib/admin/args/ProgramOptions.php');
 require_once('lib/admin/ArgEngine.php');
 require_once('lib/admin/ActionEngine.php');
-require_once('lib/common/Shell/ShellCommand.php');
-require_once('lib/common/DefinitionFile.php');
-require_once('lib/common/NoticeDefinitions.php');
+require_once('lib/admin/ShellCommand.php');
+require_once('lib/admin/DefinitionFile.php');
+require_once('lib/admin/NoticeDefinitions.php');
 
 //check that the user is root
 $processUser = posix_getpwuid(posix_geteuid());

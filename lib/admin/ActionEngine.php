@@ -9,14 +9,14 @@
 
 require_once('actions/EntityType.php');
 require_once('args/ProgramActions.php');
-require_once(dirname(dirname(__FILE__)).'/common/etcfiles/all.php');
+require_once('etcfiles/all.php');
 require_once('syscommands/all.php');
 require_once('sysqueries/all.php');
-require_once('action_engine/ActionNamingConvention.php');
-require_once('action_engine/UserReportRecord.php');
-require_once('action_engine/UserReportRecords.php');
-require_once('action_engine/DeviceQuota.php');
-require_once('action_engine/Incrontab.php');
+require_once('action-engine/ActionNamingConvention.php');
+require_once('action-engine/UserReportRecord.php');
+require_once('action-engine/UserReportRecords.php');
+require_once('action-engine/DeviceQuota.php');
+require_once('action-engine/Incrontab.php');
 
 class ActionEngine
 {
