@@ -6,112 +6,59 @@ function syslog_notice($msg)
 	syslog(LOG_NOTICE,$msg);
 }
 
+function terminate($msg)
+{
+	syslog_notice($msg);
+	exit(1);
+}
+
+function endsWith($str, $needle)
+{
+	$length = strlen($needle);
+	$result=!$length || substr($str, - $length) === $needle;
+   	return $result;
+}
+
+function isProjectFolder($folder)
+{
+	if(endsWith($folder,'.shared')) return true;
+	if(endsWith($folder,'.avid')) return true;
+	return false;
+}
+
+
 syslog_notice("indiestor-inotify running");
 
-$date=date(DATE_RFC822);
-$watchType=$argv[1];
-$folderWatched=$argv[2];
-$fsObject=$argv[3];
-$events=$argv[4];
+require_once(dirname(__FILE__).'/lib/inotify/InEvent.php');
 
-require_once('lib/inotify/InotifyEventHandler.php');
+$inEvent=new InEvent();
+syslog_notice($inEvent->toString());
 
-$inMovePendingPath=dirname(__FILE__).'/in_move_pending';
-if(!is_dir($inMovePendingPath)) mkdir($inMovePendingPath);
-$inotifyEventHandler=new InotifyEventHandler($inMovePendingPath);
+#if(!$inEvent->isDir) terminate("object concerned '{$inEvent->fsObject}' not a directory");
+if($inEvent->watchType=="MAIN" && !isProjectFolder($inEvent->fsObject))
+	terminate("folder concerned '{$inEvent->fsObject}' not a project folder");
 
-//process number
-$pid=getmypid();
+require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcPasswd.php');
+require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcGroup.php');
 
-syslog_notice("pid=$pid folder='$folderWatched' type='$watchType' object='$fsObject' events='$events'");
+//find user for folder
+$homeFolder=$inEvent->homeFolder();
+$etcPasswd=EtcPasswd::instance();
+$user=$etcPasswd->findUserByHomeFolder($homeFolder);
+if($user==null) terminate("Cannot find user for home folder '$homeFolder'");
+$userName=$user->name;
+syslog_notice("user is: '$userName'");
 
-try
-{
-	$decision=$inotifyEventHandler->decision($watchType,$folderWatched,$fsObject,$events);
-}
-catch(Exception $e)
-{
-	$decision='ERROR:'.$e->getMessage();
-}
+//find group for user
+$etcGroup=EtcGroup::instance();
+$group=$etcGroup->findGroupForUserName($userName);
+if($group==null) terminate("Cannot find group for user '$userName'");
+$groupName=$group->name;
+syslog_notice("group is: '$groupName'");
 
-if($decision instanceof RenameOperation)
-{
-	$from=$decision->from;
-	$to=$decision->to;
-	$decision="RENAME '$from' TO '$to'";
-}
+//retrieve all group members
+$members=$etcPasswd->findUsersForEtcGroup($group);
 
-syslog_notice("====>pid=$pid decision=$decision");
-
-//--------------------------
-//execute share decision
-//--------------------------
-
-if($watchType=='MAIN' && $decision==DECISION_SHARE)
-{
-	syslog_notice('executing share decision');
-	require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcPasswd.php');
-	require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcGroup.php');
-
-	//find user for folder
-	$etcPasswd=EtcPasswd::instance();
-	$user=$etcPasswd->findUserByHomeFolder($folderWatched);
-	if($user==null)
-	{
-		syslog_notice("Cannot find user for home folder '$folderWatched'");
-		exit(1);
-	}
-
-	$userName=$user->name;
-	syslog_notice("user is: '$userName'");
-
-	//find group for user
-	$etcGroup=EtcGroup::instance();
-	$group=$etcGroup->findGroupForUserName($userName);
-	if($group==null)
-	{
-		syslog_notice("Cannot find group for user '$userName'");
-		exit(1);
-	}
-
-	$groupName=$group->name;
-	syslog_notice("group is: '$groupName'");
-	
-	//symlink the members for the group
-	foreach($group->members as $member)
-	{
-		if($member!=$userName)
-		{
-			syslog_notice("symlinking group member '$member'");
-			$memberHomeFolder=$etcPasswd->findUserByName($member)->homeFolder;
-			$target="$folderWatched/$fsObject";
-			$link="$memberHomeFolder/$fsObject";
-			if(is_link($link))
-			{
-				syslog_notice("symlinking link='$link' exists already");
-				$currentTarget=readlink($link);
-				if($currentTarget==$target)
-				{
-					syslog_notice("with same target='$target'. No need to do anything.");
-				}
-				else
-				{
-					syslog_notice("Target='$currentTarget' is different. Removing existing target.");
-					unlink($link);
-					syslog_notice("symlinking link='$link',target='$target'");
-					$result=symlink($target,$link);
-					if($result==true) syslog_notice('symlink successfully created');
-					else  syslog_notice('error creating symlink');
-				}
-			}
-			else
-			{
-				syslog_notice("symlinking link='$link',target='$target'");
-				$result=symlink($target,$link);
-				if($result==true) syslog_notice('symlink successfully created');
-				else  syslog_notice('error creating symlink');
-			}
-		}
-	}
-}
+require_once(dirname(__FILE__).'/lib/inotify/reshare.php');
+share($groupName,$members);
 

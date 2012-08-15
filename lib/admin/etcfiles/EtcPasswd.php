@@ -107,6 +107,24 @@ class EtcPasswd
 	}
 
 	//----------------------------------------------
+	// FIND USERS FOR ETC GROUP
+	//----------------------------------------------
+
+	function findUsersForEtcGroup($group)
+	{
+		if($group==null) return null;
+		if($group->members==null) return null;
+
+		$users=array();
+		foreach($group->members as $member)
+		{
+			$user=$this->findUserByName($member);
+			if($user!=null) $users[$member]=$user;			
+		}
+		return $users;
+	}
+	
+	//----------------------------------------------
 	// FIND USER BY HOME FOLDER
 	//----------------------------------------------
 
