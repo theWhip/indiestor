@@ -23,8 +23,10 @@ function verifyProjectLinks($groupName,$users)
 		$avidProjectsPresent=$avidProjectsPresent || hasAtLeastOneAvidProject($projects);
 		foreach($projects as $project)
 		{
-			verifyProjectFileNames($user->homeFolder,$project);
-			verifyProjectPrivileges($groupName,$user->name,$user->homeFolder,$project);
+			verifyProjectFiles($groupName,$user,$project);
+			$projectFolder=$user->homeFolder."/".$project;
+			fixProjectFsObjectOwnership($groupName,$user->name,$projectFolder);
+			fixProjectFolderPermissions($projectFolder);
 			foreach($users as $sharingUser)
 				if($user->name!=$sharingUser->name)
 					verifyProjectLink($user,$sharingUser,$project);
@@ -89,50 +91,12 @@ function userProjectsOrLinks($homeFolder,$type)
 	return $projects;
 }
 
-function renameProjectFileIfNeeded($homeFolder,$project,$file,$extension)
+function fixProjectFsObjectOwnership($groupName,$userName,$fsObject)
 {
-	if(endsWith($file,$extension))
-	{
-		$oldName="$homeFolder/$project/$file";
-		$newName="$homeFolder/$project/$project$extension";
-		if($oldName!=$newName)
-		{
-			$result=rename($oldName,$newName);
-			if(!$result)
-			{
-				syslog_notice("Failed to rename '$oldName' to '$newName'"); 
-			}
-		}
-	} 
-}
-
-function verifyProjectFileNames($homeFolder,$project)
-{
-	if ($handle = opendir("$homeFolder/$project"))
-	{
-		while(false !== ($entry = readdir($handle)))
-		{
-			if(is_file("$homeFolder/$project/$entry"))
-			{
-				renameProjectFileIfNeeded($homeFolder,$project,$entry,'.avp');
-				renameProjectFileIfNeeded($homeFolder,$project,$entry,'.avs');
-			}
-		}
-		closedir($handle);
-	}
-	else
-	{
-		syslog_notice("Cannot open folder '$homeFolder/$project' for renaming .avp and .avs files");
-	}
-}
-
-function verifyProjectPrivileges($groupName,$userName,$homeFolder,$project)
-{
-	$folder="$homeFolder/$project";
-	$stat=stat($folder);
+	$stat=stat($fsObject);
 	if($stat==null)
 	{
-		syslog_notice("Cannot stat '$folder'");
+		syslog_notice("Cannot stat '$fsObject'");
 		return;
 	}
 
@@ -141,9 +105,9 @@ function verifyProjectPrivileges($groupName,$userName,$homeFolder,$project)
 	$currentOwner=ownerByUid($stat['uid']);	
 	if($currentOwner!=$userName) 
 	{
-		$result=chown($folder,$userName);
+		$result=chown($fsObject,$userName);
 		if(!$result)
-			syslog_notice("cannot chown '$folder' to '$userName'");
+			syslog_notice("cannot chown '$fsObject' to '$userName'");
 	}
 
 	//group must be the indiestor group
@@ -151,24 +115,114 @@ function verifyProjectPrivileges($groupName,$userName,$homeFolder,$project)
 	$currentGroup=groupByGid($stat['gid']);
 	if($currentGroup!='is_'.$groupName)
 	{
-		$result=chgrp($folder,'is_'.$groupName);
+		$result=chgrp($fsObject,'is_'.$groupName);
 		if(!$result)
-			syslog_notice("cannot chgrp '$folder' to 'is_$groupName'");
+			syslog_notice("cannot chgrp '$fsObject' to 'is_$groupName'");
 	}
 
+}
+
+function fixFsObjectPermissions($fsObject,$mode)
+{
+	$stat=stat($fsObject);
+
+	if($stat==null)
+	{
+		syslog_notice("Cannot stat '$fsObject'");
+		return;
+	}
+
+	$currentMode=substr(decoct($stat['mode']),-strlen($mode));
+
+	if($currentMode!=$mode)
+	{
+		$result=chmod($fsObject,octdec($mode));
+		if(!$result)
+			syslog_notice("cannot chmod '$fsObject' to '$mode'");
+
+	}
+}
+
+function fixProjectFilePermissions($file)
+{
+	//permissions must be owner=rwx group=rwx other=---
+	fixFsObjectPermissions($file,"770");
+}
+
+function fixProjectFolderPermissions($folder)
+{
 	//permissions must be owner=rwx group=rwx other=---
 	//sticky bit must be set: only the owner of a project file/folder may delete it
 	//setgid must be set: all files/folders created must inherit the group id
 	//Other must have execute rights for sticky bit to work
 
-	$mode="3771";
-	$currentMode=substr(decoct($stat['mode']),-strlen($mode));
-	if($currentMode!=$mode)
-	{
-		$result=chmod($folder,octdec($mode));
-		if(!$result)
-			syslog_notice("cannot chmod '$folder' to '$mode'");
+	fixFsObjectPermissions($folder,"3771");
+}
 
+function renameProjectFileIfNeeded($groupName,$userName,$oldName,$newName)
+{
+	if($oldName!=$newName)
+	{
+		$result=rename($oldName,$newName);
+		if(!$result)
+		{
+			syslog_notice("Failed to rename '$oldName' to '$newName'"); 
+			return;
+		}
+	}
+
+	fixProjectFsObjectOwnership($groupName,$userName,$newName);
+	fixProjectFilePermissions($newName);
+
+}
+
+function renameAvpProjectFile($groupName,$userName,$homeFolder,$project,$file)
+{
+	$oldName="$homeFolder/$project/$file";
+	$newName="$homeFolder/$project/$project.avp";
+	renameProjectFileIfNeeded($groupName,$userName,$oldName,$newName);
+}
+
+function renameAvsProjectFile($groupName,$userName,$homeFolder,$project,$file)
+{
+	$oldName="$homeFolder/$project/$file";
+
+	/*
+	/home/user/hello/hello.avid.avs
+	/home/user/hello/hello.avid Settings.avs
+	With max. lenght of hello.avid maximum 18 chars.
+	With max. total length 27 chars.
+	*/
+
+	$prefix=substr($project,0,18);
+	$avsFile="$prefix Settings.avs";
+	$newName="$homeFolder/$project/$avsFile";
+
+	renameProjectFileIfNeeded($groupName,$userName,$oldName,$newName);
+}
+
+
+function verifyProjectFiles($groupName,$user,$project)
+{
+	$userName=$user->name;
+	$homeFolder=$user->homeFolder;
+	if ($handle = opendir("$homeFolder/$project"))
+	{
+		while(false !== ($entry = readdir($handle)))
+		{
+			if(is_file("$homeFolder/$project/$entry"))
+			{
+				if(endsWith($entry,'.avp'))
+					renameAvpProjectFile($groupName,$userName,$homeFolder,$project,$entry);
+				if(endsWith($entry,'.avs'))
+					renameAvsProjectFile($groupName,$userName,$homeFolder,$project,$entry);
+			}
+		}
+		closedir($handle);
+	}
+	else
+	{
+		syslog_notice("Cannot open folder '$homeFolder/$project' for renaming .avp and .avs files");
 	}
 }
 

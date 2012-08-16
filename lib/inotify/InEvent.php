@@ -18,13 +18,18 @@ class InEvent
 	var $event=null;
 	var $isDir=null;
 
+	function cleanArg($arg)
+	{
+		return trim($arg);
+	}
+
 	function __construct()
 	{
 		global $argv;
 		$this->date=date(DATE_RFC822);
 		$this->watchType=$argv[1];
-		$this->folderWatched=trim($argv[2]);
-		$this->fsObject=$argv[3];
+		$this->folderWatched=self::cleanArg($argv[2]);
+		$this->fsObject=self::cleanArg($argv[3]);
 		$this->events=$argv[4];
 		$this->pid=getmypid();
 		$this->analyzeEventFlags();
@@ -61,7 +66,7 @@ class InEvent
 
 	function homeFolderForMXFFolder()
 	{
-		if(preg_match('|(.*)/Avid\\\\ MediaFiles/MXF|', $this->folderWatched, $matches))
+		if(preg_match('|(.*)/Avid MediaFiles.*|', $this->folderWatched, $matches))
 			return 	trim($matches[1]);
 		else terminate("Cannot determine home folder from MXF Folder '{$this->folderWatched}'");
 	}
@@ -71,8 +76,8 @@ class InEvent
 		switch($this->watchType)
 		{
 			case "MAIN": return $this->folderWatched;
-			case "MXF": return homeFolderForMXFFolder();
-			default: terminate("Unknown watch type '{$this->watchType}");
+			case "MXF": return $this->homeFolderForMXFFolder();
+			default: terminate("Unknown watch type '{$this->watchType}'");
 		}
 	}
 }

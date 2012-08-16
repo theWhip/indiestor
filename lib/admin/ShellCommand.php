@@ -7,6 +7,8 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+require_once(dirname(__FILE__).'/args/ProgramOptions.php');
+
 class ProcessInput
 {
 	var $command=null;

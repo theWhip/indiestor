@@ -9,7 +9,6 @@
 
 define('INCRON_ARGS','$@ $# $%');
 define('INCRON_MAIN_EVENTS','IN_ATTRIB,IN_CREATE,IN_DELETE,IN_MOVED_FROM,IN_MOVED_TO');
-#define('INCRON_OPTION_EVENTS','IN_DONT_FOLLOW,IN_ONLYDIR');
 define('INCRON_OPTION_EVENTS','');
 define('INCRON_SCRIPT_EVENT_HANDLER','indiestor-inotify');
 define('INCRON_ROOT_FOLDER',dirname(dirname(dirname(dirname(__FILE__)))));
@@ -41,16 +40,27 @@ class Incrontab
 
 	static function generateTabForUser($userName,$homeFolder)
 	{
+		$userIncronLines='';
+
 		#watch home folder
-		$mainUserIncronLine=$homeFolder.' '.INCRON_MAIN_EVENTS.','.INCRON_OPTION_EVENTS.' '.
+		$userIncronLines.=$homeFolder.' '.INCRON_MAIN_EVENTS.','.INCRON_OPTION_EVENTS.' '.
 			INCRON_SCRIPT_EVENT_HANDLER_PATH.' MAIN '.INCRON_ARGS."\n";
 
-		#watch mxf folder
-		$mxfWatched="$homeFolder/Avid\ MediaFiles/MXF";
-		$mxfUserIncronLine=$mxfWatched.' '.INCRON_MAIN_EVENTS.','.INCRON_OPTION_EVENTS.' '.
-			INCRON_SCRIPT_EVENT_HANDLER_PATH.' MXF '.INCRON_ARGS."\n";
+		#watch 'Avid MediaFiles'
+		if(file_exists("$homeFolder/Avid MediaFiles"))
+		{
+			$userIncronLines.="$homeFolder/Avid\ MediaFiles".' '.INCRON_MAIN_EVENTS.','.INCRON_OPTION_EVENTS.' '.
+				INCRON_SCRIPT_EVENT_HANDLER_PATH.' MXF '.INCRON_ARGS."\n";
+		}
+
+		#watch 'Avid MediaFiles/MXF'
+		if(file_exists("$homeFolder/Avid MediaFiles/MXF"))
+		{
+			$userIncronLines.="$homeFolder/Avid\ MediaFiles/MXF".' '.INCRON_MAIN_EVENTS.','.INCRON_OPTION_EVENTS.' '.
+				INCRON_SCRIPT_EVENT_HANDLER_PATH.' MXF '.INCRON_ARGS."\n";
+		}
 		
-		return $mainUserIncronLine.$mxfUserIncronLine;
+		return $userIncronLines;
 	}
 }
 
