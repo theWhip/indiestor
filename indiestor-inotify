@@ -1,22 +1,21 @@
 #!/usr/bin/php
 <?php
 
-function syslog_notice($msg)
-{
-	syslog(LOG_NOTICE,$msg);
-}
+/*
+        Indiestor inotify program
 
-function syslog_notice_end_running()
-{
-	syslog_notice('indiestor, end run');
-}
+	Written by Erik Poupaert, erik@sankuru.biz
+        Commissioned at peopleperhour.com 
+        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
+*/
 
-function terminate($msg)
-{
-	syslog_notice($msg);
-	syslog_notice_end_running();
-	exit(1);
-}
+require_once(dirname(__FILE__).'/lib/inotify/InEvent.php');
+require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcPasswd.php');
+require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcGroup.php');
+require_once(dirname(__FILE__).'/lib/admin/action-engine/Incrontab.php');
+require_once(dirname(__FILE__).'/lib/inotify/syslog.php');
+require_once(dirname(__FILE__).'/lib/inotify/reshare.php');
+require_once(dirname(__FILE__).'/lib/inotify/LockingMechanism.php');
 
 function endsWith($str, $needle)
 {
@@ -32,29 +31,16 @@ function isProjectFolder($folder)
 	return false;
 }
 
+syslog_notice_start_running();
 
-syslog_notice("indiestor-inotify running");
-
-require_once(dirname(__FILE__).'/lib/inotify/InEvent.php');
-
-//fix argv for MXF
-if($argv[1]=='MXF')
-{
-	$argv[2]=$argv[2].' '.$argv[3];
-	$argv[3]=$argv[4];
-	$argv[4]=$argv[5];
-	$argv[5]='';
-}
-
-syslog_notice("ARGS: {$argv[1]},{$argv[2]},{$argv[3]},{$argv[4]},{$argv[5]}");
-
+//prepare commandline args
 $inEvent=new InEvent();
 
-if($inEvent->watchType=='MAIN' && !isProjectFolder($inEvent->fsObject) && $inEvent->fsObject!='Avid MediaFiles')
-	terminate("folder concerned '{$inEvent->fsObject}' not a project folder");
-
-require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcPasswd.php');
-require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcGroup.php');
+//only handle project folders or Avid MediaFiles folder
+if($inEvent->watchType=='MAIN' && 
+	!isProjectFolder($inEvent->fsObject) &&
+	$inEvent->fsObject!='Avid MediaFiles'
+) terminate("folder concerned '{$inEvent->fsObject}' not a project folder");
 
 //find user for folder
 $homeFolder=$inEvent->homeFolder();
@@ -62,26 +48,33 @@ $etcPasswd=EtcPasswd::instance();
 $user=$etcPasswd->findUserByHomeFolder($homeFolder);
 if($user==null) terminate("Cannot find user for home folder '$homeFolder'");
 $userName=$user->name;
-syslog_notice("user is: '$userName'");
 
 //find group for user
 $etcGroup=EtcGroup::instance();
 $group=$etcGroup->findGroupForUserName($userName);
 if($group==null) terminate("Cannot find group for user '$userName'");
 $groupName=$group->name;
-syslog_notice("group is: '$groupName'");
+
+//we know user and group now
+syslog_notice("user is: '$userName' group is: '$groupName'");
 
 //retrieve all group members
 $members=$etcPasswd->findUsersForEtcGroup($group);
 
-require_once(dirname(__FILE__).'/lib/inotify/reshare.php');
-syslog_notice("resharing group '$groupName'");
-share($groupName,$members);
+//start resharing
+$lockingMechanism=new LockingMechanism($groupName);
+$lockingMechanism->lock();
+do
+{
+	syslog_notice("resharing group '$groupName'");
+	reshare($groupName,$members);
+}
+while($lockingMechanism->mustReRun());
+$lockingMechanism->unlock();
 
 //regenerate incrontab for MXF events
 if($inEvent->watchType=='MXF' || $inEvent->fsObject=='Avid MediaFiles')
 {
-	require_once(dirname(__FILE__).'/lib/admin/action-engine/Incrontab.php');
 	syslog_notice('Regenerating incrontab');
 	Incrontab::generate();
 }

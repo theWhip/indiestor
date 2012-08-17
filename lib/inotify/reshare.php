@@ -1,14 +1,14 @@
 <?php
 
 /*
-        Indiestor simulation program
+        Indiestor inotify program
 
 	Written by Erik Poupaert, erik@sankuru.biz
         Commissioned at peopleperhour.com 
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-function share($groupName,$users)
+function reshare($groupName,$users)
 {
 	verifyProjectLinks($groupName,$users);
 	purgeProjectLinks($users);

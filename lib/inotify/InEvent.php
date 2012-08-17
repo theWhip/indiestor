@@ -1,6 +1,6 @@
 <?php
 /*
-        Indiestor program
+        Indiestor inotify program
 
 	Written by Erik Poupaert, erik@sankuru.biz
         Commissioned at peopleperhour.com 
@@ -26,6 +26,16 @@ class InEvent
 	function __construct()
 	{
 		global $argv;
+
+		//fix argv for MXF
+		if($argv[1]=='MXF')
+		{
+			$argv[2]=$argv[2].' '.$argv[3]; //Avid MediaFiles
+			$argv[3]=$argv[4];
+			$argv[4]=$argv[5];
+			$argv[5]='';
+		}
+
 		$this->date=date(DATE_RFC822);
 		$this->watchType=$argv[1];
 		$this->folderWatched=self::cleanArg($argv[2]);
