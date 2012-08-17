@@ -60,7 +60,14 @@ class LockingMechanism
 	function requestReRun()
 	{
 		if(!file_exists($this->reRunFile()))
+		{
+			syslog_notice("no existing rerun request; requesting rerun by touching file '{$this->reRunFile()}'");
 			touch($this->reRunFile());
+		}
+		else
+		{
+			syslog_notice("rerun request '{$this->reRunFile()}' exists already; no need to request rerun");
+		}
 	}
 
 	function init()
@@ -68,7 +75,7 @@ class LockingMechanism
 		if($this->isBusy())
 		{
 			$this->requestReRun();
-			terminate("requesting rerun; terminating");
+			terminate("rerun scheduled; terminating");
 		}
 
 		$this->removeReRun();
@@ -103,13 +110,13 @@ class LockingMechanism
 	{
 		if(file_exists($this->reRunFile()))
 		{
-			syslog_notice("re-run file '{$this->reRunFile()}' present; re-run required.");
+			syslog_notice("re-run file '{$this->reRunFile()}' present; re-run required");
 			$this->RemoveReRun();
 			return true;
 		}
 		else
 		{
-			syslog_notice("no re-run file '{$this->reRunFile()}' present; terminating.");
+			syslog_notice("no re-run file '{$this->reRunFile()}' present; terminating");
 			return false;
 		}
 	}

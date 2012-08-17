@@ -320,7 +320,7 @@ function purgeProjectLink($userName,$homeFolder,$projectLink,$users)
 	if(!is_dir($target))
 	{
 		unlink($projectLinkPath);
-		syslog_notice("Removed '$projectLinkPath'; target '$target' is not a folder");
+		syslog_notice("Removed '$projectLinkPath'; target '$target' is not a valid link target");
 		return;
 	}
 
@@ -330,7 +330,7 @@ function purgeProjectLink($userName,$homeFolder,$projectLink,$users)
 	{
 		unlink($projectLinkPath);
 		syslog_notice("Removed '$projectLinkPath'; in target '$target' ".
-			"the project '$targetProjectFolder' is not a valid project folder");
+			"the target '$targetProjectFolder' is not a valid project folder");
 		return;
 	}
 	//the link must point to member project folder
