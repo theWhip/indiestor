@@ -34,6 +34,11 @@ class ActionEngine
 		NoticeDefinitions::instance()->warning($messageCode,$parameters);
 	}
 
+	static function notice($messageCode,$parameters=array())
+	{
+		NoticeDefinitions::instance()->notice($messageCode,$parameters);
+	}
+
 	static function notify($entityType,$actionDone)
 	{
 		$entityType=strtolower($entityType);

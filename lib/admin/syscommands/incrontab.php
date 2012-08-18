@@ -24,9 +24,13 @@ function syscommand_incrontab($incronLines)
 	unlink('/tmp/incrontab-tmp');
 }
 
+function syscommand_incrontab_list()
+{
+	return shell_exec("incrontab --list");	
+}
+
 function syscommand_incrontab_show()
 {
-	$output=shell_exec("incrontab --list");	
-	echo $output;
+	echo syscommand_incrontab_list();
 }
 

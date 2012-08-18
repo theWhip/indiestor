@@ -22,5 +22,14 @@ class Users extends EntityType
         {
 		syscommand_incrontab_show();		
       	}
+
+        static function regenerateIncrontab($commandAction)
+        {
+		$incrontab_old=syscommand_incrontab_list();
+		Incrontab::generate();
+		$incrontab_new=syscommand_incrontab_list();
+		if($incrontab_old==$incrontab_new) ActionEngine::notice('AE_NOTI_INCRONTAB_NO_CHANGES');
+		else ActionEngine::notice('AE_NOTI_INCRONTAB_CHANGED');
+      	}
 }
 
