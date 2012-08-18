@@ -273,12 +273,24 @@ class User extends EntityType
 		/* handled in the delete action already */
 	}
 
+	static function reshareGroup($groupName)
+	{
+		$group=EtcGroup::instance()->findGroup($groupName);
+		if($group!=null)
+		{
+			$members=EtcPasswd::instance()->findUsersForEtcGroup($group);
+			reshare($group->name,$members);
+		}
+	}
+
 	static function setGroup($commandAction)
 	{
 		$userName=ProgramActions::$entityName;
 		$groupName=$commandAction->actionArg;
 		//if user already member of any group, remove him
-		self::removeFromISGroup($userName);
+		$oldGroupName=self::removeFromISGroup($userName);
+		//reshare old group
+		if($oldGroupName!=null) self::reshareGroup($oldGroupName);
 		//add user to user group
 		syscommand_usermod_aG($userName,ActionEngine::sysGroupName($groupName));
 		EtcGroup::reset();
@@ -308,19 +320,25 @@ class User extends EntityType
 	{
                 $etcGroup=EtcGroup::instance();
 		$group=$etcGroup->findGroupForUserName($userName);
-		if($group==null) return;
+		if($group==null) return null;
 		//we calculate the new collection of groups to which the user belongs
 		//by removing his existing group from the list
 		$groupNameToRemove=ActionEngine::sysGroupName($group->name);
 		$groupNames=self::newGroupNamesForUserName($userName,$groupNameToRemove);
 		syscommand_usermod_G($userName,$groupNames);
 		EtcGroup::reset();
+		return ActionEngine::indiestorGroupName($groupNameToRemove);
 	}
 
 	static function unsetGroup($commandAction)
 	{
 		$userName=ProgramActions::$entityName;
-		self::removeFromISGroup($userName);
+		$oldGroupName=self::removeFromISGroup($userName);
+		//purge project links
+		$user=EtcPasswd::instance()->findUserByName($userName);
+		purgeProjectLinks(array($user));
+		//reshare old group
+		self::reshareGroup($oldGroupName);
 	}
 
 	static function setPasswd($commandAction)
@@ -536,11 +554,14 @@ class User extends EntityType
 
 	static function afterCommand()
 	{
-		if(ProgramActions::actionExists('add') ||
-				ProgramActions::actionExists('delete') ||
-				ProgramActions::actionExists('set-home') ||
-				ProgramActions::actionExists('remove-from-indiestor'))
+		if(ProgramActions::hasUpdateCommand())
+		{
+			//reshare group
+			$userName=ProgramActions::$entityName;
+			$group=EtcGroup::instance()->findGroupForUserName($userName);
+			if($group!=null) self::reshareGroup($group->name);
 			ActionEngine::regenerateIncrontab();			
+		}
 	}
 }
 

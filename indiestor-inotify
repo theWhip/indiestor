@@ -17,20 +17,6 @@ require_once(dirname(__FILE__).'/lib/inotify/syslog.php');
 require_once(dirname(__FILE__).'/lib/inotify/reshare.php');
 require_once(dirname(__FILE__).'/lib/inotify/LockingMechanism.php');
 
-function endsWith($str, $needle)
-{
-	$length = strlen($needle);
-	$result=!$length || substr($str, - $length) === $needle;
-   	return $result;
-}
-
-function isProjectFolder($folder)
-{
-	if(endsWith($folder,'.shared')) return true;
-	if(endsWith($folder,'.avid')) return true;
-	return false;
-}
-
 syslog_notice_start_running();
 
 //prepare commandline args
@@ -66,7 +52,6 @@ $lockingMechanism=new LockingMechanism($groupName);
 $lockingMechanism->lock();
 do
 {
-	syslog_notice("resharing group '$groupName'");
 	reshare($groupName,$members);
 }
 while($lockingMechanism->mustReRun());

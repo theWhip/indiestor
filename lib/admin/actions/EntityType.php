@@ -33,14 +33,15 @@ class EntityType
 		                $className::validateUpFront();
 			}
 
+			$fixSharingStructure=false;
 		        foreach(ProgramActions::$actions as $commandAction)
 		        {
 		                $action=$commandAction->action;
 		                $function=actionCamelCaseNameWithFirstLowerCase($action);
 		                $className=get_called_class();
 		                $className::$function($commandAction);
-				if($commandAction->mustNotify)
-					ActionEngine::notify($className,$function);					
+				if($commandAction->isUpdateCommand)
+					ActionEngine::notify($className,$function);
 		        }
 
 			if(method_exists($className,'afterCommand'))

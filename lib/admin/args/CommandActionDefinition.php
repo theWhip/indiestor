@@ -16,16 +16,16 @@ class CommandActionDefinition
 	var $priority=null;
         var $hasArg=null;
 	var $isOption=null;
-	var $mustNotify=null;
+	var $isUpdateCommand=null;
 
-        function __construct($entityType,$action,$hasArg,$priority,$isOption,$mustNotify)
+        function __construct($entityType,$action,$hasArg,$priority,$isOption,$isUpdateCommand)
         {
                 $this->entityType=$entityType;
                 $this->action=$action;
                 $this->hasArg=$hasArg;
 		$this->priority=$priority;
 		$this->isOption=$isOption;
-		$this->mustNotify=$mustNotify;
+		$this->isUpdateCommand=$isUpdateCommand;
         }
 
 	function newCommandAction($action,$actionArg)
@@ -36,7 +36,7 @@ class CommandActionDefinition
 			$actionArg,
 			$this->priority,
 			$this->isOption,
-			$this->mustNotify
+			$this->isUpdateCommand
 		);
 		
 	}

@@ -1,5 +1,4 @@
 <?php
-
 /*
         Indiestor inotify program
 
@@ -8,8 +7,25 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
+require_once(dirname(__FILE__).'/syslog.php');
+
+function endsWith($str, $needle)
+{
+	$length = strlen($needle);
+	$result=!$length || substr($str, - $length) === $needle;
+   	return $result;
+}
+
+function isProjectFolder($folder)
+{
+	if(endsWith($folder,'.shared')) return true;
+	if(endsWith($folder,'.avid')) return true;
+	return false;
+}
+
 function reshare($groupName,$users)
 {
+	syslog_notice("resharing group '$groupName'");
 	verifyProjectLinks($groupName,$users);
 	purgeProjectLinks($users);
 }

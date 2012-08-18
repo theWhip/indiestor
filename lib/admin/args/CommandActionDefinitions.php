@@ -30,19 +30,19 @@ class CommandActionDefinitions
 	{
                 $this->actionDefinitions=array();
 		$rows=DefinitionFile::parse('entityActions',array('entityType','action','hasArg',
-						'priority','isOption','mustNotify'));
+						'priority','isOption','isUpdateCommand'));
 		foreach($rows as $row)
 		{
 			$this->addActionDefinition($row['entityType'],$row['action'],$row['hasArg'],
-						$row['priority'],$row['isOption'],$row['mustNotify']);
+						$row['priority'],$row['isOption'],$row['isUpdateCommand']);
 		}
 	}
 
-        function addActionDefinition($entityType,$action,$hasArg,$priority,$isOption,$mustNotify)
+        function addActionDefinition($entityType,$action,$hasArg,$priority,$isOption,$isUpdateCommand)
         {
                 $this->actionDefinitions[$this->syntheticKey($entityType,$action)]=
 			new CommandActionDefinition($entityType,$action,$hasArg,
-					$priority,$isOption,$mustNotify);
+					$priority,$isOption,$isUpdateCommand);
         }
 
 

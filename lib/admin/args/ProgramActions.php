@@ -57,6 +57,17 @@ class ProgramActions
 		return $priorities;
 	}
 
+	function hasUpdateCommand()
+	{
+                if(self::$actions==null)
+			return false;
+
+		foreach(self::$actions as $commandAction)
+			if($commandAction->isUpdateCommand) return true;
+
+		return false;		
+	}
+
 	static function sortActionsByPriority()
 	{
                 if(self::$actions==null) return;

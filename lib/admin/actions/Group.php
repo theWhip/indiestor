@@ -40,8 +40,15 @@ class Group extends EntityType
 		//if group does not exists, abort
 		self::checkInvalidGroup($ISGroupName);
 		$sysGroupName=ActionEngine::sysGroupName($ISGroupName);
+		//remember members
+		$group=EtcGroup::instance()->findGroup($ISGroupName);
+		$oldMembers=EtcPasswd::instance()->findUsersForEtcGroup($group);
+		//delete group
 		syscommand_delgroup($sysGroupName);
 		EtcGroup::reset();
+		//purge group links
+		foreach($oldMembers as $member)
+			purgeProjectLinks(array($member));
         }
 
 	static function checkInvalidGroup($ISGroupName)
@@ -60,6 +67,14 @@ class Group extends EntityType
 
 		$userReportRecords=new UserReportRecords($group->members);
 		$userReportRecords->output();
+	}
+
+	static function afterCommand()
+	{
+		if(ProgramActions::hasUpdateCommand())
+		{
+			ActionEngine::regenerateIncrontab();			
+		}
 	}
 }
 

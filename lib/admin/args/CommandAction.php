@@ -13,15 +13,15 @@ class CommandAction
         var $actionArg=null;
 	var $priority=null;
 	var $isOption=null;
-	var $mustNotify=null;
+	var $isUpdateCommand=null;
 
-        function __construct($action,$actionArg,$priority,$isOption,$mustNotify)
+        function __construct($action,$actionArg,$priority,$isOption,$isUpdateCommand)
         {
                 $this->action=$action;
                 $this->actionArg=$actionArg;
 		$this->priority=$priority;
 		$this->isOption=$isOption;
-		$this->mustNotify=$mustNotify;
+		$this->isUpdateCommand=$isUpdateCommand;
         }
 
 	function __toString()
