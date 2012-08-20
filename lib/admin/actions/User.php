@@ -279,7 +279,7 @@ class User extends EntityType
 		if($group!=null)
 		{
 			$members=EtcPasswd::instance()->findUsersForEtcGroup($group);
-			reshare($group->name,$members);
+			SharingStructure::reshare($group->name,$members);
 		}
 	}
 
@@ -336,7 +336,7 @@ class User extends EntityType
 		$oldGroupName=self::removeFromISGroup($userName);
 		//purge project links
 		$user=EtcPasswd::instance()->findUserByName($userName);
-		purgeProjectLinks(array($user));
+		SharingStructure::purgeProjectLinks(array($user));
 		//reshare old group
 		self::reshareGroup($oldGroupName);
 	}

@@ -16,7 +16,7 @@ require_once('lib/admin/ActionEngine.php');
 require_once('lib/admin/ShellCommand.php');
 require_once('lib/admin/DefinitionFile.php');
 require_once('lib/admin/NoticeDefinitions.php');
-require_once('lib/inotify/reshare.php');
+require_once('lib/inotify/SharingStructure.php');
 
 //check that the user is root
 $processUser = posix_getpwuid(posix_geteuid());

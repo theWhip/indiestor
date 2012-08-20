@@ -14,7 +14,7 @@ require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcPasswd.php');
 require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcGroup.php');
 require_once(dirname(__FILE__).'/lib/admin/action-engine/Incrontab.php');
 require_once(dirname(__FILE__).'/lib/inotify/syslog.php');
-require_once(dirname(__FILE__).'/lib/inotify/reshare.php');
+require_once(dirname(__FILE__).'/lib/inotify/SharingStructure.php');
 require_once(dirname(__FILE__).'/lib/inotify/LockingMechanism.php');
 
 syslog_notice_start_running();
@@ -24,7 +24,7 @@ $inEvent=new InEvent();
 
 //only handle project folders or Avid MediaFiles folder
 if($inEvent->watchType=='MAIN' && 
-	!isProjectFolder($inEvent->fsObject) &&
+	!SharingStructure::isProjectFolder($inEvent->fsObject) &&
 	$inEvent->fsObject!='Avid MediaFiles'
 ) terminate("folder concerned '{$inEvent->fsObject}' not a project folder");
 
@@ -52,7 +52,7 @@ $lockingMechanism=new LockingMechanism($groupName);
 $lockingMechanism->lock();
 do
 {
-	reshare($groupName,$members);
+	SharingStructure::reshare($groupName,$members);
 }
 while($lockingMechanism->mustReRun());
 $lockingMechanism->unlock();

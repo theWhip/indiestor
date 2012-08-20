@@ -48,7 +48,7 @@ class Group extends EntityType
 		EtcGroup::reset();
 		//purge group links
 		foreach($oldMembers as $member)
-			purgeProjectLinks(array($member));
+			SharingStructure::purgeProjectLinks(array($member));
         }
 
 	static function checkInvalidGroup($ISGroupName)
