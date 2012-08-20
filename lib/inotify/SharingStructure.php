@@ -177,7 +177,10 @@ class SharingStructure
 		//setgid must be set: all files/folders created must inherit the group id
 		//Other must have execute rights for sticky bit to work
 
-		self::fixFsObjectPermissions($folder,"3771");
+		if(self::endsWith($folder,'.avid'))
+			self::fixFsObjectPermissions($folder,"3771");
+		if(self::endsWith($folder,'.shared'))
+			self::fixFsObjectPermissions($folder,"750");
 	}
 
 	function renameProjectFileIfNeeded($groupName,$userName,$oldName,$newName)
