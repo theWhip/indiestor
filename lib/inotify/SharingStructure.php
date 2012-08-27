@@ -68,14 +68,46 @@ class SharingStructure
 		return false;
 	}
 
+	function userAvidProjects($homeFolder)
+	{
+		$subFolders=self::userSubFolders($homeFolder);
+		$projects=array();
+		foreach($subFolders as $subFolder)
+		{
+			if(self::endsWith($subFolder,'.avid') &&
+				is_dir("$homeFolder/$subFolder") &&
+				!is_link("$homeFolder/$subFolder"))
+			$projects[$subFolder]=$subFolder;
+		}
+		return $projects;
+	}
+
 	function userProjects($homeFolder)
 	{
-		return self::userProjectsOrLinks($homeFolder,'project');
+		$subFolders=self::userSubFolders($homeFolder);
+		$projects=array();
+		foreach($subFolders as $subFolder)
+		{
+			if(self::isProjectFolder($subFolder) &&
+				is_dir("$homeFolder/$subFolder") &&
+				!is_link("$homeFolder/$subFolder"))
+			$projects[$subFolder]=$subFolder;
+		}
+		return $projects;
 	}
 
 	function userProjectLinks($homeFolder)
 	{
-		return self::userProjectsOrLinks($homeFolder,'link');
+		$subFolders=self::userSubFolders($homeFolder);
+		$projectLinks=array();
+		foreach($subFolders as $subFolder)
+		{
+			if(self::isProjectFolder($subFolder) &&
+				is_dir("$homeFolder/$subFolder") &&
+				is_link("$homeFolder/$subFolder"))
+			$projectLinks[$subFolder]=$subFolder;
+		}
+		return $projectLinks;
 	}
 
 	function isRejectedFolderEntry($entry)
@@ -85,31 +117,19 @@ class SharingStructure
 		return false;
 	}
 
-	function isRequiredFolderType($folder,$type)
+	function userSubFolders($homeFolder)
 	{
-		if($type=='project' && !is_dir($folder)) return false;
-		if($type=='project' && is_link($folder)) return false;
-		if($type=='link' && !is_link($folder)) return false;
-		return true;
-	}
-
-	function userProjectsOrLinks($homeFolder,$type)
-	{
-		$projects=array();
+		$subFolders=array();
 		if ($handle = opendir($homeFolder))
 		{
 			while(false !== ($entry = readdir($handle)))
 			{
-				if(
-					!self::isRejectedFolderEntry($entry)  && 
-					self::isProjectFolder($entry) &&
-					self::isRequiredFolderType("$homeFolder/$entry",$type)
-				)
-					$projects[$entry]=$entry;
+				if(!self::isRejectedFolderEntry($entry))
+					$subFolders[$entry]=$entry;
 			}
 			closedir($handle);
 		}
-		return $projects;
+		return $subFolders;
 	}
 
 	function fixProjectFsObjectOwnership($groupName,$userName,$fsObject)

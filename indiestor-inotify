@@ -48,19 +48,29 @@ syslog_notice("user is: '$userName' group is: '$groupName'");
 $members=$etcPasswd->findUsersForEtcGroup($group);
 
 //start resharing
-$lockingMechanism=new LockingMechanism($groupName);
-$lockingMechanism->lock();
-do
+if($inEvent->watchType=='MAIN')
 {
-	SharingStructure::reshare($groupName,$members);
+	$lockingMechanism=new LockingMechanism($groupName);
+	$lockingMechanism->lock();
+	do
+	{
+		SharingStructure::reshare($groupName,$members);
+	}
+	while($lockingMechanism->mustReRun());
+	$lockingMechanism->unlock();
 }
-while($lockingMechanism->mustReRun());
-$lockingMechanism->unlock();
 
 //regenerate incrontab for MXF events
-if($inEvent->watchType=='MXF' || $inEvent->fsObject=='Avid MediaFiles')
+if($inEvent->watchType=='MXF' && $inEvent->fsObject=='Avid MediaFiles')
 {
-	syslog_notice('Regenerating incrontab');
+	syslog_notice('Regenerating incrontab (MXF)');
+	Incrontab::generate();
+}
+
+//regenerate incrontab for PROJ events
+if($inEvent->watchType=='MAIN' && SharingStructure::isProjectFolder($inEvent->fsObject))
+{
+	syslog_notice('Regenerating incrontab (MAIN)');
 	Incrontab::generate();
 }
 
