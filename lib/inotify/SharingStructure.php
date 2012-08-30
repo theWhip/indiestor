@@ -48,6 +48,8 @@ class SharingStructure
 				$projectFolder=$user->homeFolder."/".$project;
 				self::fixProjectFsObjectOwnership($groupName,$user->name,$projectFolder);
 				self::fixProjectFolderPermissions($projectFolder);
+				if(self::endsWith($project,'.avid')) 
+					self::fixProjectSubs($projectFolder,$groupName,$users);
 				foreach($users as $sharingUser)
 					if($user->name!=$sharingUser->name)
 						self::verifyProjectLink($user,$sharingUser,$project);
@@ -130,6 +132,20 @@ class SharingStructure
 			closedir($handle);
 		}
 		return $subFolders;
+	}
+
+	function fixProjectSubs($projectFolder,$groupName,$users)
+	{
+		$shared="$projectFolder/Shared";
+		if(!is_dir($shared)) mkdir($shared);
+		self::fixFsObjectPermissions($shared,"755");
+		foreach($users as $user)
+		{
+			$sub="$shared/{$user->name}";
+			if(!is_dir($sub)) mkdir($sub);
+			self::fixFsObjectPermissions($shared,"750");
+			self::fixProjectFsObjectOwnership($groupName,$user->name,$sub);
+		}
 	}
 
 	function fixProjectFsObjectOwnership($groupName,$userName,$fsObject)
