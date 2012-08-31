@@ -30,6 +30,7 @@ class SharingStructure
 
 	function reshare($groupName,$users)
 	{
+		if($users==null) $users=array();
 		syslog_notice("resharing group '$groupName'");
 		self::verifyProjectLinks($groupName,$users);
 		self::purgeProjectLinks($users);
@@ -37,6 +38,8 @@ class SharingStructure
 
 	function verifyProjectLinks($groupName,$users)
 	{
+		if($users==null) $users=array();
+
 		$avidProjectsPresent=false;
 		foreach($users as $user)
 		{
@@ -214,7 +217,7 @@ class SharingStructure
 		//Other must have execute rights for sticky bit to work
 
 		if(self::endsWith($folder,'.avid'))
-			self::fixFsObjectPermissions($folder,"3771");
+			self::fixFsObjectPermissions($folder,"2771");
 		if(self::endsWith($folder,'.shared'))
 			self::fixFsObjectPermissions($folder,"750");
 	}
