@@ -47,7 +47,7 @@ syslog_notice("user is: '$userName' group is: '$groupName'");
 //retrieve all group members
 $members=$etcPasswd->findUsersForEtcGroup($group);
 
-//start resharing
+//MAIN: start resharing
 if($inEvent->watchType=='MAIN')
 {
 	$lockingMechanism=new LockingMechanism($groupName);
@@ -58,6 +58,57 @@ if($inEvent->watchType=='MAIN')
 	}
 	while($lockingMechanism->mustReRun());
 	$lockingMechanism->unlock();
+}
+
+define('INDIESTOR_LOCKING_PID','indiestor_locking_pid');
+
+function avbFile_lock($avbFile,$userName,$groupName,$pid)
+{
+	SharingStructure::fixProjectFsObjectOwnership($groupName,$userName,$avbFile);
+	SharingStructure::fixFsObjectPermissions($avbFile,'640');
+	$lockingPid=avbFile_lockingPid($avbFile);
+	if($lockingPid!=$pid)
+		shell_exec("setfattr -n user.".INDIESTOR_LOCKING_PID." -v $pid $avbFile");
+}
+
+function avbFile_unlock($avbFile,$userName,$groupName)
+{
+	SharingStructure::fixProjectFsObjectOwnership($groupName,$userName,$avbFile);
+	SharingStructure::fixFsObjectPermissions($avbFile,'660');
+	shell_exec("setfattr -x user.".INDIESTOR_LOCKING_PID." $avbFile");
+}
+
+function avbFile_lockingPid($avbFile)
+{
+	$lockingPid=trim(shell_exec("getfattr $avbFile -n user.".INDIESTOR_LOCKING_PID." --only-values 2> /dev/null"));
+	if(empty($lockingPid)) return null;
+	else return $lockingPid;
+}
+
+//PROJ: lock or unlock avid bin
+if($inEvent->watchType=='PROJ')
+{
+	//only handle .avb files
+	if(!SharingStructure::endsWith($inEvent->fsObject,'.avb')) return;
+
+	$avbFile=$inEvent->folderWatched.'/'.$inEvent->fsObject;
+	$lockingPid=avbFile_lockingPid($avbFile);
+	if($lockingPid!=null)
+		if(!file_exists("/proc/$lockingPid"))
+			avbFile_unlock($avbFile,$userName,$groupName);
+
+	if($inEvent->event=='IN_ACCESS' || $inEvent->event=='IN_MODIFY' || $inEvent->event=='IN_CREATE')
+	{
+		$openingUser=trim(shell_exec("fuser -u '$avbFile' 2>&1 | sed 's/.*(\(.*\))/\\1/'"));
+		$openingPid=trim(shell_exec("fuser '$avbFile' 2>&1 | sed 's/.*:\(.*\)/\\1/'"));
+
+		if(!file_exists("/proc/$openingPid")) return;
+
+		if($group->isMember($openingUser))
+		{
+			avbFile_lock($avbFile,$openingUser,$groupName,$openingPid);
+		}
+	}
 }
 
 //regenerate incrontab for MXF events
