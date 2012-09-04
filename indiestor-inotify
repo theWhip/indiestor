@@ -94,9 +94,9 @@ if($inEvent->watchType=='PROJ')
 	$avbFile=$inEvent->folderWatched.'/'.$inEvent->fsObject;
 	$lockingPid=avbFile_lockingPid($avbFile);
 	if($lockingPid!=null)
-		if(!file_exists("/proc/$lockingPid"))
-			avbFile_unlock($avbFile,$userName,$groupName);
-
+		if(file_exists("/proc/$lockingPid")) return;
+		else avbFile_unlock($avbFile,$userName,$groupName);
+		
 	if($inEvent->event=='IN_ACCESS' || $inEvent->event=='IN_MODIFY' || $inEvent->event=='IN_CREATE')
 	{
 		$openingUser=trim(shell_exec("fuser -u '$avbFile' 2>&1 | sed 's/.*(\(.*\))/\\1/'"));
