@@ -9,12 +9,11 @@
 
 define('INCRON_ARGS','$@ $# $%');
 define('INCRON_MAIN_EVENTS','IN_ATTRIB,IN_CREATE,IN_DELETE,IN_MOVED_FROM,IN_MOVED_TO');
-define('INCRON_PROJ_EVENTS','IN_ACCESS,IN_MODIFY,IN_OPEN,IN_CLOSE,IN_CREATE');
+//define('INCRON_PROJ_EVENTS','IN_ACCESS,IN_MODIFY,IN_OPEN,IN_CLOSE,IN_CREATE');
+define('INCRON_PROJ_EVENTS','IN_ALL_EVENTS');
 define('INCRON_SCRIPT_EVENT_HANDLER','indiestor-inotify');
 define('INCRON_ROOT_FOLDER',dirname(dirname(dirname(dirname(__FILE__)))));
 define('INCRON_SCRIPT_EVENT_HANDLER_PATH','/usr/bin/php '.INCRON_ROOT_FOLDER.'/'.INCRON_SCRIPT_EVENT_HANDLER);
-
-require_once(dirname(dirname(dirname(__FILE__))).'/inotify/SharingStructure.php');
 
 class Incrontab
 {
@@ -47,14 +46,6 @@ class Incrontab
 		#watch home folder
 		$userIncronLines.=$homeFolder.' '.INCRON_MAIN_EVENTS.' '.
 			INCRON_SCRIPT_EVENT_HANDLER_PATH.' MAIN '.INCRON_ARGS."\n";
-
-		#watch Avid project folders
-		$userAvidProjects=SharingStructure::userAvidProjects($homeFolder);
-		foreach($userAvidProjects as $userAvidProject)
-		{
-			$userIncronLines.="$homeFolder/$userAvidProject".' '.INCRON_PROJ_EVENTS.' '.
-				INCRON_SCRIPT_EVENT_HANDLER_PATH.' PROJ '.INCRON_ARGS."\n";
-		}
 	
 		#watch 'Avid MediaFiles'
 		if(file_exists("$homeFolder/Avid MediaFiles"))
