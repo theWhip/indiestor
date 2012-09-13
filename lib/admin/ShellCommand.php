@@ -27,13 +27,13 @@ class ProcessOutput
 class ShellCommand
 {
 
-	function warnLongTime($command)
+	static function warnLongTime($command)
 	{
 		echo "running the '$command' command\n";
 		echo "this may take a long time ...\n";
 	}
 
-	function printCommand($command)
+	static function printCommand($command)
 	{
 		if(ProgramOptions::$verbose || ProgramOptions::$simulation)
 		{
@@ -41,7 +41,7 @@ class ShellCommand
 		}
 	}
 
-	function printProcessOutput($processOutput)
+	static function printProcessOutput($processOutput)
 	{
 		if(ProgramOptions::$verbose)
 		{
@@ -49,7 +49,7 @@ class ShellCommand
 		}
 	}
 
-	function processOutputString($processOutput)
+	static function processOutputString($processOutput)
 	{
 		$buffer=self::fieldString('>stdout',$processOutput->stdout);
 		$buffer.=self::fieldString('>stderr',$processOutput->stderr);
@@ -57,17 +57,17 @@ class ShellCommand
 		return $buffer;
 	}
 
-	function fieldString($label,$value)
+	static function fieldString($label,$value)
 	{
 		return $label.':'.$value."\n";
 	}
 
-	function printStdErr($msg)
+	static function printStdErr($msg)
 	{
 		file_put_contents('php://stderr',$msg);
 	}
 
-	function fail($command,$processOutput,$commandType)
+	static function fail($command,$processOutput,$commandType)
 	{
 		self::printStdErr("ERR-$commandType: the following command failed\n");
 		self::printStdErr("# $command\n");
@@ -75,14 +75,14 @@ class ShellCommand
 		exit(1);
 	}
 
-	function exec_fail_if_error($command)
+	static function exec_fail_if_error($command)
 	{
 		$processOutput=self::exec($command);
 		if($processOutput==null) return; //simulation mode
 		if($processOutput->returnCode!=0) self::fail($command,$processOutput,'EXEC');
 	}
 
-	function exec($command)
+	static function exec($command)
 	{
 		self::printCommand($command);
 		if(!ProgramOptions::$simulation)
@@ -94,7 +94,7 @@ class ShellCommand
 		return null;
 	}
 
-	function query_fail_if_error($command,$returnProcessOutputObject=false)
+	static function query_fail_if_error($command,$returnProcessOutputObject=false)
 	{
 		
 		self::printCommand($command);
@@ -104,7 +104,7 @@ class ShellCommand
 		else return $processOutput->stdout;
 	}
 
-	function query($command,$returnProcessOutputObject=false)
+	static function query($command,$returnProcessOutputObject=false)
 	{
 		self::printCommand($command);
 		$processOutput=self::exec_default($command);
@@ -112,7 +112,7 @@ class ShellCommand
 		else return $processOutput->stdout;
 	}
 
-	function exec_default($command)
+	static function exec_default($command)
 	{
 
 		$processInput=new ProcessInput();
@@ -122,7 +122,7 @@ class ShellCommand
 		return $processOutput;
 	}
 
-	function process($processInput)
+	static function process($processInput)
 	{
 		$descriptorSpec=array
 				(

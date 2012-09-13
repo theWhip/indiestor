@@ -19,6 +19,23 @@ require_once(dirname(__FILE__).'/lib/inotify/LockingMechanism.php');
 
 syslog_notice_start_running();
 
+//syslog error handling
+function customError($errno,$errmsg,$errfile,$errline)
+{
+	syslog_notice("err:$errno,$errmsg in file $errfile, line $errline");
+	die();
+}
+set_error_handler("customError");
+
+//catch fatal errors
+function handleShutdown()
+{
+	$error = error_get_last();
+	if($error !== NULL)
+		customError('FATAL-SHUTDOWN',$error['message'],$error['file'],$error['line']);
+}
+register_shutdown_function('handleShutdown');
+
 //prepare commandline args
 $inEvent=new InEvent();
 

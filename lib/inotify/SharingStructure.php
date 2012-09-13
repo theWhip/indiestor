@@ -14,21 +14,21 @@ define('MXF_SUBFOLDER','Avid MediaFiles/MXF');
 class SharingStructure
 {
 
-	function endsWith($str, $needle)
+	static function endsWith($str, $needle)
 	{
 		$length = strlen($needle);
 		$result=!$length || substr($str, - $length) === $needle;
 	   	return $result;
 	}
 
-	function isProjectFolder($folder)
+	static function isProjectFolder($folder)
 	{
 		if(self::endsWith($folder,'.shared')) return true;
 		if(self::endsWith($folder,'.avid')) return true;
 		return false;
 	}
 
-	function reshare($groupName,$users)
+	static function reshare($groupName,$users)
 	{
 		if($users==null) $users=array();
 		syslog_notice("resharing group '$groupName'");
@@ -36,7 +36,7 @@ class SharingStructure
 		self::purgeProjectLinks($users);
 	}
 
-	function verifyProjectLinks($groupName,$users)
+	static function verifyProjectLinks($groupName,$users)
 	{
 		if($users==null) $users=array();
 
@@ -64,7 +64,7 @@ class SharingStructure
 		self::purgeAvid($users);
 	}
 
-	function hasAtLeastOneAvidProject($projects)
+	static function hasAtLeastOneAvidProject($projects)
 	{
 		foreach($projects as $project)
 		{
@@ -73,7 +73,7 @@ class SharingStructure
 		return false;
 	}
 
-	function userAvidProjects($homeFolder)
+	static function userAvidProjects($homeFolder)
 	{
 		$subFolders=self::userSubFolders($homeFolder);
 		$projects=array();
@@ -87,7 +87,7 @@ class SharingStructure
 		return $projects;
 	}
 
-	function userProjects($homeFolder)
+	static function userProjects($homeFolder)
 	{
 		$subFolders=self::userSubFolders($homeFolder);
 		$projects=array();
@@ -101,7 +101,7 @@ class SharingStructure
 		return $projects;
 	}
 
-	function userProjectLinks($homeFolder)
+	static function userProjectLinks($homeFolder)
 	{
 		$subFolders=self::userSubFolders($homeFolder);
 		$projectLinks=array();
@@ -115,14 +115,14 @@ class SharingStructure
 		return $projectLinks;
 	}
 
-	function isRejectedFolderEntry($entry)
+	static	function isRejectedFolderEntry($entry)
 	{
 		if($entry=='.') return true;
 		if($entry=='..') return true;
 		return false;
 	}
 
-	function userSubFolders($homeFolder)
+	static function userSubFolders($homeFolder)
 	{
 		$subFolders=array();
 		if ($handle = opendir($homeFolder))
@@ -137,7 +137,7 @@ class SharingStructure
 		return $subFolders;
 	}
 
-	function fixProjectSubs($projectFolder,$groupName,$users)
+	static function fixProjectSubs($projectFolder,$groupName,$users)
 	{
 		$shared="$projectFolder/Shared";
 		if(!is_dir($shared)) mkdir($shared);
@@ -151,7 +151,7 @@ class SharingStructure
 		}
 	}
 
-	function fixProjectFsObjectOwnership($groupName,$userName,$fsObject)
+	static function fixProjectFsObjectOwnership($groupName,$userName,$fsObject)
 	{
 		$stat=stat($fsObject);
 		if($stat==null)
@@ -182,7 +182,7 @@ class SharingStructure
 
 	}
 
-	function fixFsObjectPermissions($fsObject,$mode)
+	static function fixFsObjectPermissions($fsObject,$mode)
 	{
 		$stat=stat($fsObject);
 
@@ -203,13 +203,13 @@ class SharingStructure
 		}
 	}
 
-	function fixProjectFilePermissions($file)
+	static function fixProjectFilePermissions($file)
 	{
 		//permissions must be owner=rwx group=rwx other=---
 		self::fixFsObjectPermissions($file,"770");
 	}
 
-	function fixProjectFolderPermissions($folder)
+	static function fixProjectFolderPermissions($folder)
 	{
 		//permissions must be owner=rwx group=rwx other=---
 		//sticky bit must be set: only the owner of a project file/folder may delete it
@@ -222,7 +222,7 @@ class SharingStructure
 			self::fixFsObjectPermissions($folder,"750");
 	}
 
-	function renameProjectFileIfNeeded($groupName,$userName,$oldName,$newName)
+	static function renameProjectFileIfNeeded($groupName,$userName,$oldName,$newName)
 	{
 		if($oldName!=$newName)
 		{
@@ -239,14 +239,14 @@ class SharingStructure
 
 	}
 
-	function renameAvpProjectFile($groupName,$userName,$homeFolder,$project,$file)
+	static function renameAvpProjectFile($groupName,$userName,$homeFolder,$project,$file)
 	{
 		$oldName="$homeFolder/$project/$file";
 		$newName="$homeFolder/$project/$project.avp";
 		self::renameProjectFileIfNeeded($groupName,$userName,$oldName,$newName);
 	}
 
-	function renameAvsProjectFile($groupName,$userName,$homeFolder,$project,$file)
+	static function renameAvsProjectFile($groupName,$userName,$homeFolder,$project,$file)
 	{
 		$oldName="$homeFolder/$project/$file";
 
@@ -265,7 +265,7 @@ class SharingStructure
 	}
 
 
-	function verifyProjectFiles($groupName,$user,$project)
+	static function verifyProjectFiles($groupName,$user,$project)
 	{
 		$userName=$user->name;
 		$homeFolder=$user->homeFolder;
@@ -289,21 +289,21 @@ class SharingStructure
 		}
 	}
 
-	function ownerByUid($uid)
+	static function ownerByUid($uid)
 	{
 		$ownerArray=posix_getpwuid($uid);
 		$owner=$ownerArray['name'];
 		return $owner;
 	}
 
-	function groupByGid($gid)
+	static function groupByGid($gid)
 	{
 		$groupArray=posix_getgrgid($gid);
 		$group=$groupArray['name'];
 		return $group;
 	}
 
-	function createSymlink($linkName,$target,$userName)
+	static function createSymlink($linkName,$target,$userName)
 	{
 		syslog_notice("symlinking link:'$linkName',target:'$target'");
 		$result=symlink($target,$linkName);
@@ -312,7 +312,7 @@ class SharingStructure
 		self::ensureLinkOwnership($linkName,$userName);
 	}
 
-	function ensureLinkOwnership($linkName,$userName)
+	static function ensureLinkOwnership($linkName,$userName)
 	{
 		$lstat=lstat($linkName);
 		if($lstat==null)
@@ -331,7 +331,7 @@ class SharingStructure
 		}
 	}
 
-	function verifyProjectLink($user,$sharingUser,$project)
+	static function verifyProjectLink($user,$sharingUser,$project)
 	{
 		$linkName="{$sharingUser->homeFolder}/$project";
 		$target="{$user->homeFolder}/$project";
@@ -355,7 +355,7 @@ class SharingStructure
 		}
 	}
 
-	function purgeProjectLinks($users)
+	static function purgeProjectLinks($users)
 	{
 		foreach($users as $user)
 		{
@@ -365,7 +365,7 @@ class SharingStructure
 		}
 	}
 
-	function isGroupMemberHomeFolder($users,$homeFolder)
+	static function isGroupMemberHomeFolder($users,$homeFolder)
 	{
 		foreach($users as $user)
 		{
@@ -374,7 +374,7 @@ class SharingStructure
 		return false;
 	}
 
-	function purgeProjectLink($userName,$homeFolder,$projectLink,$users)
+	static function purgeProjectLink($userName,$homeFolder,$projectLink,$users)
 	{
 		$projectLinkPath="$homeFolder/$projectLink";
 		$target=readlink($projectLinkPath);
@@ -407,30 +407,30 @@ class SharingStructure
 		}
 	}
 
-	function reshareAvid($users)
+	static function reshareAvid($users)
 	{
 		foreach($users as $user)
 			self::reshareAvidFromUser($user,$users);
 	}
 
-	function mxfSubFolders($mxfFolder)
+	static function mxfSubFolders($mxfFolder)
 	{
 		return self::mxfSubFoldersForType($mxfFolder,'folder');
 	}
 
-	function mxfSubFolderLinks($mxfFolder)
+	static function mxfSubFolderLinks($mxfFolder)
 	{
 		return self::mxfSubFoldersForType($mxfFolder,'link');
 	}
 
-	function isRequiredMxfSubFolderType($target,$type)
+	static function isRequiredMxfSubFolderType($target,$type)
 	{
 		if($type=='folder' && is_link($target)) return false;
 		if($type=='link' && !is_link($target)) return false;
 		return true;
 	}
 
-	function mxfSubFoldersForType($mxfFolder,$type)
+	static function mxfSubFoldersForType($mxfFolder,$type)
 	{
 		$folders=array();
 		if ($handle = opendir($mxfFolder))
@@ -450,7 +450,7 @@ class SharingStructure
 	}
 
 
-	function reshareAvidFromUser($user,$users)
+	static function reshareAvidFromUser($user,$users)
 	{
 		$mxfFolder=$user->homeFolder.'/'.MXF_SUBFOLDER;
 		if(!file_exists($mxfFolder)) return;
@@ -466,7 +466,7 @@ class SharingStructure
 		}
 	}
 
-	function reshareAvidMXFToUser($sharingUser,$target,$entry,$fromUserName)
+	static function reshareAvidMXFToUser($sharingUser,$target,$entry,$fromUserName)
 	{
 		$mxfSubFolder="{$sharingUser->homeFolder}/".MXF_SUBFOLDER;
 		if(!is_dir($mxfSubFolder))
@@ -484,14 +484,14 @@ class SharingStructure
 		self::ensureLinkOwnership($linkName,$sharingUser->name);
 	}
 
-	function purgeAvid($users)
+	static function purgeAvid($users)
 	{
 		foreach($users as $user)
 			self::purgeAvidForUser($user,$users);
 	}
 
 
-	function purgeAvidForUser($user,$users)
+	static function purgeAvidForUser($user,$users)
 	{
 		$mxfFolder=$user->homeFolder.'/'.MXF_SUBFOLDER;
 		if(!file_exists($mxfFolder)) return;
