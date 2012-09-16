@@ -95,14 +95,14 @@ if($inEvent->watchType=='MXF')
 }
 
 //regenerate incrontab for MXF events
-if($inEvent->watchType=='MXF' && $inEvent->fsObject=='Avid MediaFiles')
+if($inEvent->watchType=='MXF')
 {
 	syslog_notice('Regenerating incrontab (MXF)');
 	Incrontab::generate();
 }
 
 //regenerate incrontab for PROJ events
-if($inEvent->watchType=='MAIN' && SharingFolders::isProjectFolder($inEvent->fsObject))
+if($inEvent->watchType=='MAIN' && SharingFolders::isAvidProjectFolder($inEvent->fsObject))
 {
 	syslog_notice('Regenerating incrontab (MAIN)');
 	Incrontab::generate();
