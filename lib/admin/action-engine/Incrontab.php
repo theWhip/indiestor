@@ -15,6 +15,8 @@ define('INCRON_SCRIPT_EVENT_HANDLER','indiestor-inotify');
 define('INCRON_ROOT_FOLDER',dirname(dirname(dirname(dirname(__FILE__)))));
 define('INCRON_SCRIPT_EVENT_HANDLER_PATH','/usr/bin/php '.INCRON_ROOT_FOLDER.'/'.INCRON_SCRIPT_EVENT_HANDLER);
 
+require_once(dirname(dirname(__FILE__)).'/etcfiles/all.php');
+
 class Incrontab
 {
 	static function generate()

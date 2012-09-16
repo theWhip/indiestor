@@ -14,7 +14,11 @@ require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcPasswd.php');
 require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcGroup.php');
 require_once(dirname(__FILE__).'/lib/admin/action-engine/Incrontab.php');
 require_once(dirname(__FILE__).'/lib/inotify/syslog.php');
-require_once(dirname(__FILE__).'/lib/inotify/SharingStructure.php');
+require_once(dirname(__FILE__).'/lib/inotify/SharingStructureDefault.php');
+require_once(dirname(__FILE__).'/lib/inotify/SharingStructureAvid.php');
+require_once(dirname(__FILE__).'/lib/inotify/SharingStructureMXF.php');
+require_once(dirname(__FILE__).'/lib/inotify/SharingOperations.php');
+require_once(dirname(__FILE__).'/lib/inotify/SharingFolders.php');
 require_once(dirname(__FILE__).'/lib/inotify/LockingMechanism.php');
 
 syslog_notice_start_running();
@@ -41,7 +45,7 @@ $inEvent=new InEvent();
 
 //only handle project folders or Avid MediaFiles folder
 if($inEvent->watchType=='MAIN' && 
-	!SharingStructure::isProjectFolder($inEvent->fsObject) &&
+	!SharingFolders::isProjectFolder($inEvent->fsObject) &&
 	$inEvent->fsObject!='Avid MediaFiles'
 ) terminate("folder concerned '{$inEvent->fsObject}' not a project folder");
 
@@ -71,10 +75,23 @@ if($inEvent->watchType=='MAIN')
 	$lockingMechanism->lock();
 	do
 	{
-		SharingStructure::reshare($groupName,$members);
+		if(SharingFolders::isAvidProjectFolder($inEvent->fsObject))
+		{
+			SharingStructureAvid::reshare($groupName,$members);
+			SharingStructureMXF::reshare($members);
+		}
+		else
+		{
+			SharingStructureDefault::reshare($groupName,$members);
+		}
 	}
 	while($lockingMechanism->mustReRun());
 	$lockingMechanism->unlock();
+}
+
+if($inEvent->watchType=='MXF')
+{
+	SharingStructureMXF::reshare($members);
 }
 
 //regenerate incrontab for MXF events
@@ -85,7 +102,7 @@ if($inEvent->watchType=='MXF' && $inEvent->fsObject=='Avid MediaFiles')
 }
 
 //regenerate incrontab for PROJ events
-if($inEvent->watchType=='MAIN' && SharingStructure::isProjectFolder($inEvent->fsObject))
+if($inEvent->watchType=='MAIN' && SharingFolders::isProjectFolder($inEvent->fsObject))
 {
 	syslog_notice('Regenerating incrontab (MAIN)');
 	Incrontab::generate();

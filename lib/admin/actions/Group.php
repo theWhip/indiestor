@@ -49,7 +49,10 @@ class Group extends EntityType
 		//purge group links
 		if($oldMembers!=null)
 			foreach($oldMembers as $member)
-				SharingStructure::purgeProjectLinks(array($member));
+				{
+					SharingStructureDefault::purgeProjectLinks(array($member));
+					SharingStructureAvid::purgeProjectLinks(array($member));
+				}
         }
 
 	static function checkInvalidGroup($ISGroupName)
