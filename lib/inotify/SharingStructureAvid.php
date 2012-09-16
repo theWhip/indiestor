@@ -171,7 +171,8 @@ class SharingStructureAvid
 				{
 					if(SharingFolders::endsWith($entry,'.avp') || SharingFolders::endsWith($entry,'.avs'))
 					{
-						$target="$sharingMemberCopyFolder/$entry";
+						$copy=str_replace('.avid','.copy',$entry);
+						$target="$sharingMemberCopyFolder/$copy";
 						if(!file_exists($target)) copy($source,$target);
 						SharingOperations::fixUserObjectOwnership($memberName,$target);
 						SharingOperations::fixFsObjectPermissions($target,"750");
