@@ -118,7 +118,7 @@ class SharingStructureAvid
 		#the user's Avid Shared Projects folder
 		$aspFolder="{$user->homeFolder}/Avid Shared Projects";
 		if(!is_dir($aspFolder)) mkdir($aspFolder);
-		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$aspFolder);
+		SharingOperations::fixUserObjectOwnership('root','root',$aspFolder);
 		SharingOperations::fixFsObjectPermissions($aspFolder,"755");
 
 		#the user's project.copy folder
@@ -126,7 +126,7 @@ class SharingStructureAvid
 		$prjCopyFolder="$aspFolder/$projectCopy";
 		if(!is_dir($prjCopyFolder)) mkdir($prjCopyFolder);
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$prjCopyFolder);
-		SharingOperations::fixFsObjectPermissions($prjCopyFolder,"755");
+		SharingOperations::fixFsObjectPermissions($prjCopyFolder,"750");
 
 		#copy avp and avs files
 		self::copyAvidProjectFiles("{$owner->homeFolder}/$project",$prjCopyFolder,$user->name);
