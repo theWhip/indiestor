@@ -82,7 +82,10 @@ class SharingStructureAvid
 
 				SharingOperations::verifySymLink($linkName,$target,$userName);		
 			}
-		}				
+		}	
+
+		#remove archive
+		if(is_dir($archived)) shell_exec("rm -rf '$archived'");
 	}
 
 	static function verifyProjectFiles($user,$project)
