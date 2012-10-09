@@ -19,7 +19,7 @@ class SharingStructureAvid
 		if($users==null) $users=array();
 		syslog_notice("resharing group '$groupName'for avid folders");
 		self::verifyProjects($groupName,$users);
-#		self::purgeProjectLinks($users);
+		self::purgeProjectLinks($users);
 	}
 
 	static function verifyProjects($groupName,$users)
@@ -38,7 +38,7 @@ class SharingStructureAvid
 
 	static function verifyProject($groupName,$user,$project,$users)
 	{
-		self::verifyProjectFiles($groupName,$user,$project);
+		self::verifyProjectFiles($user,$project);
 		self::verifyProjectSharedFolder($groupName,$user,$project,$users);
 	}
 
@@ -48,14 +48,26 @@ class SharingStructureAvid
 		$homeFolder=$user->homeFolder;
 		$projectFolder=$homeFolder."/".$project;
 		$shared="$projectFolder/Shared";
+
 		if(!is_dir($shared)) mkdir($shared);
 		SharingOperations::fixFsObjectPermissions($shared,"755");
 
 		#the owner's own shared subfolder
 		$sharedSubOwner="$shared/$userName";
-		if(!is_dir($sharedSubOwner)) mkdir($sharedSubOwner);
+
+		#owner's archive, if it exists
+		$archived="$projectFolder/Archived";
+		$archivedOwner="$archived/$userName";
+		if(!is_dir($sharedSubOwner)) 
+		{
+			if(is_dir($archivedOwner))
+				rename($archivedOwner, $sharedSubOwner);
+			else
+				mkdir($sharedSubOwner);
+		}
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedSubOwner);
 		SharingOperations::fixFsObjectPermissions($sharedSubOwner,"755");
+
 
 		#avid copy 
 		$projectCopy=self::folderAvidToCopy($project);
@@ -67,12 +79,13 @@ class SharingStructureAvid
 			{
 				$linkName="$shared/{$sharingUser->name}";
 				$target="{$sharingUser->homeFolder}/Avid Shared Projects/$projectCopy/Shared/{$sharingUser->name}";
+
 				SharingOperations::verifySymLink($linkName,$target,$userName);		
 			}
 		}				
 	}
 
-	static function verifyProjectFiles($groupName,$user,$project)
+	static function verifyProjectFiles($user,$project)
 	{
 		$userName=$user->name;
 		$homeFolder=$user->homeFolder;
@@ -118,7 +131,7 @@ class SharingStructureAvid
 		#the user's Avid Shared Projects folder
 		$aspFolder="{$user->homeFolder}/Avid Shared Projects";
 		if(!is_dir($aspFolder)) mkdir($aspFolder);
-		SharingOperations::fixUserObjectOwnership('root','root',$aspFolder);
+		SharingOperations::fixUserObjectOwnership('root',$aspFolder);
 		SharingOperations::fixFsObjectPermissions($aspFolder,"755");
 
 		#the user's project.copy folder
@@ -137,16 +150,28 @@ class SharingStructureAvid
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$shared);
 		SharingOperations::fixFsObjectPermissions($shared,"755");
 
-		#the user's own shared subfolder
-		$sharedSubUser="$shared/{$user->name}";
-		if(!is_dir($sharedSubUser)) mkdir($sharedSubUser);
-		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$sharedSubUser);
-		SharingOperations::fixFsObjectPermissions($sharedSubUser,"755");
-
 		#the link from the project owner
 		$sharedSubOwner="$shared/{$owner->name}";
 		$target="{$owner->homeFolder}/$project/Shared/{$owner->name}";
 		SharingOperations::verifySymLink($sharedSubOwner,$target,$user->name);		
+
+		#the user's own shared subfolder
+		$sharedSubUser="$shared/{$user->name}";
+		if(!is_dir($sharedSubUser))
+		{
+			$archived="{$owner->homeFolder}/$project/Archived";
+			$archivedUser="$archived/{$user->name}";
+			if(!is_dir($archivedUser))
+				mkdir($sharedSubUser);
+			else
+			{
+				rename($archivedUser,$sharedSubUser);
+				shell_exec("chown -R {$user->name}.{$user->name} '$sharedSubUser'");
+			}
+		}
+
+		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$sharedSubUser);
+		SharingOperations::fixFsObjectPermissions($sharedSubUser,"755");
 
 		#all other users (not the member himself, nor the owner)
 		foreach($users as $sharingMember)
@@ -189,14 +214,72 @@ class SharingStructureAvid
 
 	static function purgeProjectLinks($users)
 	{
-/*
 		foreach($users as $user)
 		{
-			$projectLinks=SharingFolders::userProjectLinks($user->homeFolder);
-			foreach($projectLinks as $projectLink)
-				SharingOperations::purgeProjectLink($user->name,$user->homeFolder,$projectLink,$users);
+			self::purgeOldProjectsForUser($user);
 		}
-*/
+	}
+
+	static function purgeOldProjectsForUser($user)
+	{
+		$oldProjectFolders=SharingFolders::userRenamedProjectFolders($user->homeFolder);
+		foreach($oldProjectFolders as $oldProjectFolder)
+		{
+			self::verifyProjectFiles($user,$oldProjectFolder);
+			self::purgeOldProjectForUser($user,$oldProjectFolder);
+		}
+	}
+	
+	static function purgeOldProjectForUser($user,$oldProjectFolder)
+	{
+		//create archive folder
+		$archiveFolder="{$user->homeFolder}/$oldProjectFolder/Archived";
+		if(!is_dir($archiveFolder)) mkdir($archiveFolder);
+		SharingOperations::fixUserObjectOwnership($user->name,$archiveFolder);
+
+		//handle shared subfolders
+		$sharedSubFolderRoot="{$user->homeFolder}/$oldProjectFolder/Shared";
+		$sharedSubFolders=SharingFolders::userSubFolders($sharedSubFolderRoot);
+		foreach($sharedSubFolders as $sharedSubFolder)
+		{
+			//move content to archive
+			$pathSharedSubFolder="$sharedSubFolderRoot/$sharedSubFolder";
+			$subArchiveFolder="$archiveFolder/$sharedSubFolder";
+			if(is_link($pathSharedSubFolder))
+			{
+				$islink=true;
+				$source=readlink($pathSharedSubFolder);
+			}
+			else
+			{
+				$islink=false;
+				$source=$pathSharedSubFolder;
+			}
+			rename($source,$subArchiveFolder);
+			shell_exec("chown -R {$user->name}.{$user->name} $subArchiveFolder");
+
+			//purge copy
+			if($islink)
+			{
+				$copy=dirname(dirname($source));
+				$rootOfCopy=dirname($copy);
+				$baseOfCopy=basename($rootOfCopy);
+				if($baseOfCopy=='Avid Shared Projects')
+				{
+					//remove copy of project
+					shell_exec("rm -rf '$copy'");
+					//check if this is the last copy
+					$numberOfItems=intval(shell_exec("ls '$rootOfCopy' | wc -l"));
+					if($numberOfItems==0) shell_exec("rm -rf '$rootOfCopy'");
+				}
+			}
+
+
+		}
+
+		//purge shared folder
+		shell_exec("rm -rf '$sharedSubFolderRoot'");
+
 	}
 }
 

@@ -42,6 +42,24 @@ class SharingFolders
 		return false;
 	}
 
+	static function userRenamedProjectFolders($homeFolder)
+	{
+		$subFolders=self::userSubFolders($homeFolder);
+		$projects=array();
+		foreach($subFolders as $subFolder)
+		{
+			if(!self::isProjectFolder($subFolder) &&
+				is_dir("$homeFolder/$subFolder") &&
+				!is_link("$homeFolder/$subFolder") &&
+				$subFolder!='Avid MediaFiles' &&
+				$subFolder!='Avid Shared Projects' &&
+				$subFolder[0]!='.') //don't deal with hidden folders
+					if(file_exists("$homeFolder/$subFolder/Shared"))
+						$projects[$subFolder]=$subFolder;
+		}
+		return $projects;
+	}
+
 	static function userProjects($homeFolder)
 	{
 		$subFolders=self::userSubFolders($homeFolder);
