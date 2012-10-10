@@ -13,7 +13,12 @@ class Users extends EntityType
         static function show($commandAction)
         {
                 $etcGroup=EtcGroup::instance();
+
+		//in case it's null
 		$indiestorGroup=$etcGroup->indiestorGroup;
+		if($indiestorGroup==null) $indiestorGroup=new stdClass;
+		if(!property_exists($indiestorGroup,'members')) $indiestorGroup->members=array();
+
 		$userReportRecords=new UserReportRecords($indiestorGroup->members);
 		$userReportRecords->output();
        }
