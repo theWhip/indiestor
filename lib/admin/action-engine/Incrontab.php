@@ -24,11 +24,13 @@ class Incrontab
 		EtcGroup::reset();
                 $etcGroup=EtcGroup::instance();
 		$indiestorGroup=$etcGroup->indiestorGroup;
-		if($indiestorGroup==null) $indiestorGroup=array();
+		if($indiestorGroup==null) $indiestorGroup=new stdClass;
+		if(!property_exists($indiestorGroup,'members')) $indiestorGroup->members=array();
 
 		$tab='';
 		EtcPasswd::reset();
 		$etcPasswd=EtcPasswd::instance();
+
 
                 foreach($indiestorGroup->members as $member)
                 {
