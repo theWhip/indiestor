@@ -86,6 +86,7 @@ class InEvent
 		switch($this->watchType)
 		{
 			case "MAIN": return $this->folderWatched;
+			case "PRJ": return dirname($this->folderWatched);
 			case "MXF": return $this->homeFolderForMXFFolder();
 			default: terminate("Unknown watch type '{$this->watchType}'");
 		}

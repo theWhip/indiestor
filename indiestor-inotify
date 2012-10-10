@@ -49,6 +49,12 @@ if($inEvent->watchType=='MAIN' &&
 	$inEvent->fsObject!='Avid MediaFiles'
 ) terminate("folder concerned '{$inEvent->fsObject}' not a project folder");
 
+//only handle .avp/.avs files
+if($inEvent->watchType=='PRJ' && 
+	!SharingFolders::endsWith($inEvent->fsObject,'.avp') &&
+	!SharingFolders::endsWith($inEvent->fsObject,'.avs')
+) terminate("avid file concerned '{$inEvent->fsObject}' not a .avp nor .avs file");
+
 //find user for folder
 $homeFolder=$inEvent->homeFolder();
 $etcPasswd=EtcPasswd::instance();
@@ -69,13 +75,14 @@ syslog_notice("user is: '$userName' group is: '$groupName'");
 $members=$etcPasswd->findUsersForEtcGroup($group);
 
 //MAIN: start resharing
-if($inEvent->watchType=='MAIN')
+if($inEvent->watchType=='MAIN' || $inEvent->watchType=='PRJ')
 {
 	$lockingMechanism=new LockingMechanism($groupName);
 	$lockingMechanism->lock();
 	do
 	{
-		if(SharingFolders::isAvidProjectFolder($inEvent->fsObject))
+		if(($inEvent->watchType=='MAIN' && SharingFolders::isAvidProjectFolder($inEvent->fsObject)) ||
+			$inEvent->watchType=='PRJ')
 		{
 			SharingStructureAvid::reshare($groupName,$members);
 			SharingStructureMXF::reshare($members);
@@ -95,13 +102,13 @@ if($inEvent->watchType=='MXF')
 }
 
 //regenerate incrontab for MXF events
-if($inEvent->watchType=='MXF')
+if($inEvent->watchType=='MXF' )
 {
 	syslog_notice('Regenerating incrontab (MXF)');
 	Incrontab::generate();
 }
 
-//regenerate incrontab for PROJ events
+//regenerate incrontab for MAIN events
 if($inEvent->watchType=='MAIN' && SharingFolders::isAvidProjectFolder($inEvent->fsObject))
 {
 	syslog_notice('Regenerating incrontab (MAIN)');
