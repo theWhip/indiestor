@@ -31,10 +31,24 @@ class SharingStructureAvid
 			{
 				self::verifyProject($groupName,$user,$project,$users);
 				self::verifyProjectSharing($groupName,$user,$project,$users);
+				self::verifyProjectArchive($user,$project);
 			}
 		}
 	}
 
+	static function verifyProjectArchive($user,$project)
+	{
+		#remove archive, if needed
+		$homeFolder=$user->homeFolder;
+		$projectFolder=$homeFolder."/".$project;
+		$archived="$projectFolder/Archived";
+		if(is_dir($archived)) 
+		{
+			//check if archive is empty
+			$numberOfItems=intval(shell_exec("ls '$archived' | wc -l"));
+			if($numberOfItems==0) shell_exec("rm -rf '$archived'");
+		}
+	}
 
 	static function verifyProject($groupName,$user,$project,$users)
 	{
@@ -83,9 +97,6 @@ class SharingStructureAvid
 				SharingOperations::verifySymLink($linkName,$target,$userName);		
 			}
 		}	
-
-		#remove archive
-		if(is_dir($archived)) shell_exec("rm -rf '$archived'");
 	}
 
 	static function verifyProjectFiles($user,$project)
@@ -282,7 +293,30 @@ class SharingStructureAvid
 
 		//purge shared folder
 		shell_exec("rm -rf '$sharedSubFolderRoot'");
+	}
 
+	static function renameUserAvidProjects($user)
+	{
+		$renameOps=array();
+		$projects=sharingFolders::userAvidProjects($user->homeFolder);
+		foreach($projects as $project)
+		{
+			$projectTmp="__{$project}__tmp__";
+			rename("{$user->homeFolder}/$project","{$user->homeFolder}/$projectTmp");
+			$renameOps[]=array('tmp'=>$projectTmp,'project'=>$project);
+		}
+		return $renameOps;
+	}
+
+	static function renameBackUserAvidProjects($user,$renameOps)
+	{
+		foreach($renameOps as $renameOp)
+		{
+			$projectTmp=$renameOp['tmp'];
+			$project=$renameOp['project'];
+			rename("{$user->homeFolder}/$projectTmp","{$user->homeFolder}/$project");
+			self::verifyProjectFiles($user,$project);
+		}
 	}
 }
 

@@ -35,7 +35,12 @@ class Incrontab
                 foreach($indiestorGroup->members as $member)
                 {
 			$etcUser=$etcPasswd->findUserByName($member);
-			$tab.=self::generateTabForUser($member,$etcUser->homeFolder);
+			$group=$etcGroup->findGroupForUserName($member);
+			//only watch member folders for members in group
+			if($group!=null)
+				//only watch member folders for groups with at least 2 members
+				if(count($group->members>=2))
+					$tab.=self::generateTabForUser($member,$etcUser->homeFolder);
                 }
 
 		//write the lines

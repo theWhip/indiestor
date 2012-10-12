@@ -87,8 +87,11 @@ class User extends EntityType
                 $etcGroup=EtcGroup::instance();
 		$group=$etcGroup->findGroupForUserName($userName);
 		if($group==null)
+		{
 			ActionEngine::warning('AE_WARN_USER_NOT_MEMBER_OF_ANY_GROUP',
 						array('userName'=>$userName));
+			exit(0);
+		}
 	}
 
 	static function validateLock($userName)
@@ -322,25 +325,45 @@ class User extends EntityType
                 $etcGroup=EtcGroup::instance();
 		$group=$etcGroup->findGroupForUserName($userName);
 		if($group==null) return null;
+		//prepare unsharing of projects
+		$renameOps=self::unshareMemberFromGroupBeforeUnsetGroup($userName);
 		//we calculate the new collection of groups to which the user belongs
 		//by removing his existing group from the list
 		$groupNameToRemove=ActionEngine::sysGroupName($group->name);
 		$groupNames=self::newGroupNamesForUserName($userName,$groupNameToRemove);
 		syscommand_usermod_G($userName,$groupNames);
+		//finalize unsharing of projects
+		self::unshareMemberFromGroupAfterUnsetGroup($userName,$renameOps);
+		//cleanup
 		EtcGroup::reset();
 		return ActionEngine::indiestorGroupName($groupNameToRemove);
+	}
+
+	static function unshareMemberFromGroupBeforeUnsetGroup($userName)
+	{
+		$user=EtcPasswd::instance()->findUserByName($userName);
+		$group=EtcGroup::instance()->findGroupForUserName($userName);
+		//avid
+		$renameOps=SharingStructureAvid::renameUserAvidProjects($user);
+		$members=EtcPasswd::instance()->findUsersForEtcGroup($group);
+		SharingStructureAvid::reshare($group->name,$members);
+		return $renameOps;
+	}
+
+	static function unshareMemberFromGroupAfterUnsetGroup($userName,$renameOps)
+	{
+		$user=EtcPasswd::instance()->findUserByName($userName);
+		//avid
+		ActionEngine::regenerateIncrontab();			
+		SharingStructureAvid::renameBackUserAvidProjects($user,$renameOps);
+		//default
+		SharingStructureDefault::purgeProjectLinks(array($user));
 	}
 
 	static function unsetGroup($commandAction)
 	{
 		$userName=ProgramActions::$entityName;
 		$oldGroupName=self::removeFromISGroup($userName);
-		//purge project links
-		$user=EtcPasswd::instance()->findUserByName($userName);
-		SharingStructureDefault::purgeProjectLinks(array($user));
-		SharingStructureAvid::purgeProjectLinks(array($user));
-		//reshare old group
-		self::reshareGroup($oldGroupName);
 	}
 
 	static function setPasswd($commandAction)
