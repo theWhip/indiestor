@@ -231,16 +231,54 @@ class SharingStructureAvid
 		foreach($users as $user)
 		{
 			self::purgeOldProjectsForUser($user);
-			self::purgeInvalidSymlinks($user,$users);
+			self::purgeInvalidSymlinksInProjects($user,$users);
+			self::purgeInvalidSymlinksInAVSFolder($user,$users);
 		}
 	}
 
-	static function purgeInvalidSymlinks($user,$users)
+	static function purgeInvalidSymlinksInProjects($user,$users)
 	{
 		$projects=sharingFolders::userAvidProjects($user->homeFolder);
 		foreach($projects as $project)
 		{
 			$sharedSubFolderRoot="{$user->homeFolder}/$project/Shared";
+			$sharedSubFolders=SharingFolders::userSubFolders($sharedSubFolderRoot);
+			foreach($sharedSubFolders as $sharedSubFolder)
+			{
+				$memberFolder="$sharedSubFolderRoot/$sharedSubFolder";
+				if(is_link($memberFolder))
+				{
+					$target=readlink($memberFolder);
+					
+					//if the link does not point to a folder, remove it
+					if(!is_dir($target))
+					{
+						unlink($memberFolder);
+						syslog_notice("Removed '$memberFolder'; target '$target' is not a valid link target");
+					}
+
+					//the link must point to member project folder
+					$targetHomeFolder=dirname(dirname(dirname(dirname($target))));
+					if(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
+					{
+						if(file_exists($memberFolder)) unlink($memberFolder);
+						syslog_notice("Removed '$memberFolder'; in target '$target' ".
+							"the home folder '$targetHomeFolder' is not the home folder for a group member");
+					}
+				}	
+			}			
+		}
+	}
+
+	static function purgeInvalidSymlinksInAVSFolder($user,$users)
+	{
+		$avpFolder="{$user->homeFolder}/Avid Shared Projects";
+		if(!file_exists($avpFolder)) return;
+		if(!is_dir($avpFolder)) return;
+		$copyFolders=SharingFolders::userSubFolders($avpFolder);
+		foreach($copyFolders as $copyFolder)
+		{
+			$sharedSubFolderRoot="$avpFolder/$copyFolder/Shared";
 			$sharedSubFolders=SharingFolders::userSubFolders($sharedSubFolderRoot);
 			foreach($sharedSubFolders as $sharedSubFolder)
 			{
@@ -363,8 +401,8 @@ class SharingStructureAvid
 			$projectPrefix=basename($copyFolder,'.copy');
 			$sharedFolder="$aspFolder/$copyFolder/Shared";
 			$members=SharingFolders::userSubFolders($sharedFolder);
-			$ownFolder="";
-			$ownerName="";
+			$ownFolder=null;
+			$ownerName=null;
 			foreach($members as $member)
 			{
 				$folder="$sharedFolder/$member";
@@ -375,25 +413,29 @@ class SharingStructureAvid
 				if(SharingFolders::endsWith($target,$requiredSuffix)) $ownerName=$member;
 			}
 
-			//find owner record
-			$etcPasswd=EtcPasswd::instance();
-			$owner=$etcPasswd->findUserByName($ownerName);
-
-			//archive
-
-			$archived="{$owner->homeFolder}/$projectPrefix.avid/Archived";
-
-			if(!file_exists($archived))
+			if($ownFolder!=null && $ownerName!=null)
 			{
-				mkdir($archived);
-				SharingOperations::fixUserObjectOwnership($ownerName,$archived);
+				//find owner record
+				$etcPasswd=EtcPasswd::instance();
+				$owner=$etcPasswd->findUserByName($ownerName);
+
+				//archive
+
+				$archived="{$owner->homeFolder}/$projectPrefix.avid/Archived";
+
+				if(!file_exists($archived))
+				{
+					mkdir($archived);
+					SharingOperations::fixUserObjectOwnership($ownerName,$archived);
+				}
+
+				$archiveSubFolder="$archived/{$user->name}";
+				rename($ownFolder,$archiveSubFolder);
+				shell_exec("chown -R $ownerName.$ownerName '$archiveSubFolder'");
 			}
-			$archiveSubFolder="$archived/{$user->name}";
-			rename($ownFolder,$archiveSubFolder);
-			shell_exec("chown -R $ownerName.$ownerName '$archiveSubFolder'");
 		}
 		//delete ASP folder
-		//rm -rf "{$user->homeFolder}/Avid Shared Projects"
+		shell_exec("rm -rf '{$user->homeFolder}/Avid Shared Projects'");
 	}
 
 }
