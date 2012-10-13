@@ -18,10 +18,11 @@ $ echo -e $allIncronLines | incrontab -
 
 function syscommand_incrontab($incronLines)
 {
+	$tmpIncrontab='/tmp/incrontab-tmp'.getmypid();
 	ShellCommand::exec_fail_if_error("incrontab --remove");
-	file_put_contents('/tmp/incrontab-tmp',$incronLines);
-	ShellCommand::exec_fail_if_error("cat /tmp/incrontab-tmp | incrontab -");
-	unlink('/tmp/incrontab-tmp');
+	file_put_contents($tmpIncrontab,$incronLines);
+	ShellCommand::exec_fail_if_error("cat $tmpIncrontab | incrontab -");
+	if(file_exists($tmpIncrontab)) unlink($tmpIncrontab);
 }
 
 function syscommand_incrontab_list()

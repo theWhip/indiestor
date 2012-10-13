@@ -74,46 +74,26 @@ syslog_notice("user is: '$userName' group is: '$groupName'");
 //retrieve all group members
 $members=$etcPasswd->findUsersForEtcGroup($group);
 
-//MAIN: start resharing
-if($inEvent->watchType=='MAIN' || $inEvent->watchType=='PRJ')
+$lockingMechanism=new LockingMechanism($groupName);
+$lockingMechanism->lock();
+do
 {
-	$lockingMechanism=new LockingMechanism($groupName);
-	$lockingMechanism->lock();
-	do
+	if(($inEvent->watchType=='MAIN' && SharingFolders::isAvidProjectFolder($inEvent->fsObject)) ||
+		$inEvent->watchType=='PRJ')
 	{
-		if(($inEvent->watchType=='MAIN' && SharingFolders::isAvidProjectFolder($inEvent->fsObject)) ||
-			$inEvent->watchType=='PRJ')
-		{
-			SharingStructureAvid::reshare($groupName,$members);
-			SharingStructureMXF::reshare($members);
-		}
-		else
-		{
-			SharingStructureDefault::reshare($groupName,$members);
-		}
+		SharingStructureAvid::reshare($groupName,$members);
+		SharingStructureMXF::reshare($members);
 	}
-	while($lockingMechanism->mustReRun());
-	$lockingMechanism->unlock();
-}
-
-if($inEvent->watchType=='MXF')
-{
+	else
+	{
+		SharingStructureDefault::reshare($groupName,$members);
+	}
 	SharingStructureMXF::reshare($members);
 }
+while($lockingMechanism->mustReRun());
+$lockingMechanism->unlock();
 
-//regenerate incrontab for MXF events
-if($inEvent->watchType=='MXF' )
-{
-	syslog_notice('Regenerating incrontab (MXF)');
-	Incrontab::generate();
-}
-
-//regenerate incrontab for MAIN events
-if($inEvent->watchType=='MAIN' && SharingFolders::isAvidProjectFolder($inEvent->fsObject))
-{
-	syslog_notice('Regenerating incrontab (MAIN)');
-	Incrontab::generate();
-}
+Incrontab::generate();
 
 //notify end run
 syslog_notice_end_running();

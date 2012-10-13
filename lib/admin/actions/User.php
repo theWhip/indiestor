@@ -333,9 +333,9 @@ class User extends EntityType
 		$groupNames=self::newGroupNamesForUserName($userName,$groupNameToRemove);
 		syscommand_usermod_G($userName,$groupNames);
 		//finalize unsharing of projects
-		self::unshareMemberFromGroupAfterUnsetGroup($userName,$renameOps);
-		//cleanup
+		EtcPasswd::reset();
 		EtcGroup::reset();
+		self::unshareMemberFromGroupAfterUnsetGroup($userName,$renameOps,$group->name);
 		return ActionEngine::indiestorGroupName($groupNameToRemove);
 	}
 
@@ -346,16 +346,20 @@ class User extends EntityType
 		//avid
 		$renameOps=SharingStructureAvid::renameUserAvidProjects($user);
 		$members=EtcPasswd::instance()->findUsersForEtcGroup($group);
-		SharingStructureAvid::reshare($group->name,$members);
+		SharingStructureAvid::reshare($group->name,$members); //for archiving own folders
+		SharingStructureAvid::archiveASPFolder($user); //archive 'Avid Shared Projects'
 		return $renameOps;
 	}
 
-	static function unshareMemberFromGroupAfterUnsetGroup($userName,$renameOps)
+	static function unshareMemberFromGroupAfterUnsetGroup($userName,$renameOps,$groupName)
 	{
 		$user=EtcPasswd::instance()->findUserByName($userName);
+		$group=EtcGroup::instance()->findGroup($groupName);
 		//avid
 		ActionEngine::regenerateIncrontab();			
 		SharingStructureAvid::renameBackUserAvidProjects($user,$renameOps);
+		$members=EtcPasswd::instance()->findUsersForEtcGroup($group);
+		SharingStructureAvid::reshare($groupName,$members); //for purging invalid symlinks
 		//default
 		SharingStructureDefault::purgeProjectLinks(array($user));
 	}

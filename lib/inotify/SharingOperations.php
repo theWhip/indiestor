@@ -222,9 +222,8 @@ class SharingOperations
 		self::renameProjectFileIfNeeded($userName,$oldName,$newName);
 	}
 
-	static function purgeProjectLink($userName,$homeFolder,$projectLink,$users)
+	static function purgeProjectLink($projectLinkPath,$users)
 	{
-		$projectLinkPath="$homeFolder/$projectLink";
 		$target=readlink($projectLinkPath);
 
 		//if the link does not point to a folder, remove it

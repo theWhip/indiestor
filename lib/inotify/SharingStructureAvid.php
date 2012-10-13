@@ -63,7 +63,7 @@ class SharingStructureAvid
 		$projectFolder=$homeFolder."/".$project;
 		$shared="$projectFolder/Shared";
 
-		if(!is_dir($shared)) mkdir($shared);
+		if(!is_dir($shared) && !file_exists($shared)) mkdir($shared);
 		SharingOperations::fixFsObjectPermissions($shared,"755");
 
 		#the owner's own shared subfolder
@@ -77,7 +77,7 @@ class SharingStructureAvid
 			if(is_dir($archivedOwner))
 				rename($archivedOwner, $sharedSubOwner);
 			else
-				mkdir($sharedSubOwner);
+				if(!file_exists($sharedSubOwner)) mkdir($sharedSubOwner);
 		}
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedSubOwner);
 		SharingOperations::fixFsObjectPermissions($sharedSubOwner,"755");
@@ -231,6 +231,41 @@ class SharingStructureAvid
 		foreach($users as $user)
 		{
 			self::purgeOldProjectsForUser($user);
+			self::purgeInvalidSymlinks($user,$users);
+		}
+	}
+
+	static function purgeInvalidSymlinks($user,$users)
+	{
+		$projects=sharingFolders::userAvidProjects($user->homeFolder);
+		foreach($projects as $project)
+		{
+			$sharedSubFolderRoot="{$user->homeFolder}/$project/Shared";
+			$sharedSubFolders=SharingFolders::userSubFolders($sharedSubFolderRoot);
+			foreach($sharedSubFolders as $sharedSubFolder)
+			{
+				$memberFolder="$sharedSubFolderRoot/$sharedSubFolder";
+				if(is_link($memberFolder))
+				{
+					$target=readlink($memberFolder);
+					
+					//if the link does not point to a folder, remove it
+					if(!is_dir($target))
+					{
+						unlink($memberFolder);
+						syslog_notice("Removed '$memberFolder'; target '$target' is not a valid link target");
+					}
+
+					//the link must point to member project folder
+					$targetHomeFolder=dirname(dirname(dirname(dirname($target))));
+					if(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
+					{
+						if(file_exists($memberFolder)) unlink($memberFolder);
+						syslog_notice("Removed '$memberFolder'; in target '$target' ".
+							"the home folder '$targetHomeFolder' is not the home folder for a group member");
+					}
+				}	
+			}			
 		}
 	}
 
@@ -248,7 +283,7 @@ class SharingStructureAvid
 	{
 		//create archive folder
 		$archiveFolder="{$user->homeFolder}/$oldProjectFolder/Archived";
-		if(!is_dir($archiveFolder)) mkdir($archiveFolder);
+		if(!is_dir($archiveFolder) && !file_exists($archiveFolder)) mkdir($archiveFolder);
 		SharingOperations::fixUserObjectOwnership($user->name,$archiveFolder);
 
 		//handle shared subfolders
@@ -269,7 +304,7 @@ class SharingStructureAvid
 				$islink=false;
 				$source=$pathSharedSubFolder;
 			}
-			rename($source,$subArchiveFolder);
+			if(file_exists($source)) rename($source,$subArchiveFolder);
 			shell_exec("chown -R {$user->name}.{$user->name} $subArchiveFolder");
 
 			//purge copy
@@ -318,5 +353,48 @@ class SharingStructureAvid
 			self::verifyProjectFiles($user,$project);
 		}
 	}
+
+	static function archiveASPFolder($user)
+	{
+		$aspFolder="{$user->homeFolder}/Avid Shared Projects";
+		$copyFolders=SharingFolders::userSubFolders($aspFolder);
+		foreach($copyFolders as $copyFolder)
+		{
+			$projectPrefix=basename($copyFolder,'.copy');
+			$sharedFolder="$aspFolder/$copyFolder/Shared";
+			$members=SharingFolders::userSubFolders($sharedFolder);
+			$ownFolder="";
+			$ownerName="";
+			foreach($members as $member)
+			{
+				$folder="$sharedFolder/$member";
+				if($member==$user->name) $ownFolder=$folder;
+				if(is_link($folder)) $target=readlink($folder);
+				else $target="";
+				$requiredSuffix="$projectPrefix.avid/Shared/$member";
+				if(SharingFolders::endsWith($target,$requiredSuffix)) $ownerName=$member;
+			}
+
+			//find owner record
+			$etcPasswd=EtcPasswd::instance();
+			$owner=$etcPasswd->findUserByName($ownerName);
+
+			//archive
+
+			$archived="{$owner->homeFolder}/$projectPrefix.avid/Archived";
+
+			if(!file_exists($archived))
+			{
+				mkdir($archived);
+				SharingOperations::fixUserObjectOwnership($ownerName,$archived);
+			}
+			$archiveSubFolder="$archived/{$user->name}";
+			rename($ownFolder,$archiveSubFolder);
+			shell_exec("chown -R $ownerName.$ownerName '$archiveSubFolder'");
+		}
+		//delete ASP folder
+		//rm -rf "{$user->homeFolder}/Avid Shared Projects"
+	}
+
 }
 
