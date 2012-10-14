@@ -242,6 +242,7 @@ class SharingStructureAvid
 		foreach($projects as $project)
 		{
 			$sharedSubFolderRoot="{$user->homeFolder}/$project/Shared";
+			if(!file_exists($sharedSubFolderRoot)) continue;
 			$sharedSubFolders=SharingFolders::userSubFolders($sharedSubFolderRoot);
 			foreach($sharedSubFolders as $sharedSubFolder)
 			{
@@ -395,6 +396,7 @@ class SharingStructureAvid
 	static function archiveASPFolder($user)
 	{
 		$aspFolder="{$user->homeFolder}/Avid Shared Projects";
+		if(!file_exists($aspFolder)) return;
 		$copyFolders=SharingFolders::userSubFolders($aspFolder);
 		foreach($copyFolders as $copyFolder)
 		{

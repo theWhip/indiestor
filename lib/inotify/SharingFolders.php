@@ -105,10 +105,13 @@ class SharingFolders
 		return false;
 	}
 
-	static function userSubFolders($homeFolder)
+	static function userSubFolders($folder)
 	{
 		$subFolders=array();
-		if ($handle = opendir($homeFolder))
+		if(!file_exists($folder)) return $subFolders;
+		if(!is_dir($folder)) return $subFolders;
+
+		if ($handle = opendir($folder))
 		{
 			while(false !== ($entry = readdir($handle)))
 			{
