@@ -7,9 +7,9 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once(dirname(__FILE__).'/syslog.php');
-require_once(dirname(__FILE__).'/SharingOperations.php');
-require_once(dirname(__FILE__).'/SharingFolders.php');
+requireLibFile('inotify/syslog.php');
+requireLibFile('inotify/SharingOperations.php');
+requireLibFile('inotify/SharingFolders.php');
 
 class SharingStructureDefault
 {

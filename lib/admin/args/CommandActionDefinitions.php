@@ -7,9 +7,9 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('CommandActionDefinition.php');
-require_once('CommandIncompatibleActionPair.php');
-require_once('CommandMandatoryActionPair.php');
+requireLibFile('admin/args/CommandActionDefinition.php');
+requireLibFile('admin/args/CommandIncompatibleActionPair.php');
+requireLibFile('admin/args/CommandMandatoryActionPair.php');
 
 class CommandActionDefinitions
 {

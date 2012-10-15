@@ -7,10 +7,10 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('args/CommandEntityDefinitions.php');
-require_once('args/CommandActionDefinitions.php');
-require_once('args/CommandAction.php');
-require_once('args/ProgramActions.php');
+requireLibFile('admin/args/CommandEntityDefinitions.php');
+requireLibFile('admin/args/CommandActionDefinitions.php');
+requireLibFile('admin/args/CommandAction.php');
+requireLibFile('admin/args/ProgramActions.php');
 
 class ArgEngine
 {

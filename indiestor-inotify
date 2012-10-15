@@ -9,17 +9,44 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once(dirname(__FILE__).'/lib/inotify/InEvent.php');
-require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcPasswd.php');
-require_once(dirname(__FILE__).'/lib/admin/etcfiles/EtcGroup.php');
-require_once(dirname(__FILE__).'/lib/admin/action-engine/Incrontab.php');
-require_once(dirname(__FILE__).'/lib/inotify/syslog.php');
-require_once(dirname(__FILE__).'/lib/inotify/SharingStructureDefault.php');
-require_once(dirname(__FILE__).'/lib/inotify/SharingStructureAvid.php');
-require_once(dirname(__FILE__).'/lib/inotify/SharingStructureMXF.php');
-require_once(dirname(__FILE__).'/lib/inotify/SharingOperations.php');
-require_once(dirname(__FILE__).'/lib/inotify/SharingFolders.php');
-require_once(dirname(__FILE__).'/lib/inotify/LockingMechanism.php');
+//--------------------------
+//Check deployment location
+//--------------------------
+if (dirname(__FILE__)=='/usr/bin')
+{
+	$BIN='/usr/bin';
+	$LIB='/usr/share/indiestor';
+}
+else
+{
+	$BIN=dirname(__FILE__);
+	$LIB=dirname(__FILE__).'/lib';
+}
+
+function indiestor_BIN()
+{
+	global $BIN;
+	return $BIN;
+}
+
+function requireLibFile($path)
+{
+	global $LIB;
+	require_once("$LIB/$path");
+}
+//--------------------------
+
+requireLibFile("inotify/InEvent.php");
+requireLibFile("admin/etcfiles/EtcPasswd.php");
+requireLibFile("admin/etcfiles/EtcGroup.php");
+requireLibFile("admin/action-engine/Incrontab.php");
+requireLibFile("inotify/syslog.php");
+requireLibFile("inotify/SharingStructureDefault.php");
+requireLibFile("inotify/SharingStructureAvid.php");
+requireLibFile("inotify/SharingStructureMXF.php");
+requireLibFile("inotify/SharingOperations.php");
+requireLibFile("inotify/SharingFolders.php");
+requireLibFile("inotify/LockingMechanism.php");
 
 syslog_notice_start_running();
 

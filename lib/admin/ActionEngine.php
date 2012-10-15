@@ -7,16 +7,16 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('actions/EntityType.php');
-require_once('args/ProgramActions.php');
-require_once('etcfiles/all.php');
-require_once('syscommands/all.php');
-require_once('sysqueries/all.php');
-require_once('action-engine/ActionNamingConvention.php');
-require_once('action-engine/UserReportRecord.php');
-require_once('action-engine/UserReportRecords.php');
-require_once('action-engine/DeviceQuota.php');
-require_once('action-engine/Incrontab.php');
+requireLibFile('admin/actions/EntityType.php');
+requireLibFile('admin/args/ProgramActions.php');
+requireLibFile('admin/etcfiles/all.php');
+requireLibFile('admin/syscommands/all.php');
+requireLibFile('admin/sysqueries/all.php');
+requireLibFile('admin/action-engine/ActionNamingConvention.php');
+requireLibFile('admin/action-engine/UserReportRecord.php');
+requireLibFile('admin/action-engine/UserReportRecords.php');
+requireLibFile('admin/action-engine/DeviceQuota.php');
+requireLibFile('admin/action-engine/Incrontab.php');
 
 class ActionEngine
 {
@@ -107,7 +107,7 @@ class ActionEngine
 
                 $className=actionCamelCaseName(ProgramActions::$entityType);
                 $scriptName='actions/'.$className.'.php';
-                require_once($scriptName);
+                requireLibFile("admin/$scriptName");
                 $className::execute();
         }
 

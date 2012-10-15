@@ -7,7 +7,7 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('CommandEntityDefinition.php');
+requireLibFile('admin/args/CommandEntityDefinition.php');
 
 class CommandEntityDefinitions
 {

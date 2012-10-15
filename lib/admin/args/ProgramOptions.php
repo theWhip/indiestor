@@ -7,7 +7,7 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('ProgramActions.php');
+requireLibFile('admin/args/ProgramActions.php');
 
 class ProgramOptions
 {

@@ -8,16 +8,7 @@
 */
 
 //action definition folder
-define('COMMAND_ARGS_DEFINITIONS_FOLDER', folderParentAtLevel(__FILE__,3).'/lib/admin/arg-definitions');
-
-function folderParentAtLevel($file,$level)
-{
-	for($i=0; $i<$level; $i++)
-	{
-		$file=dirname($file);
-	}
-	return $file;
-}
+define('COMMAND_ARGS_DEFINITIONS_FOLDER', indiestor_LIB().'/admin/arg-definitions');
 
 class DefinitionFile
 {

@@ -7,7 +7,7 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once(dirname(__FILE__).'/syslog.php');
+requireLibFile('inotify/syslog.php');
 
 class SharingOperations
 {

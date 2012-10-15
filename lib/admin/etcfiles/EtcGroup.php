@@ -82,7 +82,7 @@ class EtcGroup
 	{
 
 		//load ActionEngine, if needed
-		require_once(dirname(dirname(__FILE__)).'/ActionEngine.php');
+		requireLibFile('admin/ActionEngine.php');
 
 		foreach($groups as $group)
 		{

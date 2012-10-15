@@ -10,11 +10,10 @@
 define('INCRON_ARGS','$@ $# $%');
 define('INCRON_MAIN_EVENTS','IN_ATTRIB,IN_CREATE,IN_DELETE,IN_MOVED_FROM,IN_MOVED_TO');
 define('INCRON_SCRIPT_EVENT_HANDLER','indiestor-inotify');
-define('INCRON_ROOT_FOLDER',dirname(dirname(dirname(dirname(__FILE__)))));
-define('INCRON_SCRIPT_EVENT_HANDLER_PATH','/usr/bin/php '.INCRON_ROOT_FOLDER.'/'.INCRON_SCRIPT_EVENT_HANDLER);
+define('INCRON_SCRIPT_EVENT_HANDLER_PATH','/usr/bin/php '.indiestor_BIN().'/'.INCRON_SCRIPT_EVENT_HANDLER);
 
-require_once(dirname(dirname(__FILE__)).'/etcfiles/all.php');
-require_once(dirname(dirname(dirname(__FILE__))).'/inotify/SharingFolders.php');
+requireLibFile('admin/etcfiles/all.php');
+requireLibFile('inotify/SharingFolders.php');
 
 class Incrontab
 {

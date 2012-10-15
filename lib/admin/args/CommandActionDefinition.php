@@ -7,7 +7,7 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('CommandAction.php');
+requireLibFile('admin/args/CommandAction.php');
 
 class CommandActionDefinition
 {

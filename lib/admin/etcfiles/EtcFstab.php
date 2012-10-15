@@ -8,7 +8,7 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once(dirname(dirname(__FILE__)).'/ShellCommand.php');
+requireLibFile('admin/ShellCommand.php');
 
 class EtcOneFileSystem
 {

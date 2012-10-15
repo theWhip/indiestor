@@ -8,16 +8,48 @@
         By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 */
 
-require_once('lib/admin/require_once_folder.php');
-require_once('lib/admin/args/ProgramActions.php');
-require_once('lib/admin/args/ProgramOptions.php');
-require_once('lib/admin/ArgEngine.php');
-require_once('lib/admin/ActionEngine.php');
-require_once('lib/admin/ShellCommand.php');
-require_once('lib/admin/DefinitionFile.php');
-require_once('lib/admin/NoticeDefinitions.php');
-require_once('lib/inotify/SharingStructureDefault.php');
-require_once('lib/inotify/SharingStructureAvid.php');
+//--------------------------
+//Check deployment location
+//--------------------------
+if (dirname(__FILE__)=='/usr/bin')
+{
+	$BIN='/usr/bin';
+	$LIB='/usr/share/indiestor';
+}
+else
+{
+	$BIN=dirname(__FILE__);
+	$LIB=dirname(__FILE__).'/lib';
+}
+
+function indiestor_BIN()
+{
+	global $BIN;
+	return $BIN;
+}
+
+function indiestor_LIB()
+{
+	global $LIB;
+	return $LIB;
+}
+
+function requireLibFile($path)
+{
+	require_once(indiestor_LIB().'/'.$path);
+}
+//--------------------------
+
+requireLibFile("admin/require_once_folder.php");
+requireLibFile("admin/args/ProgramActions.php");
+requireLibFile("admin/args/ProgramOptions.php");
+requireLibFile("admin/ArgEngine.php");
+requireLibFile("admin/ActionEngine.php");
+requireLibFile("admin/ShellCommand.php");
+requireLibFile("admin/DefinitionFile.php");
+requireLibFile("admin/NoticeDefinitions.php");
+requireLibFile("inotify/SharingStructureDefault.php");
+requireLibFile("inotify/SharingStructureAvid.php");
 
 //check that the user is root
 $processUser = posix_getpwuid(posix_geteuid());
