@@ -11,15 +11,23 @@
 //--------------------------
 //Check deployment location
 //--------------------------
-if (dirname(__FILE__)=='/usr/bin')
+if (dirname(__FILE__)=='/usr/share/indiestor/prg')
 {
 	$BIN='/usr/bin';
 	$LIB='/usr/share/indiestor';
+	$INUSER='indienotify';
 }
 else
 {
 	$BIN=dirname(__FILE__);
 	$LIB=dirname(__FILE__).'/lib';
+	$INUSER='root';
+}
+
+function indiestor_INUSER()
+{
+	global $INUSER;
+	return $INUSER;
 }
 
 function indiestor_BIN()

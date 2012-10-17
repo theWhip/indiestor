@@ -236,6 +236,34 @@ class SharingStructureAvid
 		}
 	}
 
+	static function homeFolderSegmentForLinkTarget($folder)
+	{
+		if(preg_match('|/Avid Shared Projects/|',$folder))
+		{
+			//Example: /home/carl/Avid Shared Projects/project3.copy/Shared/peter
+			//Example: /home/carl/Avid Shared Projects/project2.copy/Shared/carl
+			$segments=explode('/',$folder);
+			array_pop($segments);
+			array_pop($segments);
+			array_pop($segments);
+			array_pop($segments);
+			$home=implode('/',$segments);
+			return $home;
+		}
+		else if(preg_match('|/Shared/|',$folder))
+		{
+			//Example: home/peter/project3.avid/Shared/peter
+			//Example: home/erik/haha4.avid/Shared/erik
+			$segments=explode('/',$folder);
+			array_pop($segments);
+			array_pop($segments);
+			array_pop($segments);
+			$home=implode('/',$segments);
+			return $home;
+		}
+		else return null;
+	}
+
 	static function purgeInvalidSymlinksInProjects($user,$users)
 	{
 		$projects=sharingFolders::userAvidProjects($user->homeFolder);
@@ -257,9 +285,8 @@ class SharingStructureAvid
 						unlink($memberFolder);
 						syslog_notice("Removed '$memberFolder'; target '$target' is not a valid link target");
 					}
-
 					//the link must point to member project folder
-					$targetHomeFolder=dirname(dirname(dirname(dirname($target))));
+					$targetHomeFolder=self::homeFolderSegmentForLinkTarget($target);
 					if(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
 					{
 						if(file_exists($memberFolder)) unlink($memberFolder);
@@ -296,7 +323,7 @@ class SharingStructureAvid
 					}
 
 					//the link must point to member project folder
-					$targetHomeFolder=dirname(dirname(dirname(dirname($target))));
+					$targetHomeFolder=self::homeFolderSegmentForLinkTarget($target);
 					if(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
 					{
 						if(file_exists($memberFolder)) unlink($memberFolder);

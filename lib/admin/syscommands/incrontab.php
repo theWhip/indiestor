@@ -19,15 +19,15 @@ $ echo -e $allIncronLines | incrontab -
 function syscommand_incrontab($incronLines)
 {
 	$tmpIncrontab='/tmp/incrontab-tmp'.getmypid();
-	ShellCommand::exec_fail_if_error("incrontab --remove");
+	ShellCommand::exec_fail_if_error("incrontab -u ".indiestor_INUSER()." --remove");
 	file_put_contents($tmpIncrontab,$incronLines);
-	ShellCommand::exec_fail_if_error("cat $tmpIncrontab | incrontab -");
+	ShellCommand::exec_fail_if_error("cat $tmpIncrontab | incrontab -u ".indiestor_INUSER()." -");
 	if(file_exists($tmpIncrontab)) unlink($tmpIncrontab);
 }
 
 function syscommand_incrontab_list()
 {
-	return shell_exec("incrontab --list");	
+	return shell_exec("incrontab -u ".indiestor_INUSER()." --list");	
 }
 
 function syscommand_incrontab_show()
