@@ -25,7 +25,7 @@ class ArgEngine
 		$this->commandEntityDefinitions=new CommandEntityDefinitions();
 		$this->commandActionDefinitions=new CommandActionDefinitions();
 		$this->args=$args;
-		$this->scriptName=$args[0];
+		$this->scriptName='indiestor';
 		$this->removeArg(0); //remove calling script
 	}
 
