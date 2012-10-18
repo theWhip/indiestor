@@ -9,8 +9,7 @@
 
 define('INCRON_ARGS','$@ $# $%');
 define('INCRON_MAIN_EVENTS','IN_ATTRIB,IN_CREATE,IN_DELETE,IN_MOVED_FROM,IN_MOVED_TO');
-define('INCRON_SCRIPT_EVENT_HANDLER','indiestor-inotify');
-define('INCRON_SCRIPT_EVENT_HANDLER_PATH','/usr/bin/php '.indiestor_BIN().'/'.INCRON_SCRIPT_EVENT_HANDLER);
+define('INCRON_SCRIPT_EVENT_HANDLER_PATH', indiestor_BIN().'/indiestor-inotify');
 
 requireLibFile('admin/etcfiles/all.php');
 requireLibFile('inotify/SharingFolders.php');
