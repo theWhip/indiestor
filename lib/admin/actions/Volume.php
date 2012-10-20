@@ -43,7 +43,9 @@ class Volume extends EntityType
 	static function checkIfQuotaPackageInstalled()
 	{
 		if(!sysquery_which('setquota'))
+		{
 			ActionEngine::error('AE_ERR_VOLUME_QUOTA_PACKAGE_NOT_INSTALLED',array());
+		}
 	}
 
 	static function checkValidCharactersInVolumeName($device)
