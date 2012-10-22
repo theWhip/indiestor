@@ -1,0 +1,16 @@
+Source: indiestor
+Section: 
+Priority: extra
+Maintainer: admin <info@indiestor.com>
+Build-Depends: debhelper (>= 7), build-essential
+Standards-Version: 3.9.3.1
+Homepage: https://indiestor.com
+
+Package: indiestor
+Architecture: any
+Depends: ...
+Description: {title}
+  {line1}
+  {line2}
+  ...
+
