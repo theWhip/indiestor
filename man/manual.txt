@@ -210,15 +210,16 @@ locks the account for the user named. This prevents the user from logging in or 
 .B -add-to-samba:
 Adds an existing user to samba. 
 
-.IP --user <arg>
+.IP --user <arg>:
 .B -remove-from-indiestor:
 Removes the user <arg> from indiestor. This action cannot be combined with other actions.
 
-.IP --user <arg>
+.IP --user <arg>:
 .B -remove-from-samba:
 Removes the user <arg> from samba. This action cannot be combined with other actions.
 
-.IP --help Shows the command the synopsis.
+.IP --help:
+Shows the command the synopsis.
 
 
 .SH EXAMPLES
