@@ -3,8 +3,6 @@
 #
 # see: dh_installdeb(1)
 
-set -e
-
 # summary of how this script can be called:
 #        * <postinst> `configure' <most-recently-configured-version>
 #        * <old-postinst> `abort-upgrade' <new version>
@@ -17,15 +15,19 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-
-function post_install()
-{
-	#XXX to be completed
-}
-
 case "$1" in
     configure)
-	post_install
+	indiewheel=$(cat /etc/group | grep indiewheel)
+	if [ -z "$indiewheel" ]; then
+		groupadd indiewheel
+	fi
+	indienotify=$(cat /etc/passwd | grep indienotify)
+	if [ -z "$indienotify" ]; then
+		adduser --system --group indienotify
+	fi
+	/etc/init.d/incron restart
+	/etc/init.d/nmbd restart
+	/etc/init.d/smbd restart
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

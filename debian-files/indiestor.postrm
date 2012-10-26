@@ -3,8 +3,6 @@
 #
 # see: dh_installdeb(1)
 
-set -e
-
 # summary of how this script can be called:
 #        * <postrm> `remove'
 #        * <postrm> `purge'
@@ -18,14 +16,9 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-function post_remove()
-{
-	#XXX To be completed
-}
 
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-        post_remove
     ;;
 
     *)

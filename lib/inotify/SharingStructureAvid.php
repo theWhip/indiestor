@@ -314,7 +314,7 @@ class SharingStructureAvid
 				if(is_link($memberFolder))
 				{
 					$target=readlink($memberFolder);
-					
+					syslog_notice("ASP: memberFolder=$memberFolder target=$target");
 					//if the link does not point to a folder, remove it
 					if(!is_dir($target))
 					{
