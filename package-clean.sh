@@ -3,4 +3,4 @@
 # deletes the debian folder and the packages generated
 
 rm -rf debian
-rm ../indiestor_*
+rm -f ../indiestor_*
