@@ -8,6 +8,6 @@ builddir=debian
 mkdir $builddir
 cp -R debian-files/* $builddir
 
-#fakeroot -- dpkg-buildpackage -F -I.git
-debuild -S
+fakeroot -- dpkg-buildpackage -F -I.git
+#debuild -S
 
