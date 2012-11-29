@@ -9,7 +9,6 @@ aio write size = 1
 #SHARES
 
 [indieSTOR]
-comment = IndieSTOR home directories 
 browseable = no
 writeable = yes
 path = %H

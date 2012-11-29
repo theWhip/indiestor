@@ -24,7 +24,7 @@ indiestor - Project & MXF media sharing for Avid Media Composer
 .SH DESCRIPTION
 indiestor provides a complete OpenSource solution for Avid project & MXF/AMA media sharing. It takes care of the management of volumes, groups and users (homes, passwords, quotas). Incron is used to trigger the sharing of projects and the patching of Avid MXF media folders.
 
-As such there is no requirement for a convoluted client side application. In turn, this ensures a shallow learning curve for editors.
+As such  there is no requirement for a convoluted client side application. In turn, this ensures a shallow learning curve for editors.
 
 To trigger sharing the editor must name (or rename) any folder on the top level of his/her home directory accordingly:
 
