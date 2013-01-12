@@ -32,3 +32,12 @@ git commit -a -m "$message"
 git tag "$version" -m "$version"
 git push --tags origin master
 
+#replace version in default config:
+cat config-default.sh | sed 's/package_version=.*/package_version='$version'/'
+
+#show
+echo '-----------------'
+echo 'config-default.sh'
+echo '-----------------'
+cat config-default.sh
+
