@@ -2,7 +2,7 @@
 
 # builds the debian package
 
-./package-clean.sh
+./sys-package-clean.sh
 builddir=debian
 
 mkdir $builddir

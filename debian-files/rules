@@ -7,7 +7,7 @@ build:
 	@dh_installdirs
 
 binary: build
-	./package-copy-files.sh
+	./sys-package-copy-files.sh
 	@touch build-stamp
 	@dh_testdir
 	@dh_testroot
