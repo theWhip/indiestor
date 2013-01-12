@@ -1,7 +1,7 @@
 Indiestor collaborative video sharing for Avid
 ==============================================
 
-Debian package build and publication instructions
+Debian package build and publication instructions.
 
 1. Applicable configuration
 ---------------------------
