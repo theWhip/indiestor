@@ -1,5 +1,5 @@
-indiestor (0.8.0.4) precise; urgency=low
+indiestor (=package_version=) =distrib_version=; urgency=low
 
-  * Version 0.8.0.4
+  * Version =package_version=
 
  -- Packaging service <info@indiestor.com>  Fri, 26 Oct 2012 20:36:12 +0700

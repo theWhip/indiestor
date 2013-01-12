@@ -10,5 +10,5 @@
 # reverses the sys-package-build.sh command
 # -----------------------------------------------------------
 rm -rf debian
-rm build-stamp
+rm -f build-stamp
 rm -f ../indiestor_*
