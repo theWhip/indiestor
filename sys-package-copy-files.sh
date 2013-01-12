@@ -9,8 +9,12 @@
 # called by the debian rules file (which is a make file)
 # populates the installer with the package files
 #------------------------------------------------------------
+
+# load the default environment
+source ./config-default.sh
+
 builddir=debian
-deployroot=$builddir/indiestor/usr
+deployroot=$builddir/$package/usr
 mkdir -p $deployroot
 #-------------
 #bin
@@ -21,7 +25,7 @@ cp bin/* $bin
 #-------------
 #share
 #-------------
-share=$deployroot/share/indiestor
+share=$deployroot/share/$package
 mkdir -p $share
 cp -R lib/* $share
 #-------------
@@ -40,7 +44,7 @@ cat man/manual.txt | gzip -c > $man/indiestor.8.gz
 #-------------
 #etc
 #-------------
-etc=$builddir/indiestor/etc
+etc=$builddir/$package/etc
 mkdir -p $etc
 cp -R etc/* $etc
 

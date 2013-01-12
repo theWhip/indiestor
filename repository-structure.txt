@@ -1,0 +1,24 @@
+[[FOLDER]]
+$user_repository_root/$distribution
+
+        incoming
+        conf
+                distributions
+                        Origin: =domain=
+                        Label: indiestor apt repository
+                        Codename: =distrib_version=
+                        Architectures: i386 amd64 source
+                        Components: main
+                        Description: indiestor.com package repo
+                        SignWith: 6E11937D
+                        Pull: =distrib_version=
+
+                options
+                        verbose
+                        basedir =user_repository_root=/=distribution=
+                        ask-passphrase
+
+                override.=distrib_version=
+                        ==package== Priority extra
+                        ==package== section utils
+

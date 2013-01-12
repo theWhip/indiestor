@@ -6,14 +6,12 @@
 #        Commissioned at peopleperhour.com 
 #        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
 #------------------------------------------------------------
-# Removes the deployment packages on the deployment server
-# for a particular distribution
-# Reverses sys-package-publish.sh (for all versions)
+# Runs on the remote deployment server
+# Executes the reprepro script to populate the deployment
+# repository
 #------------------------------------------------------------
 
-# load the default environment
-source ./config-default.sh
-
-#remove distribution publication
-ssh $user_machine rm -rf $user_repository_root/$distribution/{db,dists,pool}
+cd /home/packages/packages.indiestor.com/html/apt/ubuntu
+reprepro -Vb . include precise incoming/indiestor_0.8.0.10_amd64.changes
+rm incoming/indiestor_0.8.0.10*
 

@@ -9,6 +9,10 @@
 # deletes the debian folder and the packages generated
 # reverses the sys-package-build.sh command
 # -----------------------------------------------------------
+
+# load the default environment
+source ./config-default.sh
+
 rm -rf debian
 rm -f build-stamp
-rm -f ../indiestor_*
+rm -f ../${package}_*

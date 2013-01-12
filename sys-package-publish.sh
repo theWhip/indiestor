@@ -12,10 +12,10 @@
 # load the default environment
 source ./config-default.sh
 
-echo "copying package files for indiestor $package_version"
-scp ../indiestor_$version* packages@packages.indiestor.com:/home/packages/packages.indiestor.com/html/apt/$distribution/incoming
+echo "copying package files for $package $package_version"
+scp ../$package_$version* $user_machine:$user_repository_root/$distribution/incoming
 
-echo "publishing files for indiestor_$package_version"
+echo "publishing files for $package_$package_version"
 
 #set template variables in remote script
 script_name_in=./sys-package-publish.remote.sh
