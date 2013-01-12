@@ -1,5 +1,13 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
+#------------------------------------------------------------
+#        Indiestor program
+#
+#	 Written by Erik Poupaert, erik@sankuru.biz
+#        Commissioned at peopleperhour.com 
+#        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
+#------------------------------------------------------------
+# pushes a version tag to git repository
+# -----------------------------------------------------------
 version="$1"
 message="$2"
 

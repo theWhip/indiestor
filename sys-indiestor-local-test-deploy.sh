@@ -1,7 +1,13 @@
-#!/bin/sh
-
+#!/usr/bin/env bash
+#------------------------------------------------------------
+#        Indiestor program
+#
+#	 Written by Erik Poupaert, erik@sankuru.biz
+#        Commissioned at peopleperhour.com 
+#        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
+#------------------------------------------------------------
 #rapid local deployment for testing purposes
-
+# -----------------------------------------------------------
 cp bin/* /usr/bin
 if [ ! -d /usr/share/indiestor ]; then
 	mkdir /usr/share/indiestor

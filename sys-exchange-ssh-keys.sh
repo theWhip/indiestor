@@ -1,5 +1,13 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
+#------------------------------------------------------------
+#        Indiestor program
+#
+#	 Written by Erik Poupaert, erik@sankuru.biz
+#        Commissioned at peopleperhour.com 
+#        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
+#------------------------------------------------------------
+# exchange of SSH keys with deployment server
+# -----------------------------------------------------------
 remoteUserAtServer="$1"
 
 function usage()
