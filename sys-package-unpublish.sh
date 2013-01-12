@@ -10,5 +10,10 @@
 # for a particular distribution
 # Reverses sys-package-publish.sh (for all versions)
 #------------------------------------------------------------
-ssh packages@packages.indiestor.com rm -rf /home/packages/packages.indiestor.com/html/apt/ubuntu/{db,dists,pool}
+
+# load the default environment
+source ./config-default.sh
+
+#remove distribution publication
+ssh $user_machine rm -rf user_repository_root/$distribution/{db,dists,pool}
 
