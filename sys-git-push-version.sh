@@ -33,8 +33,9 @@ git tag "$version" -m "$version"
 git push --tags origin master
 
 #replace version in default config:
-new_config=$(cat config-default.sh | sed 's/package_version=.*/package_version='$version'/')
-echo $new_config > config-default.sh
+cat config-default.sh | sed 's/package_version=.*/package_version='$version'/' > config.tmp
+mv config.tmp config-default.sh
+rm config.tmp
 
 #show
 echo '-----------------'
