@@ -24,9 +24,9 @@ cp -R debian-files/* $builddir
 cat $builddir/changelog | sed -e 's/=package_version=/'$package_version'/g' \
                                 -e 's/=distrib_version=/'$distrib_version'/g' \
                                 -e 's/=package=/'$package'/g' \
-        > $builddir/changelog.tmp
-mv $builddir/changelog.tmp $builddir/changelog
-rm -f $builddir/changelog.tmp
+        > /tmp/changelog.tmp
+mv /tmp/changelog.tmp $builddir/changelog
+rm -f /tmp/changelog.tmp
 
 # execute the build
 fakeroot -- dpkg-buildpackage -a$architecture -F -I.git
