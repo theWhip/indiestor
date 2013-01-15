@@ -1,0 +1,9 @@
+Origin: =domain=
+Label: =package= apt repository
+Codename: =distrib_version=
+Architectures: i386 amd64 source
+Components: main
+Description: =package= package repo
+SignWith: 6E11937D
+Pull: =distrib_version=
+
