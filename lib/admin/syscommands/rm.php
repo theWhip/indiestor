@@ -17,6 +17,6 @@ $ rm myfile.*
 
 function syscommand_rm($filePath)
 {
-	ShellCommand::exec_fail_if_error("rm $filePath");	
+	ShellCommand::exec("rm -f $filePath");	
 }
 
