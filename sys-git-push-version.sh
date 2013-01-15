@@ -27,16 +27,16 @@ if [ "$message" = "" ]; then
 	exit
 fi
 
-git add -A
-git commit -a -m "$message"
-git tag "$version" -m "$version"
-git push --tags origin master
-
 #replace version in default config:
 cat config-default.sh | sed 's/package_version=.*/package_version='$version'/' > config.tmp
 mv config.tmp config-default.sh
 rm config.tmp
 chmod a+x config-default.sh
+
+git add -A .
+git commit -a -m "$message"
+git tag "$version" -m "$version"
+git push --tags origin master
 
 #show
 echo '-----------------'
