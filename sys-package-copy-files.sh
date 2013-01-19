@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 #------------------------------------------------------------
-#        Indiestor program
-#
-#	 Written by Erik Poupaert, erik@sankuru.biz
-#        Commissioned at peopleperhour.com 
-#        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
+# Indiestor program
+# Concept, requirements, specifications, and unit testing
+# By Alex Gardiner, alex@indiestor.com
+# Written by Erik Poupaert, erik@sankuru.biz
+# Commissioned at peopleperhour.com 
+# Licensed under the GPL
 #------------------------------------------------------------
 # called by the debian rules file (which is a make file)
 # populates the installer with the package files

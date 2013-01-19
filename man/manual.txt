@@ -26,7 +26,7 @@ indiestor provides a complete OpenSource solution for Avid project & MXF/AMA med
 
 As such there is no requirement for a convoluted client side application. In turn, this ensures a shallow learning curve for editors.
 
-To trigger sharing the editor must name (or rename) any folder on the top level of his/her home directory accordingly:
+To trigger sharing the editor must rename any folder on the top level of his/her home directory accordingly:
 
 For avid shared projects use:
 .B
@@ -157,13 +157,13 @@ samba flags. Normally U=user.
 .B 	conn.: 
 Currently connected through samba. Y=yes. N=no.
 
-	*none if the user does not belong to an indiestor group.
-
 .B -show-incrontab:
 shows the list of folders being watched by incron for the user indienotify. See incrontab for the meaning of the columns.
 
 .B  -regenerate-incrontab:
 for debugging purposes. If the incrontab seems inconsistent, regenerate it.
+
+*none if the user does not belong to an indiestor group.
 
 .IP --user
 .B <arg>
@@ -320,16 +320,16 @@ Quota file in the root of the filesystem for the volume for which the quota syst
 .B Connecting Mac clients to indiestor:
 Users should switch to Finder and use Command + K or click Go > connect to server:
 
-smb://xxx.xxx.xxx.xxx/indiestor
+smb://<IP-ADDRESS-or-HOST-NAME>/indiestor
 
-Mac users on 10.6.8 and newer are advised to use the replacement Thursby Dave SMB client to satisfy the needs of Avid Media Composer. We strongly recommend you test this before purchasing Dave.
+Mac users on 10.6.8 (Snow Leopard) or newer are advised to use the replacement Thursby Dave SMB client to satisfy the needs of Avid Media Composer. We strongly recommend you test this before purchasing Dave. A trail is available at the Thursby site.
 
 .B Connecting Windows clients to indiestor:
 For windows use the built in CIFS/SMB client. Right click on "Computer" then choose Map Network Drive.
 
 All users in a group should agree to map mounts to the same drive letter using the following folder path:
 
-\e\exxx.xxx.xxx.xxx\eindiestor
+\e\e<IP-ADDRESS-or-HOST-NAME>\eindiestor
 
 The 'Connect using different credentials' is handy if windows signs you in automatically.
 
@@ -373,16 +373,12 @@ Permission denied to user username
 User is must be added to /etc/super.tab as described above in the files section.
 
 .B ISSUE: Stale SMB Mount Points
-- indiestor(<number>)
+-  indiestor-1 (etc)
 
 .B FIX:
 This issue is a Mac only.
 
-Occasionally Dave will connect mount points with a number appended to the name. This issue is caused by "stale" mount points and relates directly to Thursby Dave.
-
-Downstream of Dave this can cause issues with the indiestor workflow, particularly with ".shared" AMA volumes, as the path becomes inconsistent between users.
-
-In the event of stale mount points simply delete the detached "indiestor" mount point folder from /Volumes/ (This task must NOT be performed while connected)
+Occasionally Dave will connect mount points with a number appended to the name. This issue is caused by "stale" mount points and relates directly to Thursby Dave. Downstream of Dave this can cause issues with the indiestor workflow, particularly with ".shared" AMA volumes, as the path becomes inconsistent between users. In the event of stale mount points simply delete the detached "indiestor" mount point folder from /Volumes/ (This task must NOT be performed while connected)
 
 See: http://www.thursby.com/forum/viewtopic.php?f=10&t=262
 .SH AUTHOR

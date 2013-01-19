@@ -1,10 +1,11 @@
 <?php
 /*
         Indiestor program
-
-	Written by Erik Poupaert, erik@sankuru.biz
+        Concept, requirements, specifications, and unit testing
+        By Alex Gardiner, alex@indiestor.com
+        Written by Erik Poupaert, erik@sankuru.biz
         Commissioned at peopleperhour.com 
-        By Alex Gardiner, alex.gardiner@canterbury.ac.uk
+        Licensed under the GPL
 */
 
 requireLibFile('admin/args/ProgramActions.php');
