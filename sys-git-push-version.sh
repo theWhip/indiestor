@@ -30,7 +30,6 @@ fi
 #replace version in default config:
 cat config-default.sh | sed 's/package_version=.*/package_version='$version'/' > config.tmp
 mv config.tmp config-default.sh
-rm config.tmp
 chmod a+x config-default.sh
 
 git add -A .
