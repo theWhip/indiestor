@@ -200,6 +200,13 @@ class SharingStructureAvid
 		}		
 	}
 
+        static function copyAvidProjectFile($memberName,$source,$target)
+        {
+	        if(!file_exists($target)) copy($source,$target);
+	        SharingOperations::fixUserObjectOwnership($memberName,$target);
+	        SharingOperations::fixFsObjectPermissions($target,"750");
+        }
+
 	static function copyAvidProjectFiles($ownerProjectFolder,$sharingMemberCopyFolder,$memberName)
 	{
 		if ($handle = opendir($ownerProjectFolder))
@@ -207,15 +214,18 @@ class SharingStructureAvid
 			while(false !== ($entry = readdir($handle)))
 			{
 				$source="$ownerProjectFolder/$entry";
+			        $copy=str_replace('.avid','.copy',$entry);
+			        $target="$sharingMemberCopyFolder/$copy";
 				if(is_file($source))
 				{
-					if(SharingFolders::endsWith($entry,'.avp') || SharingFolders::endsWith($entry,'.avs'))
+					if(SharingFolders::endsWith($entry,'.avp'))
 					{
-						$copy=str_replace('.avid','.copy',$entry);
-						$target="$sharingMemberCopyFolder/$copy";
-						if(!file_exists($target)) copy($source,$target);
-						SharingOperations::fixUserObjectOwnership($memberName,$target);
-						SharingOperations::fixFsObjectPermissions($target,"750");
+                                                if(filesize($source)>0)
+                                                        self::copyAvidProjectFile($memberName,$source,$target);
+					}
+					else if(SharingFolders::endsWith($entry,'.avs'))
+					{
+                                                self::copyAvidProjectFile($memberName,$source,$target);
 					}
 				}
 			}

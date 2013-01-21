@@ -10,6 +10,7 @@
 
 define('INCRON_ARGS','$@ $# $%');
 define('INCRON_MAIN_EVENTS','IN_ATTRIB,IN_CREATE,IN_DELETE,IN_MOVED_FROM,IN_MOVED_TO');
+define('INCRON_MAIN_EVENTS_WATCH_IN_MODIFY_TOO',INCRON_MAIN_EVENTS.',IN_MODIFY');
 define('INCRON_SCRIPT_EVENT_HANDLER_PATH', indiestor_BIN().'/indiestor-inotify');
 
 requireLibFile('admin/etcfiles/all.php');
@@ -46,6 +47,36 @@ class Incrontab
 		syscommand_incrontab($tab);
 	}
 
+        static function folderHasOneEmptyAVPfile($folder)
+        {
+                $emptyAVPfileCount=0;
+                $nonEmptyAVPfileCount=0;
+		if ($handle = opendir($folder))
+		{
+			while(false !== ($entry = readdir($handle)))
+			{
+				$file="$folder/$entry";
+				if(is_file($file))
+				{
+					if(SharingFolders::endsWith($entry,'.avp'))
+					{
+                                                if(filesize($file)==0)
+                                                        $emptyAVPfileCount++;
+                                                else
+                                                        $nonEmptyAVPfileCount++;
+					}
+				}
+			}
+			closedir($handle);
+		}
+                #if a non-empty AVP file is present, no need to deal with empty AVP files
+                if($nonEmptyAVPfileCount>0) return false;
+                #there may be no AVP files present at all
+                if($emptyAVPfileCount==0) return false;
+                #there is exactly one empty AVP file in the folder
+                return true;
+        }
+
 	static function generateTabForUser($userName,$homeFolder)
 	{
 		$userIncronLines='';
@@ -59,8 +90,14 @@ class Incrontab
 		foreach($avidFolders as $avidFolder)
 		{
 			$folder=str_replace(' ','\ ',$avidFolder);
-			$userIncronLines.="$homeFolder/$folder".' '.INCRON_MAIN_EVENTS.' '.
-				INCRON_SCRIPT_EVENT_HANDLER_PATH.' PRJ '.INCRON_ARGS."\n";			
+
+                        #check for this border case
+                        if(self::folderHasOneEmptyAVPfile("$homeFolder/$avidFolder"))
+                                $eventsToWatch=INCRON_MAIN_EVENTS_WATCH_IN_MODIFY_TOO;
+                        else $eventsToWatch=INCRON_MAIN_EVENTS;
+
+			$userIncronLines.="$homeFolder/$folder".' '.$eventsToWatch.' '.
+				INCRON_SCRIPT_EVENT_HANDLER_PATH.' PRJ '.INCRON_ARGS."\n";
 		}
 	
 		#watch 'Avid MediaFiles'
