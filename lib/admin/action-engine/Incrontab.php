@@ -47,36 +47,6 @@ class Incrontab
 		syscommand_incrontab($tab);
 	}
 
-        static function folderHasOneEmptyAVPfile($folder)
-        {
-                $emptyAVPfileCount=0;
-                $nonEmptyAVPfileCount=0;
-		if ($handle = opendir($folder))
-		{
-			while(false !== ($entry = readdir($handle)))
-			{
-				$file="$folder/$entry";
-				if(is_file($file))
-				{
-					if(SharingFolders::endsWith($entry,'.avp'))
-					{
-                                                if(filesize($file)==0)
-                                                        $emptyAVPfileCount++;
-                                                else
-                                                        $nonEmptyAVPfileCount++;
-					}
-				}
-			}
-			closedir($handle);
-		}
-                #if a non-empty AVP file is present, no need to deal with empty AVP files
-                if($nonEmptyAVPfileCount>0) return false;
-                #there may be no AVP files present at all
-                if($emptyAVPfileCount==0) return false;
-                #there is exactly one empty AVP file in the folder
-                return true;
-        }
-
 	static function generateTabForUser($userName,$homeFolder)
 	{
 		$userIncronLines='';
@@ -92,7 +62,7 @@ class Incrontab
 			$folder=str_replace(' ','\ ',$avidFolder);
 
                         #check for this border case
-                        if(self::folderHasOneEmptyAVPfile("$homeFolder/$avidFolder"))
+                        if(!SharingFolders::folderHasValidAVPfile("$homeFolder/$avidFolder"))
                                 $eventsToWatch=INCRON_MAIN_EVENTS_WATCH_IN_MODIFY_TOO;
                         else $eventsToWatch=INCRON_MAIN_EVENTS;
 

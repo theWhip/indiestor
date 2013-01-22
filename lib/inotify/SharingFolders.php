@@ -170,5 +170,26 @@ class SharingFolders
 		}
 		return false;
 	}
+
+        static function folderHasValidAVPfile($folder)
+        {
+                $nonEmptyAVPfileCount=0;
+		if ($handle = opendir($folder))
+		{
+			while(false !== ($entry = readdir($handle)))
+			{
+				$file="$folder/$entry";
+				if(is_file($file))
+					if(SharingFolders::endsWith($entry,'.avp'))
+                                                if(filesize($file)>0)
+                                                        $nonEmptyAVPfileCount++;
+			}
+			closedir($handle);
+		}
+                #if a non-empty AVP file is present, no need to deal with empty AVP files
+                if($nonEmptyAVPfileCount>0) return true;
+                return false;
+        }
+
 }
 

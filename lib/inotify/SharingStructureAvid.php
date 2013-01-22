@@ -30,9 +30,15 @@ class SharingStructureAvid
 			$projects=sharingFolders::userAvidProjects($user->homeFolder);
 			foreach($projects as $project)
 			{
-				self::verifyProject($groupName,$user,$project,$users);
-				self::verifyProjectSharing($groupName,$user,$project,$users);
-				self::verifyProjectArchive($user,$project);
+                		$projectFolder=$user->homeFolder."/".$project;
+                                $shared="$projectFolder/Shared";
+                                #if the folder has been shared already, we reshare, even if there is no valid AVP file
+                                if(SharingFolders::folderHasValidAVPfile($projectFolder) || file_exists($shared))
+                                {
+				        self::verifyProject($groupName,$user,$project,$users);
+				        self::verifyProjectSharing($groupName,$user,$project,$users);
+				        self::verifyProjectArchive($user,$project);
+                                }
 			}
 		}
 	}
@@ -93,8 +99,8 @@ class SharingStructureAvid
 			if($sharingUser->name!=$userName)
 			{
 				$linkName="$shared/{$sharingUser->name}";
-				$target="{$sharingUser->homeFolder}/Avid Shared Projects/$projectCopy/Shared/{$sharingUser->name}";
-
+				$target="{$sharingUser->homeFolder}/Avid Shared Projects".
+                                        "/$projectCopy/Shared/{$sharingUser->name}";
 				SharingOperations::verifySymLink($linkName,$target,$userName);		
 			}
 		}	
@@ -194,7 +200,8 @@ class SharingStructureAvid
 			if($sharingMember->name!=$owner->name && $sharingMember->name!=$user->name)
 			{
 				$linkName="$shared/{$sharingMember->name}";
-				$target="{$sharingMember->homeFolder}/Avid Shared Projects/$projectCopy/Shared/{$sharingMember->name}";
+				$target="{$sharingMember->homeFolder}/Avid Shared Projects/".
+                                        "$projectCopy/Shared/{$sharingMember->name}";
 				SharingOperations::verifySymLink($linkName,$target,$user->name);		
 			}
 		}		
@@ -219,21 +226,17 @@ class SharingStructureAvid
 				if(is_file($source))
 				{
 					if(SharingFolders::endsWith($entry,'.avp'))
-					{
-                                                if(filesize($source)>0)
-                                                        self::copyAvidProjectFile($memberName,$source,$target);
-					}
-					else if(SharingFolders::endsWith($entry,'.avs'))
-					{
                                                 self::copyAvidProjectFile($memberName,$source,$target);
-					}
+					else if(SharingFolders::endsWith($entry,'.avs'))
+                                                self::copyAvidProjectFile($memberName,$source,$target);
 				}
 			}
 			closedir($handle);
 		}
 		else
 		{
-			syslog_notice("Cannot open folder '$ownerProjectFolder' for copying .avp and .avs files");
+			syslog_notice("Cannot open folder '$ownerProjectFolder'".
+                                " for copying .avp and .avs files");
 		}
 	}
 
@@ -294,7 +297,8 @@ class SharingStructureAvid
 					if(!is_dir($target))
 					{
 						unlink($memberFolder);
-						syslog_notice("Removed '$memberFolder'; target '$target' is not a valid link target");
+						syslog_notice("Removed '$memberFolder'; ".
+                                                        "target '$target' is not a valid link target");
 					}
 					//the link must point to member project folder
 					$targetHomeFolder=self::homeFolderSegmentForLinkTarget($target);
@@ -302,7 +306,8 @@ class SharingStructureAvid
 					{
 						if(file_exists($memberFolder)) unlink($memberFolder);
 						syslog_notice("Removed '$memberFolder'; in target '$target' ".
-							"the home folder '$targetHomeFolder' is not the home folder for a group member");
+							"the home folder '$targetHomeFolder'".
+                                                        " is not the home folder for a group member");
 					}
 				}	
 			}			
@@ -330,7 +335,8 @@ class SharingStructureAvid
 					if(!is_dir($target))
 					{
 						unlink($memberFolder);
-						syslog_notice("Removed '$memberFolder'; target '$target' is not a valid link target");
+						syslog_notice("Removed '$memberFolder'; ".
+                                                        "target '$target' is not a valid link target");
 					}
 
 					//the link must point to member project folder
@@ -339,7 +345,8 @@ class SharingStructureAvid
 					{
 						if(file_exists($memberFolder)) unlink($memberFolder);
 						syslog_notice("Removed '$memberFolder'; in target '$target' ".
-							"the home folder '$targetHomeFolder' is not the home folder for a group member");
+							"the home folder '$targetHomeFolder'".
+                                                        " is not the home folder for a group member");
 					}
 				}	
 			}			
