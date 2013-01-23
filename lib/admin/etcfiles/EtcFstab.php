@@ -128,17 +128,27 @@ class EtcFsTab
 				$fileSystemLine=preg_replace('/\t/',' ',$fileSystemLine);
 				$fileSystemLine=trim($fileSystemLine);
 				$fileSystemLineFields=explode(' ',$fileSystemLine);
-				$fileSystem=new EtcOneFileSystem();
-				$fileSystem->lineNumber=$fileSystemLineFields[0];
-				$fileSystem->line=$fileSystemLineOriginal;
-				$fileSystem->_1_fs_spec=$fileSystemLineFields[1];
-				$fileSystem->_2_fs_file=$fileSystemLineFields[2];
-				$fileSystem->_3_fs_vfstype=$fileSystemLineFields[3];
-				$fileSystem->_4_fs_mntops_csv=$fileSystemLineFields[4];
-				$fileSystem->_4_fs_mntops=explode(',',$fileSystemLineFields[4]);
-				$fileSystem->_5_fs_freq=$fileSystemLineFields[5];
-				$fileSystem->_6_fs_passno=$fileSystemLineFields[6];
-				$fileSystems[]=$fileSystem;
+                                if(count($fileSystemLineFields)<7)
+                                {
+                                        echo "warning, cannot parse line ".$fileSystemLineFields[0].
+                                                "in /etc/fstab: '$fileSystemLine'";
+                                        echo "number of fields is ".count($fileSystemLineFields).
+                                                "expected at least 7 fields";
+                                }
+                                else
+                                {
+				        $fileSystem=new EtcOneFileSystem();
+				        $fileSystem->lineNumber=$fileSystemLineFields[0];
+				        $fileSystem->line=$fileSystemLineOriginal;
+				        $fileSystem->_1_fs_spec=$fileSystemLineFields[1];
+				        $fileSystem->_2_fs_file=$fileSystemLineFields[2];
+				        $fileSystem->_3_fs_vfstype=$fileSystemLineFields[3];
+				        $fileSystem->_4_fs_mntops_csv=$fileSystemLineFields[4];
+				        $fileSystem->_4_fs_mntops=explode(',',$fileSystemLineFields[4]);
+				        $fileSystem->_5_fs_freq=$fileSystemLineFields[5];
+				        $fileSystem->_6_fs_passno=$fileSystemLineFields[6];
+				        $fileSystems[]=$fileSystem;
+                                }
 			}
 		}
 		return $fileSystems;
