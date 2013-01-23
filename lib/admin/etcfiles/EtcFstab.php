@@ -122,7 +122,7 @@ class EtcFsTab
 			//remove line number
 			$fileSystemLineOriginal=trim($fileSystemLineOriginal);
 			$fileSystemLineOriginal=$this->removeLineNumber($fileSystemLineOriginal);
-			if($fileSystemLine!='')
+			if(trim($fileSystemLine)!='')
 			{
 				$fileSystemLine=preg_replace('/ +/',' ',$fileSystemLine);
 				$fileSystemLine=preg_replace('/\t/',' ',$fileSystemLine);
@@ -131,9 +131,9 @@ class EtcFsTab
                                 if(count($fileSystemLineFields)<7)
                                 {
                                         echo "warning, cannot parse line ".$fileSystemLineFields[0].
-                                                "in /etc/fstab: '$fileSystemLine'";
+                                                "in /etc/fstab: '$fileSystemLine'; ";
                                         echo "number of fields is ".count($fileSystemLineFields).
-                                                "expected at least 7 fields";
+                                                "expected at least 7 fields\n";
                                 }
                                 else
                                 {
