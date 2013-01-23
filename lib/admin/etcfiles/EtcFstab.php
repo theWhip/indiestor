@@ -122,7 +122,7 @@ class EtcFsTab
 			//remove line number
 			$fileSystemLineOriginal=trim($fileSystemLineOriginal);
 			$fileSystemLineOriginal=$this->removeLineNumber($fileSystemLineOriginal);
-			if(trim($fileSystemLine)!='')
+			if(trim($fileSystemLineOriginal)!='')
 			{
 				$fileSystemLine=preg_replace('/ +/',' ',$fileSystemLine);
 				$fileSystemLine=preg_replace('/\t/',' ',$fileSystemLine);
