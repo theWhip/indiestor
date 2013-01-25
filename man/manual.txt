@@ -49,7 +49,7 @@ Once inside the project bins are easily exchanged via the 'sharing tree' - a net
 As a sanity check indiestor is designed to reject .avid trigger requests for folders without valid .avp files.
 
 .B NB:
-In indiestor  v.1.0  users can only be a member of one group at a time. All users in a group will share all projects. The project owner can unshare a project by removing the share trigger.  For example, by renaming the folder "mydocumentary.avid" to "mydocumentary", the project owner will have removed the ".avid" trigger. This will cause indiestor to unshare the "mydocumentary" project. When unsharing a project, Indiestor will archive the members' work in the project owner's folder in the "Archived" subfolder.
+At present  users can only be a member of one group at a time. All users in a group will share all projects. The project owner can unshare a project by removing the share trigger.  For example, by renaming the folder "mydocumentary.avid" to "mydocumentary", the project owner will have removed the ".avid" trigger. This will cause indiestor to unshare the "mydocumentary" project. When unsharing a project, Indiestor will archive the members work in the project owner's folder in the "Archived" subfolder.
 .SH OPTIONS
 There are seven main entities on which indiestor operates:
 
