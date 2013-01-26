@@ -26,8 +26,8 @@ case "$1" in
 		adduser --system --group indienotify
 	fi
 	/etc/init.d/incron restart
-	/etc/init.d/nmbd restart
-	/etc/init.d/smbd restart
+	nmbd restart
+	smbd restart
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
