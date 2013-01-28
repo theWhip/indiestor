@@ -281,6 +281,8 @@ The following global and share entries are required:
  max xmit = 65536
  socket options = TCP_NODELAY SO_RCVBUF=32768 SO_SNDBUF=104857
  log level = 1
+ nt acl support = no
+ store dos attributes= no
 
 .B [indieSTOR]
  comment = IndieSTOR home directories 
@@ -345,7 +347,18 @@ NB: Windows users must to disable UAC.
 
 .B Mixed Mac and Windows projects
 
-At this time project sharing does not work in mixed Mac and Windows environments. Projects must stay on one side or another to avoid permission and media offline issues.
+This is possible after some adjustments in 0.8.1.4.
+
+Users must be aware of a few Avid MC caveats that are beyond the control of indiestor.
+
+The first note relates to a fundamental difference in the way Windows and Mac clients map network drives.
+
+While Windows likes to use drive letters (eg. indiestor mounted as Z:), OS X uses the UNC path (drives should mount as 'indiestor'). In practice when media is imported by an editor on the opposing OS, it will initially appear offline. You can see this by looking at the assets 'drive' path. Luckily once a bin is closed (then re-opened), Avid usually refreshes the path by itself. Likewise, closing and opening the whole project will usually refresh all bins.
+
+.B NB:
+Interestingly MC 6 seems to deal with UNC paths properly. For this reason AMA volumes made available to the group using the '.shared' trigger will only work in mixed environments where MC6 is used on the PC side.
+
+The second is the visibility of Mac 'resource' folders in Windows MC projects. Even when these resource forks are hidden using the 'veto' samba directive (which does hide them to Explorer) they are seen by the Windows MC project browser.
 
 .B Enable Avid "All Drives":
 this option must be enabled on all client Media Composer workstations, since it enables Media Composer to see NAS based network mounts. You can toggle this on/off by using the console in Media Composer. Tools > Console and type "alldrives 1".
