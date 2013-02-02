@@ -273,36 +273,53 @@ type authentication.
 The following global and share entries are required:
 
 .B [global]
+ # The following parameters are required for the correct function of indiestor
  security = user
  unix extensions = no
- aio write size = 1
- aio read size = 1
- write cache size = 262144
- max xmit = 65536
- socket options = TCP_NODELAY SO_RCVBUF=32768 SO_SNDBUF=104857
- log level = 1
  nt acl support = no
  store dos attributes= no
+ log level = 1
+ # The following 3  parameters offer a SMB tuning that should perform well in
+ # most cases. If you experience issues, you  may opt to commend these lines
+ # out, or begin your own custom tuning to suit.
+ socket options = TCP_NODELAY IPTOS_LOWDELAY SO_SNDBUF=32768 SO_RCVBUF=32768
+ max xmit = 65536
+ write cache size = 131072
 
-.B [indieSTOR]
- comment = IndieSTOR home directories 
+.B [indiestor-win]
+ comment = indiestor home directories for Windows clients
  browseable = no
  writeable = yes
  path = %H
- hide files = /.*/DesktopFolderDB/TrashFor%m/resource.frk/
- veto = /.*/DesktopFolderDB/TrashFor%m/resource.frk/
- comment = IndieSTOR home directories
+ veto files = /resource.frk/
+ hide files = /.DS_Store/
  follow symlinks = yes
  valid users = @indiestor-users
  wide links = yes
  map read only = permissions
- inherit permissions = yes
+ inherit permissions = no
  force create mode = 0750
  force directory mode = 0750
  create mask = 0750
  directory mask = 0750
  force group = indiestor-users
 
+.B [indiestor-mac]
+ comment = indiestor home directories for OS X clients
+ browseable = no
+ writeable = yes
+ path = %H
+ hide files = /Thumbs.db/
+ follow symlinks = yes
+ valid users = @indiestor-users
+ wide links = yes
+ map read only = permissions
+ inherit permissions = no
+ force create mode = 0750
+ force directory mode = 0750
+ create mask = 0750
+ directory mask = 0750
+ force group = indiestor-users
 
 .RE
 .I /var/lib/samba
@@ -330,7 +347,7 @@ Quota file in the root of the filesystem for the volume for which the quota syst
 .B Connecting Mac clients to indiestor:
 Users should switch to Finder and use Command + K or click Go > connect to server:
 
-smb://<IP-ADDRESS-or-HOST-NAME>/indiestor
+smb://<IP-ADDRESS-or-HOST-NAME>/indiestor-mac
 
 Mac users on 10.6.8 (Snow Leopard) or newer are advised to use the replacement Thursby Dave SMB client to satisfy the needs of Avid Media Composer. We strongly recommend you test this before purchasing Dave. A trail is available at the Thursby site.
 
@@ -339,7 +356,7 @@ For windows use the built in CIFS/SMB client. Right click on "Computer" then cho
 
 All users in a group should agree to map mounts to the same drive letter using the following folder path:
 
-\e\e<IP-ADDRESS-or-HOST-NAME>\eindiestor
+\e\e<IP-ADDRESS-or-HOST-NAME>\eindiestor-win
 
 The 'Connect using different credentials' is handy if windows signs you in automatically.
 
@@ -347,21 +364,18 @@ NB: Windows users must to disable UAC.
 
 .B Mixed Mac and Windows projects
 
-This is possible after some adjustments in 0.8.1.4.
+This is now possible after some adjustments. Be aware that Windows and Mac clients must connect to the appropriate share point for their OS  -as desribed above.
 
-Users must be aware of a few Avid MC caveats that are beyond the control of indiestor.
+The following caveats must also be noted:
 
-The first note relates to a fundamental difference in the way Windows and Mac clients map network drives.
+There is a fundamental difference in the way Windows and Mac clients map network drives. While Windows likes to use drive letters (eg. indiestor mounted as Z:), OS X uses the UNC path (drives should mount as 'indiestor-mac').
 
-While Windows likes to use drive letters (eg. indiestor mounted as Z:), OS X uses the UNC path (drives should mount as 'indiestor'). In practice when media is imported by an editor on the opposing OS, it will initially appear offline. You can see this by looking at the assets 'drive' path. Luckily once a bin is closed (then re-opened), Avid usually refreshes the path by itself. Likewise, closing and opening the whole project will usually refresh all bins.
+In practice when media is imported by an editor on the opposing OS, it will initially appear offline. You can see this by looking at the 'drive' path of the offline media in a bin. Luckily once a bin is closed (then re-opened), Avid refreshes the path by itself. Likewise, closing and opening the whole project will usually refresh all bins.
 
-.B NB:
-Interestingly MC 6 seems to deal with UNC paths properly. For this reason AMA volumes made available to the group using the '.shared' trigger will only work in mixed environments where MC6 is used on the PC side.
-
-The second is the visibility of Mac 'resource' folders in Windows MC projects. Even when these resource forks are hidden using the 'veto' samba directive (which does hide them to Explorer) they are seen by the Windows MC project browser.
+For the same reason, AMA volumes cannot be shared using the '.shared' trigger on a mixed platform project.
 
 .B Enable Avid "All Drives":
-this option must be enabled on all client Media Composer workstations, since it enables Media Composer to see NAS based network mounts. You can toggle this on/off by using the console in Media Composer. Tools > Console and type "alldrives 1".
+this option must be enabled on all client Media Composer workstations, since it enables Media Composer to see NAS based network mounts. You can toggle this on/off by using the console in Media Composer. Tools > Console and type "alldrives 1". In the event that this option is forgotton, media will simply remain offline.
 
 The console should respond with:
  "All drives will be viewed as media drives"
