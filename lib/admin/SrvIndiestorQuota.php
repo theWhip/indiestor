@@ -11,10 +11,10 @@
 
 requireLibFile('admin/ShellCommand.php');
 
-define('VOLUME_QUOTA_FILE','/etc/indiestor.quota');
+define('VOLUME_QUOTA_FILE','/srv/indiestor.quota');
 define('VOLUME_QUOTA_TMP_FILE_PREFIX','/tmp/indiestor.quota');
 
-class EtcIndiestorQuota
+class SrvIndiestorQuota
 {
 
 	//----------------------------------------------
