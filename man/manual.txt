@@ -24,9 +24,9 @@ indiestor - Project & MXF media sharing for Avid Media Composer
 .SH DESCRIPTION
 indiestor provides a complete OpenSource solution for Avid project & MXF/AMA media sharing. It takes care of the management of volumes, groups and users (homes, passwords, quotas). Incron is used to trigger the sharing of projects and the patching of Avid MXF media folders.
 
-As such there is no requirement for a convoluted client side application. In turn, this ensures a shallow learning curve for editors.
+As such there is no requirement for a client side application, which reduces the learning curve for editors.
 
-To trigger sharing the editor must rename any folder on the top level of his/her home directory accordingly:
+To trigger sharing the editor must name a new project or rename an existing project/media directory as follows:
 
 For avid shared projects use:
 .B
@@ -36,16 +36,20 @@ For AMA volumes, legacy style FCP projects or anything else use:
 .B
  <foldername>.shared
 
+Be aware that indiestor only listens to share trigger requests on the top level of each home directory. You cannot nest shares within folders or sub folders.
+
 In the case of avid shares, upon detecting the
 .B .avid
-trigger indiestor will automatically create a
+trigger, indiestor will automatically create and distribute a
 .B .copy
-version of the project for all collaborating editors in the group. At this point the relevant MXF media is automatically patched (read only) to the other users of the group.
+version of the project to each member of the group. Media sharing is automatically enabled as soon as media exists in /USER/Avid MediaFiles/MXF.
 
-For each project bins can be easily exchanged between editors via a network of "shared" folders, which read-only to group permission for protection. Upon opening another editors bin it is advised that editors simply drag clips and sequences to their own bins for modification/IN/OUT etc.
+Once inside the project bins are easily exchanged via the 'sharing tree' - a network of folders, which are offered read-only to group members. Upon opening another editors bin we recommend that editors simply drag clips and sequences to their own bins for modification/IN/OUT etc.
+
+As a sanity check indiestor is designed to reject .avid trigger requests for folders without valid .avp files.
 
 .B NB:
-In indiestor  v.1.0  users can only be a member of one group at a time. All users in a group will share all projects. The project owner can unshare a project by removing the share trigger.  For example, by renaming the folder "mydocumentary.avid" to "mydocumentary", the project owner will have removed the ".avid" trigger. This will cause indiestor to unshare the "mydocumentary" project. When unsharing a project, Indiestor will archive the members' work in the project owner's folder in the "Archived" subfolder.
+At present  users can only be a member of one group at a time. All users in a group will share all projects. The project owner can unshare a project by removing the share trigger.  For example, by renaming the folder "mydocumentary.avid" to "mydocumentary", the project owner will have removed the ".avid" trigger. This will cause indiestor to unshare the "mydocumentary" project. When unsharing a project, Indiestor will archive the members work in the project owner's folder in the "Archived" subfolder.
 .SH OPTIONS
 There are seven main entities on which indiestor operates:
 
@@ -269,30 +273,53 @@ type authentication.
 The following global and share entries are required:
 
 .B [global]
+ # The following parameters are required for the correct function of indiestor
  security = user
  unix extensions = no
- aio read size = 1
- aio write size = 1
+ nt acl support = no
+ store dos attributes= no
+ log level = 1
+ # The following 3  parameters offer a SMB tuning that should perform well in
+ # most cases. If you experience issues, you  may opt to commend these lines
+ # out, or begin your own custom tuning to suit.
+ socket options = TCP_NODELAY IPTOS_LOWDELAY SO_SNDBUF=32768 SO_RCVBUF=32768
+ max xmit = 65536
+ write cache size = 131072
 
-.B [indieSTOR]
- comment = IndieSTOR home directories 
+.B [indiestor-win]
+ comment = indiestor home directories for Windows clients
  browseable = no
  writeable = yes
  path = %H
- hide files = /.*/DesktopFolderDB/TrashFor%m/resource.frk/
- veto = /.*/DesktopFolderDB/TrashFor%m/resource.frk/
- comment = IndieSTOR home directories
+ veto files = /resource.frk/
+ hide files = /.DS_Store/
  follow symlinks = yes
  valid users = @indiestor-users
  wide links = yes
  map read only = permissions
- inherit permissions = yes
+ inherit permissions = no
  force create mode = 0750
  force directory mode = 0750
  create mask = 0750
  directory mask = 0750
  force group = indiestor-users
 
+.B [indiestor-mac]
+ comment = indiestor home directories for OS X clients
+ browseable = no
+ writeable = yes
+ path = %H
+ hide files = /Thumbs.db/
+ follow symlinks = yes
+ valid users = @indiestor-users
+ wide links = yes
+ map read only = permissions
+ inherit permissions = no
+ force create mode = 0750
+ force directory mode = 0750
+ create mask = 0750
+ directory mask = 0750
+ force group = indiestor-users
 
 .RE
 .I /var/lib/samba
@@ -320,7 +347,7 @@ Quota file in the root of the filesystem for the volume for which the quota syst
 .B Connecting Mac clients to indiestor:
 Users should switch to Finder and use Command + K or click Go > connect to server:
 
-smb://<IP-ADDRESS-or-HOST-NAME>/indiestor
+smb://<IP-ADDRESS-or-HOST-NAME>/indiestor-mac
 
 Mac users on 10.6.8 (Snow Leopard) or newer are advised to use the replacement Thursby Dave SMB client to satisfy the needs of Avid Media Composer. We strongly recommend you test this before purchasing Dave. A trail is available at the Thursby site.
 
@@ -329,7 +356,7 @@ For windows use the built in CIFS/SMB client. Right click on "Computer" then cho
 
 All users in a group should agree to map mounts to the same drive letter using the following folder path:
 
-\e\e<IP-ADDRESS-or-HOST-NAME>\eindiestor
+\e\e<IP-ADDRESS-or-HOST-NAME>\eindiestor-win
 
 The 'Connect using different credentials' is handy if windows signs you in automatically.
 
@@ -337,10 +364,18 @@ NB: Windows users must to disable UAC.
 
 .B Mixed Mac and Windows projects
 
-At this time project sharing does not work in mixed Mac and Windows environments. Projects must stay on one side or another to avoid permissions and media offline issues.
+This is now possible after some adjustments. Be aware that Windows and Mac clients must connect to the appropriate share point for their OS  -as desribed above.
+
+The following caveats must also be noted:
+
+There is a fundamental difference in the way Windows and Mac clients map network drives. While Windows likes to use drive letters (eg. indiestor mounted as Z:), OS X uses the UNC path (drives should mount as 'indiestor-mac').
+
+In practice when media is imported by an editor on the opposing OS, it will initially appear offline. You can see this by looking at the 'drive' path of the offline media in a bin. Luckily once a bin is closed (then re-opened), Avid refreshes the path by itself. Likewise, closing and opening the whole project will usually refresh all bins.
+
+For the same reason, AMA volumes cannot be shared using the '.shared' trigger on a mixed platform project.
 
 .B Enable Avid "All Drives":
-this option must be enabled on all client Media Composer workstations, since it enables Media Composer to see NAS based network mounts. You can toggle this on/off by using the console in Media Composer. Tools > Console and type "alldrives 1".
+this option must be enabled on all client Media Composer workstations, since it enables Media Composer to see NAS based network mounts. You can toggle this on/off by using the console in Media Composer. Tools > Console and type "alldrives 1". In the event that this option is forgotton, media will simply remain offline.
 
 The console should respond with:
  "All drives will be viewed as media drives"
@@ -356,31 +391,10 @@ You can find the complete list error messages triggered by indiestor including t
 
 .B /usr/share/indiestor/admin/arg-definitions/noticeDefinitions.conf
 
+Further diagnostic information can be found on the Technical FAQs page at:
 
+.B http://www.indiestor.com/documentation/getting-started/admin-faq
 
-.B ISSUE: Avid Exception Error
-- EXCEPTION: DISK_ACCESS_ERROR
-
-.B FIX:
-Occurs within the Media Composer application when attempting to move a bin into another users "shared" folder. Due to permissions write is not permitted. In both MC 5.0.x and 5.5.x this has been observed to cause a segmentation fault (application crash), usually some minutes after the event. Essentially there is no direct fault with indiestor, but documented here for sanity. MC 6.x and newer appears to be robust to this occurrence.
-
-
-
-.B ISSUE: super indiestor -
-Permission denied to user username
-
-.B FIX:
-User is must be added to /etc/super.tab as described above in the files section.
-
-.B ISSUE: Stale SMB Mount Points
--  indiestor-1 (etc)
-
-.B FIX:
-This issue is a Mac only.
-
-Occasionally Dave will connect mount points with a number appended to the name. This issue is caused by "stale" mount points and relates directly to Thursby Dave. Downstream of Dave this can cause issues with the indiestor workflow, particularly with ".shared" AMA volumes, as the path becomes inconsistent between users. In the event of stale mount points simply delete the detached "indiestor" mount point folder from /Volumes/ (This task must NOT be performed while connected)
-
-See: http://www.thursby.com/forum/viewtopic.php?f=10&t=262
 .SH AUTHOR
 Alex Gardiner (alex@indiestor.com) & Erik Poupaert (erik@sankuru.biz)
 
