@@ -1,0 +1,24 @@
+### BEGIN INIT INFO
+# Provides:          indiestor-quota
+# Required-Start:
+# Required-Stop:
+# Default-Start:
+# Default-Stop:
+### END INIT INFO
+
+case "$1" in
+  start)
+    echo "Starting Indiestor Quotas from /srv/indiestor.quota"
+    indiestor --volume <arg> -quota-on
+    ;;
+  stop)
+    echo "Stopping Indiestor Quotas from /srv/indiestor.quota"
+    indiestor --volume <arg> -quota-off
+    ;;
+  *)
+    echo "Usage: /etc/init.d/indiestor-quota {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
