@@ -8,6 +8,8 @@
         Licensed under the GPL
 */
 
+requireLibFile('admin/etcfiles/EtcIndiestorQuota.php');
+
 class Volume extends EntityType
 {
 
@@ -19,6 +21,7 @@ class Volume extends EntityType
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyOnForDevice($device);
 		DeviceQuota::switchOn($device);
+                EtcIndiestorQuota::addVolume($device);
 	}
 
 	static function quotaOff($commandAction)
@@ -29,6 +32,7 @@ class Volume extends EntityType
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyOffForDevice($device);
 		DeviceQuota::switchOff($device);
+                EtcIndiestorQuota::removeVolume($device);
 	}
 
 	static function quotaRemove($commandAction)
@@ -39,6 +43,7 @@ class Volume extends EntityType
 		self::checkValidCharactersInVolumeName($device);
 		self::checkIfQuotaAlreadyRemovedForDevice($device);
 		DeviceQuota::remove($device);
+                EtcIndiestorQuota::removeVolume($device);
 	}
 
 	static function checkIfQuotaPackageInstalled()
