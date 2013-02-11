@@ -6,14 +6,30 @@
 # Default-Stop:
 ### END INIT INFO
 
+VOLUMES_WITH_QUOTA=/srv/indiestor.quota
+
 case "$1" in
   start)
-    echo "Starting Indiestor Quotas from /srv/indiestor.quota"
-    indiestor --volume <arg> -quota-on
+    echo "Starting Indiestor quota listed in $VOLUMES_WITH_QUOTA"
+    if [ -f $VOLUMES_WITH_QUOTA ]; then
+	while read volume; do 
+		echo "Starting quota for volume $volume"
+		indiestor --volume $volume -quota-on 
+	done < $VOLUMES_WITH_QUOTA
+    else
+      	echo "no volumes with quota"
+    fi
     ;;
   stop)
-    echo "Stopping Indiestor Quotas from /srv/indiestor.quota"
-    indiestor --volume <arg> -quota-off
+    echo "Stopping Indiestor quota listed in $VOLUMES_WITH_QUOTA"
+    if [ -f $VOLUMES_WITH_QUOTA ]; then
+	while read volume; do
+		echo "Stopping quota for volume $volume"
+		quotaoff --format=vfsold -u $volume 
+	done < $VOLUMES_WITH_QUOTA
+    else
+      	echo "no volumes with quota"
+    fi
     ;;
   *)
     echo "Usage: /etc/init.d/indiestor-quota {start|stop}"
@@ -22,3 +38,4 @@ case "$1" in
 esac
 
 exit 0
+
