@@ -10,6 +10,6 @@
 source ./config-machine.sh
 distribution=ubuntu
 distrib_version=precise
-package_version=0.8.1.3
+package_version=0.8.1.4
 architecture=amd64
 
