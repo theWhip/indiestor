@@ -255,6 +255,14 @@ Must list the indienotify user. The indienotify user is the user for which incro
 .RS
 The incron table for the indienotify system user. The indiestor and indiestor-inotify commands regenerate this table as needed as a consequence of admin actions or as a consequence of changes in the filesystem monitored. In case of issues, use the --users -regenerate-incrontab option to regenerate this file. You can show the content of the file with the option --users -show-incrontab.
 .RE
+.I /etc/init.d/indiestor-quota
+.RS
+This init.d script keeps quotas switched on following a system restart. It can be manually started and stopped using "sudo /etc/init.d/indiestor-quota start/stop"
+.RE
+.I /srv/indiestor.quota
+.RS
+Here we maintain a list of volumes with quotas active, this is linked to /etc/init.d/indiestor-quota
+.RE
 .I /etc/super.tab
 .RS
 This file must have an entry for the indiestor and indiestor-inotify command ensuring that the indiewheel group can operate the indiestor command as root and the indienotify user to operate the indiestor-inotify command as root.
