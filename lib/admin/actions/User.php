@@ -589,6 +589,7 @@ class User extends EntityType
 		{
 			//reshare group
 			$userName=ProgramActions::$entityName;
+                        EtcGroup::reset();
 			$group=EtcGroup::instance()->findGroupForUserName($userName);
 			if($group!=null) self::reshareGroup($group->name);
 			ActionEngine::regenerateIncrontab();			
