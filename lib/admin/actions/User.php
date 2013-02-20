@@ -279,6 +279,7 @@ class User extends EntityType
 
 	static function reshareGroup($groupName)
 	{
+                EtcGroup::reset();
 		$group=EtcGroup::instance()->findGroup($groupName);
 		if($group!=null)
 		{
