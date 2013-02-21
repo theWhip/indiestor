@@ -365,6 +365,7 @@ class User extends EntityType
 		SharingStructureAvid::reshare($groupName,$members); //for purging invalid symlinks
 		//default
 		SharingStructureDefault::purgeProjectLinks(array($user));
+                SharingStructureMXF::purgeAvidForUser($user,array()); //remove MXF folders
 	}
 
 	static function unsetGroup($commandAction)

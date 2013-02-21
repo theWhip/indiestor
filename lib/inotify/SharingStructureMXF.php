@@ -130,10 +130,13 @@ class SharingStructureMXF
 			if(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
 			{
 				//file could have been deleted already by a concurrent process
-				if(file_exists($linkName)) unlink($linkName);
-				syslog_notice("Removed '$linkName'; in target '$target' ".
+				if(file_exists($linkName))
+                                {
+                                        unlink($linkName);
+        				syslog_notice("Removed '$linkName'; in target '$target' ".
 					"the home folder '$targetHomeFolder' is not the home folder for a group member");
-				return;
+        				return;
+                                }
 			}
 
 		}	
