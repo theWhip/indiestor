@@ -59,6 +59,7 @@ requireLibFile("admin/DefinitionFile.php");
 requireLibFile("admin/NoticeDefinitions.php");
 requireLibFile("inotify/SharingStructureDefault.php");
 requireLibFile("inotify/SharingStructureAvid.php");
+requireLibFile("inotify/SharingStructureMXF.php");
 
 //check that the user is root
 $processUser = posix_getpwuid(posix_geteuid());

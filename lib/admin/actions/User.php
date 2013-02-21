@@ -286,6 +286,7 @@ class User extends EntityType
 			$members=EtcPasswd::instance()->findUsersForEtcGroup($group);
 			SharingStructureDefault::reshare($group->name,$members);
 			SharingStructureAvid::reshare($group->name,$members);
+			SharingStructureMXF::reshare($members);
 		}
 	}
 
