@@ -48,16 +48,21 @@ cat $distribs_to_repopulate | sort | uniq > $distribs_to_repopulate.tmp
 mv $distribs_to_repopulate.tmp $distribs_to_repopulate
 rm -f $distribs_to_repopulate.tmp
 
+echo "deleting obsolete distributions"
 #distribs -> delete
 while read distrib; do
+        echo "deleting distribution $user_repository_root/$distrib"
         ssh -n $user_machine rm -rf $user_repository_root/$distrib
 done < $distribs_to_delete
 
+echo "creating new distributions"
 #distribs -> create
 while read distrib; do
+        echo "creating new distribution $user_repository_root/$distrib"
         ssh -n $user_machine mkdir -p $user_repository_root/$distrib/{config,incoming}
 done < $distribs_to_create
 
+echo "repopulating existing distributions"
 #distribs -> repopulate
 while read distrib; do
         rm -rf /tmp/$distrib
@@ -83,11 +88,12 @@ while read distrib; do
                 #add blank line to distributions file
                echo >> /tmp/$distrib/distributions
         done < <(cat $distrib_versions_desired | grep $distrib | awk 'BEGIN{FS="/"};{ print $2 }')
- 
+
+        echo "repopulating config files for existing distribution $user_repository_root/$distrib" 
         #remove config files
          ssh -n $user_machine rm -f $user_repository_root/$distrib/config/*
-         scp /tmp/$distrib/* $user_repository_root/$distrib/config
+        echo "copying config file for $distrib"
+        scp /tmp/$distrib/* $user_machine:$user_repository_root/$distrib/config
 
 done < $distribs_to_repopulate
-
 
