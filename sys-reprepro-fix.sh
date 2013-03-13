@@ -55,7 +55,7 @@ done < $distribs_to_delete
 
 #distribs -> create
 while read distrib; do
-        ssh -n $user_machine mkdir $user_repository_root/$distrib/{config,incoming}
+        ssh -n $user_machine mkdir -p $user_repository_root/$distrib/{config,incoming}
 done < $distribs_to_create
 
 #distribs -> repopulate
