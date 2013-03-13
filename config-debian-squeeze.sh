@@ -12,4 +12,3 @@ distribution=debian
 distrib_version=squeeze
 package_version=0.8.1.5
 architecture=amd64
-

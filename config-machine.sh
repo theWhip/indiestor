@@ -8,8 +8,8 @@
 # Licensed under the GPL
 #------------------------------------------------------------
 package=indiestor
-domain=packages.indiestor.com
-user_machine=packages@$domain
-user_home_remote=/home/packages
+domain=packages-test.indiestor.com
+user_machine=packages-test@$domain
+user_home_remote=/home/packages-test
 user_repository_root=$user_home_remote/$domain/html/apt
 

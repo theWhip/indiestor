@@ -1,2 +1,2 @@
+debian/squeeze
 ubuntu/precise
-
