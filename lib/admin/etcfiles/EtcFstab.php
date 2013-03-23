@@ -167,6 +167,24 @@ class EtcFsTab
 	}
 
 	//----------------------------------------------
+	// FIND UUID FOR DEVICE
+	//----------------------------------------------
+
+	static function findUUIDforDevice($device)
+	{
+		$UUIDFiles=glob('/dev/disk/by-uuid/*');
+		foreach($UUIDFiles as $UUIDFile)
+		{
+			$deviceLocal=realpath($UUIDFile);
+			$UUID=basename($UUIDFile);
+			if($deviceLocal==$device)
+				return $UUID;
+		}
+		//not found
+		return null;
+	}
+
+	//----------------------------------------------
 	// FIND FILE SYSTEM FOR DEVICE
 	//----------------------------------------------
 	function findFileSystemForDevice($device)
@@ -175,7 +193,7 @@ class EtcFsTab
 		if($fileSystem==null)
 		{
 			//look up its UUID
-			$deviceUUID=sysquery_blkid($device);
+			$deviceUUID=self::findUUIDforDevice($device);
 			//cannot resolve UUID for this device
 			if($deviceUUID==null) return 'no-uuid';
 			$fs_spec_alt="UUID=$deviceUUID"; //alternative fs_spec

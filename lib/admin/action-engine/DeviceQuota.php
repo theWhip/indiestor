@@ -12,6 +12,7 @@ define('USER_QUOTA_FILE','quota.user');
 
 class DeviceQuota
 {
+
 	static function switchOn($device)
 	{
 		ActionEngine::failOnOpenVZ($device);
@@ -86,7 +87,8 @@ class DeviceQuota
 				ActionEngine::error('SYS_ERR_VOLUME_CANNOT_FIND_UUID',array('volume'=>$device));
 				break;
 			case 'no-filesystem-for-uuid':
-			case 'no-uuid':	
+				$etcFstab=EtcFsTab::instance();
+				$deviceUUID=$etcFstab::findUUIDforDevice($device);
 				ActionEngine::error('SYS_ERR_VOLUME_CANNOT_FIND_VOLUME_NOR_UUID',
 					array('volume'=>$device,'uuid'=>$deviceUUID));
 				break;
