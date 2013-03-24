@@ -22,20 +22,9 @@ if [ "$version" = "" ]; then
 	exit
 fi
 
-#replace version in default config:
-cat config-default.sh | sed 's/package_version=.*/package_version='$version'/' > config.tmp
-mv config.tmp config-default.sh
-chmod a+x config-default.sh
-
 #update git
 git add -A .
 git commit -a -m "$version"
 git tag -a "$version" -m "$version"
 git push origin master --tags
-
-#show
-echo '-----------------'
-echo 'config-default.sh'
-echo '-----------------'
-cat config-default.sh
 

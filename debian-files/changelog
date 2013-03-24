@@ -1,4 +1,4 @@
-=package= (=package_version=) =distrib_version=; urgency=low
+=package= (=package_version=) =distrib_release=; urgency=low
 
   * Version =package_version=
 

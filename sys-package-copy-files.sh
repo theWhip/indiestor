@@ -12,7 +12,7 @@
 #------------------------------------------------------------
 
 # load the default environment
-source ./config-default.sh
+source ./build.conf
 
 builddir=debian
 deployroot=$builddir/$package/usr
