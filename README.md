@@ -41,8 +41,8 @@ You can undo the package build and delete all package files produced with the sc
 Note that the file `sys-package-copy-files.sh` is used only by the Debian `rules` file and not meant to be started directly.
 
 5. Publish the package
-----------------------
 The repository for the distribution and its version must already have been created. If the corresponding folders and files do not yet exist, the script will fail. Execute the publication script `sys-package-publish.sh`:
+----------------------
 
         $ ./sys-package-publish.sh x.y.z.t
 
