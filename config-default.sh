@@ -10,6 +10,6 @@
 source ./config-machine.sh
 distribution=debian
 distrib_version=squeeze
-package_version=0.8.1.5
+package_version=0.8.1.6
 architecture=amd64
 
