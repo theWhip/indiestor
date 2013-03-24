@@ -21,7 +21,6 @@ fi
 echo "$package_version" > VERSION.txt
 ./sys-git-push-commit.sh "$package_version"
 ./sys-git-push-tag.sh "$package_version"
-./sys-git-push-tag.sh "$package_version"
 ./sys-package-build.sh "$package_version"
 ./sys-package-publish.sh "$package_version"
 
