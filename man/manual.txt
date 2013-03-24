@@ -392,6 +392,9 @@ This only has to be set once on each workstation.
 
 .B Media Creation Settings:
 Please take care to ensure Avid "media creation" settings reflect the use of the indiestor drive.
+
+.B User shell access restricted:
+As of 0.8.1.6 non-root indiestor created users do not have access to shell.
 .SH DIAGNOSTICS
 
 .B GENERAL DIAGNOSTIC INFORMATION:
