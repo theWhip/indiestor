@@ -28,6 +28,9 @@ scp $files $user_machine:$user_repository_root/$distribution/incoming
 echo "publishing files for ${package} ${package_version}"
 remote_command="
 cd /home/packages/packages.indiestor.com/html/apt/${distribution}
+rm -rf db
+rm -rf dists
+rm -rf pool
 reprepro -Vb . include ${distrib_release} incoming/indiestor_${package_version}_${architecture}.changes
 rm incoming/indiestor_${package_version}*
 "

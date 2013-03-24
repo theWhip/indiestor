@@ -46,11 +46,15 @@ The repository for the distribution and its version must already have been creat
 
         $ ./sys-package-publish.sh x.y.z.t
 
-6. Version update
+6. All in one go
 -----------------
-For example, version is 0.9.0.1:
+
+        $ ./sys-release.sh x.y.z.t
+
+For example, version is 0.9.0.1. `sys-release.sh` will execute:
 
         $ echo 0.9.0.1 > VERSION.txt
+        $ ./sys-git-push-commit.sh 0.9.0.1
         $ ./sys-git-push-tag.sh 0.9.0.1
         $ ./sys-package-build.sh 0.9.0.1
         $ ./sys-package-publish.sh 0.9.0.1

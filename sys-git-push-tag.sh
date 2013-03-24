@@ -23,6 +23,8 @@ if [ "$version" = "" ]; then
 fi
 
 #update git
+git tag --delete "$version" > /dev/null 2>&1
+git push --delete origin "$version" > /dev/null 2>&1
 git tag -a "$version" -m "$version"
 git push origin master --tags
 
