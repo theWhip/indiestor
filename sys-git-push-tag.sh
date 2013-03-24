@@ -23,8 +23,6 @@ if [ "$version" = "" ]; then
 fi
 
 #update git
-git add -A .
-git commit -a -m "$version"
 git tag -a "$version" -m "$version"
 git push origin master --tags
 
