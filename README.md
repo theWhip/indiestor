@@ -46,8 +46,16 @@ The repository for the distribution and its version must already have been creat
 
         $ ./sys-package-publish.sh x.y.z.t
 
+6. Version update
+-----------------
+For example, version is 0.9.0.1:
 
-6. Install the package
+        $ echo 0.9.0.1 > VERSION.txt
+        $ ./sys-git-push-tag.sh 0.9.0.1
+        $ ./sys-package-build.sh 0.9.0.1
+        $ ./sys-package-publish.sh 0.9.0.1
+
+7. Install the package
 ----------------------
 On a third user machine, the user can install the package by executing/following the procedure in `sys-user-install-indiestor.sh`. It is an example procedure for ubuntu/precise.
 
