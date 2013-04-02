@@ -84,13 +84,13 @@ class ActionEngine
 	static function isValidCharactersInVolume($volume)
 	{
 		//a valid volume may only contain the following characters 
-		return preg_match('/^[-a-z0-9_\/]*$/',$volume);
+		return preg_match('/^[-a-zA-Z0-9_\/]*$/',$volume);
 	}
 
 	static function isValidCharactersInFolderName($folder)
 	{
 		//a valid folder may only contain the following characters 
-		return preg_match('/^[-a-z0-9_\/]*$/',$folder);
+		return preg_match('/^[-a-zA-Z0-9_\/]*$/',$folder);
 	}
 
 	static function failOnOpenVZ($device)
