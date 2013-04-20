@@ -78,6 +78,8 @@ class SharingStructureAvid
 
 		#owner's archive, if it exists
 		$archived="$projectFolder/Archived";
+
+                #the owner's own archive folder
 		$archivedOwner="$archived/$userName";
 		if(!is_dir($sharedSubOwner)) 
 		{
@@ -89,6 +91,20 @@ class SharingStructureAvid
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedSubOwner);
 		SharingOperations::fixFsObjectPermissions($sharedSubOwner,"755");
 
+		#the unprotected shared subfolder
+		$sharedUnprotected="$shared/Unprotected";
+
+                #the unprotected folder
+		$archivedUnprotected="$archived/Unprotected";
+		if(!is_dir($sharedUnprotected)) 
+		{
+			if(is_dir($archivedUnprotected))
+				rename($archivedUnprotected, $sharedUnprotected);
+			else
+				if(!file_exists($sharedUnprotected)) mkdir($sharedUnprotected);
+		}
+		SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedUnprotected);
+		SharingOperations::fixFsObjectPermissions($sharedUnprotected,"775");
 
 		#avid copy 
 		$projectCopy=self::folderAvidToCopy($project);
@@ -175,6 +191,11 @@ class SharingStructureAvid
 		$sharedSubOwner="$shared/{$owner->name}";
 		$target="{$owner->homeFolder}/$project/Shared/{$owner->name}";
 		SharingOperations::verifySymLink($sharedSubOwner,$target,$user->name);		
+
+		#the link from unprotected
+		$sharedUnprotected="$shared/Unprotected";
+		$target="{$owner->homeFolder}/$project/Shared/Unprotected";
+		SharingOperations::verifySymLink($sharedUnprotected,$target,$user->name);		
 
 		#the user's own shared subfolder
 		$sharedSubUser="$shared/{$user->name}";
