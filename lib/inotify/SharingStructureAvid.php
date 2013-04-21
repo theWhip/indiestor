@@ -488,18 +488,21 @@ class SharingStructureAvid
 				$owner=$etcPasswd->findUserByName($ownerName);
 
 				//archive
+                                //this is possible, e.g. the 'Unprotected' folder
+                                if($owner!=null)
+                                {
+				        $archived="{$owner->homeFolder}/$projectPrefix.avid/Archived";
 
-				$archived="{$owner->homeFolder}/$projectPrefix.avid/Archived";
+				        if(!file_exists($archived))
+				        {
+					        mkdir($archived);
+					        SharingOperations::fixUserObjectOwnership($ownerName,$archived);
+				        }
 
-				if(!file_exists($archived))
-				{
-					mkdir($archived);
-					SharingOperations::fixUserObjectOwnership($ownerName,$archived);
-				}
-
-				$archiveSubFolder="$archived/{$user->name}";
-				rename($ownFolder,$archiveSubFolder);
-				shell_exec("chown -R $ownerName.$ownerName '$archiveSubFolder'");
+				        $archiveSubFolder="$archived/{$user->name}";
+				        rename($ownFolder,$archiveSubFolder);
+				        shell_exec("chown -R $ownerName.$ownerName '$archiveSubFolder'");
+                                }
 			}
 		}
 		//delete ASP folder
