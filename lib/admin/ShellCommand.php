@@ -134,6 +134,14 @@ class ShellCommand
 
 		$processOutput=new ProcessOutput();
 
+                //a previous command may have deleted the user's own working directory
+                if(getcwd()===FALSE)
+                {
+                        if(isset(getenv('HOME'))
+                                $processInput->workingDir=getenv('HOME');
+                        else $processInput->workingDir='/';
+                }
+
 		//open process
 		$process=proc_open($processInput->command, $descriptorSpec, $pipes,
 					$processInput->workingDir,$processInput->env);

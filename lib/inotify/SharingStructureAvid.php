@@ -500,8 +500,8 @@ class SharingStructureAvid
 				        }
 
 				        $archiveSubFolder="$archived/{$user->name}";
-				        rename($ownFolder,$archiveSubFolder);
 				        shell_exec("chown -R $ownerName.$ownerName '$archiveSubFolder'");
+				        rename($ownFolder,$archiveSubFolder);
                                 }
 			}
 		}
