@@ -139,7 +139,7 @@ class ShellCommand
                 {
                         $HOME=getenv('HOME');
                         if(!empty($HOME))
-                                $processInput->workingDir=getenv('HOME');
+                                $processInput->workingDir=$HOME;
                         else $processInput->workingDir='/';
                 }
 
