@@ -137,15 +137,9 @@ class ShellCommand
                 //a previous command may have deleted the user's own working directory
                 if(getcwd()===FALSE)
                 {
-                        $HOME=getenv('HOME');
-                        if(!empty($HOME))
-                        {
-                                //the user could even have deleted his own home directory
-                                if(is_dir($HOME))
-                                        $processInput->workingDir=$HOME;
-                                else $processInput->workingDir='/';
-                        }
-                        else $processInput->workingDir='/';
+                        chdir(getenv('HOME'));
+                        if(getcwd()===FALSE)
+                                chdir('/');
                 }
 
 		//open process
