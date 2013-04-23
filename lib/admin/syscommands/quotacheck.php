@@ -51,12 +51,12 @@ function unclusterFuckTheHorribleGnome_gvfs($mountPoint)
 		if(substr($homeFolder, 0, strlen($mountPoint)) === $mountPoint) //startsWith
 		{
 			$dirtyFuck="$homeFolder/.gvfs";
-			$errorCode=intval(shell_exec("ls $dirtyFuck 2> /dev/null; echo $?"));
+			$errorCode=intval(ShellCommand::exec("ls $dirtyFuck 2> /dev/null; echo $?"));
 			if($errorCode==2) //cannot stat the folder
 			{
 				//some folders will cannot be stat'ed too, for other reasons
-				shell_exec("umount $dirtyFuck 2> /dev/null");
-				shell_exec("chmod 755 $dirtyFuck  2> /dev/null");
+				ShellCommand::exec("umount $dirtyFuck 2> /dev/null");
+				ShellCommand::exec("chmod 755 $dirtyFuck  2> /dev/null");
 			}
 		}
 	}

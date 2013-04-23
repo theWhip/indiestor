@@ -20,7 +20,7 @@ myfile.bak
 
 function syscommand_ls($filePath)
 {
-	$output=shell_exec("ls $filePath 2> /dev/null");	
+	$output=ShellCommand::exec("ls $filePath 2> /dev/null");	
 	echo $output;
 }
 
