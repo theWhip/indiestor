@@ -137,7 +137,8 @@ class ShellCommand
                 //a previous command may have deleted the user's own working directory
                 if(getcwd()===FALSE)
                 {
-                        if(!empty(getenv('HOME'))
+                        $HOME=getenv('HOME');
+                        if(!empty($HOME))
                                 $processInput->workingDir=getenv('HOME');
                         else $processInput->workingDir='/';
                 }
