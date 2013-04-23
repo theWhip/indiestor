@@ -139,7 +139,12 @@ class ShellCommand
                 {
                         $HOME=getenv('HOME');
                         if(!empty($HOME))
-                                $processInput->workingDir=$HOME;
+                        {
+                                //the user could even have deleted his own home directory
+                                if(is_dir($HOME))
+                                        $processInput->workingDir=$HOME;
+                                else $processInput->workingDir='/';
+                        }
                         else $processInput->workingDir='/';
                 }
 
