@@ -8,7 +8,7 @@ Homepage: http://indiestor.com
 
 Package: indiestor
 Architecture: all
-Depends: incron, php5-cli, quotatool, super, samba, samba-common-bin
+Depends: incron, php5-cli, quotatool, super, samba, samba-common-bin, acl
 Replaces: incron, super
 Description: indiestor - Project & MXF media sharing for Avid Media Composer
   indiestor  provides  a complete open source solution for Avid project &
