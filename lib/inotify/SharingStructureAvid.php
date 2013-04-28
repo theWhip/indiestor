@@ -109,7 +109,8 @@ class SharingStructureAvid
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedUnprotected);
 		SharingOperations::fixFsObjectPermissions($sharedUnprotected,"775");
                 $isGroupName='is_'.$groupName;
-                shell_exec("setfacl -d -m g:$isGroupName:rwX");
+                $facl=shell_exec("which setfacl");
+                if($facl!="") shell_exec("setfacl -d -m g:$isGroupName:rwX 2> /dev/null");
 
 		#avid copy 
 		$projectCopy=self::folderAvidToCopy($project);
