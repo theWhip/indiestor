@@ -23,6 +23,7 @@ class DFFileSystem
 	var $device=null;
 	var $type=null;
 	var $quotaYN=null;
+        var $aclYN=null;
 	var $storageGB=null;
 	var $usedGB=null;
 	var $availableGB=null;
@@ -86,6 +87,10 @@ function sysquery_df()
 				else if($quotaEnabled===false) $dfFileSystem->quotaYN='N';
 				else $dfFileSystem->quotaYN='?'; 
 			}
+
+                        //check ACL
+                        $acl=ShellCommand::query("mount | grep {$dfFileSystem->device} | grep acl");
+                        if($acl=="") $dfFileSystem->aclYN='N'; else $dfFileSystem->aclYN='Y';
 
 			$dfFileSystems[$dfFileSystem->device]=$dfFileSystem;
 		}
