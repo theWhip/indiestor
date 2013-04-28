@@ -101,10 +101,15 @@ class SharingStructureAvid
 			if(is_dir($archivedUnprotected))
 				rename($archivedUnprotected, $sharedUnprotected);
 			else
-				if(!file_exists($sharedUnprotected)) mkdir($sharedUnprotected);
+				if(!file_exists($sharedUnprotected)) 
+                                {
+                                        mkdir($sharedUnprotected);
+                                }
 		}
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedUnprotected);
 		SharingOperations::fixFsObjectPermissions($sharedUnprotected,"775");
+                $isGroupName='is_'.$groupName;
+                shell_exec("setfacl -d -m g:$isGroupName:rwX");
 
 		#avid copy 
 		$projectCopy=self::folderAvidToCopy($project);
