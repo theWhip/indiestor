@@ -76,9 +76,35 @@ class Volume extends EntityType
 	{
 		$etcFstab=EtcFsTab::instance();
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-		DeviceQuota::validateFileSystem($fileSystem,$device);
+		EtcFsTab::validateFileSystem($fileSystem,$device);
 		if(!$fileSystem->hasQuotaEnabled())
 			ActionEngine::warning('AE_WARN_QUOTA_ALREADY_REMOVED_FOR_VOLUME',array('volume'=>$device));
+	}
+
+	static function aclOn($commandAction)
+	{
+		$device=ProgramActions::$entityName;
+		self::checkIfAclAlreadyOnForDevice($device);
+		DeviceAcl::switchOn($device);
+	}
+
+	static function aclOff($commandAction)
+	{
+		$device=ProgramActions::$entityName;
+		self::checkIfAclAlreadyOffForDevice($device);
+		DeviceAcl::switchOff($device);
+	}
+
+	static function checkIfAclAlreadyOnForDevice($device)
+	{
+                if(DeviceAcl::isEnabled($device))            
+			ActionEngine::warning('AE_WARN_ACL_ALREADY_ON_FOR_VOLUME',array('volume'=>$device));
+	}
+
+	static function checkIfAclAlreadyOffForDevice($device)
+	{
+                if(!DeviceAcl::isEnabled($device))            
+			ActionEngine::warning('AE_WARN_ACL_ALREADY_OFF_FOR_VOLUME',array('volume'=>$device));
 	}
 }
 

@@ -19,7 +19,7 @@ class DeviceQuota
 		//don't bother if the quota is already on
 		$etcFstab=EtcFsTab::instance();
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-		self::validateFileSystem($fileSystem,$device);
+		EtcFsTab::validateFileSystem($fileSystem,$device);
               	if(sysquery_quotaon_p($device)) return;
 		$mountPoint=$fileSystem->_2_fs_file; //mount point
 		if(!$fileSystem->hasQuotaEnabled())
@@ -52,7 +52,7 @@ class DeviceQuota
 		ActionEngine::failOnOpenVZ($device);
 		$etcFstab=EtcFsTab::instance();
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-		self::validateFileSystem($fileSystem,$device);
+		EtcFsTab::validateFileSystem($fileSystem,$device);
 		$mountPoint=$fileSystem->_2_fs_file; //mount point
 		//switch off quote for mount point
 		syscommand_quotaoff($mountPoint);
@@ -62,7 +62,7 @@ class DeviceQuota
 	{
 		$etcFstab=EtcFsTab::instance();
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-		self::validateFileSystem($fileSystem,$device);
+		EtcFsTab::validateFileSystem($fileSystem,$device);
 		self::switchOff($device);
 		$mountPoint=$fileSystem->_2_fs_file; //mount point
 		if($fileSystem->hasQuotaEnabled())
@@ -77,22 +77,6 @@ class DeviceQuota
 		{
 			syscommand_rm($userQuotaFile);
 		}
-	}
-
-	static function validateFileSystem($fileSystem,$device)
-	{
-		switch($fileSystem)
-		{
-			case 'no-uuid':	
-				ActionEngine::error('SYS_ERR_VOLUME_CANNOT_FIND_UUID',array('volume'=>$device));
-				break;
-			case 'no-filesystem-for-uuid':
-				$etcFstab=EtcFsTab::instance();
-				$deviceUUID=$etcFstab::findUUIDforDevice($device);
-				ActionEngine::error('SYS_ERR_VOLUME_CANNOT_FIND_VOLUME_NOR_UUID',
-					array('volume'=>$device,'uuid'=>$deviceUUID));
-				break;
-		}		
 	}
 
 	static function endMountPointWithSlash($mountPoint)

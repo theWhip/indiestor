@@ -28,21 +28,26 @@ class EtcOneFileSystem
 	//----------------------------------------------
 	function hasQuotaEnabled()
 	{
-		return $this->hasQuotaEnabledForType('usrquota');
+		return $this->hasOptionEnabled('usrquota');
 	}
 
 	//----------------------------------------------
-	// HAS QUOTA ENABLED
+	// HAS ACL ENABLED
 	//----------------------------------------------
-	function hasQuotaEnabledForType($type)
+	function hasAclEnabled()
 	{
-		$quotaEnabled=false;
+		return $this->hasOptionEnabled('acl');
+	}
+
+	//----------------------------------------------
+	// HAS OPTION ENABLED
+	//----------------------------------------------
+	function hasOptionEnabled($type)
+	{
 		$fsOptions=$this->_4_fs_mntops;
 		foreach($fsOptions as $fsOption)
-		{
-			if($fsOption==$type) $quotaEnabled=true;
-		}
-		return $quotaEnabled;
+			if($fsOption==$type) return true;
+		return false;
 	}
 
 	//----------------------------------------------
@@ -50,8 +55,24 @@ class EtcOneFileSystem
 	//----------------------------------------------
 	function enableQuota()
 	{
-		$usrQuotaEnabled=$this->hasQuotaEnabledForType('usrquota');
-		if(!$usrQuotaEnabled) $this->_4_fs_mntops[]='usrquota';
+                $this->enableOption('usrquota');
+	}
+
+	//----------------------------------------------
+	// ENABLE ACL
+	//----------------------------------------------
+	function enableAcl()
+	{
+                $this->enableOption('acl');
+	}
+
+	//----------------------------------------------
+	// ENABLE OPTION
+	//----------------------------------------------
+	function enableOption($type)
+	{
+		$optionEnabled=$this->hasOptionEnabled($type);
+		if(!$optionEnabled) $this->_4_fs_mntops[]=$type;
 	}
 
 	//----------------------------------------------
@@ -59,22 +80,62 @@ class EtcOneFileSystem
 	//----------------------------------------------
 	function disableQuota()
 	{
+                $this->disableOption("usrquota");
+	}
+
+	//----------------------------------------------
+	// DISABLE ACL
+	//----------------------------------------------
+	function disableAcl()
+	{
+                $this->disableOption("acl");
+	}
+
+	//----------------------------------------------
+	// DISABLE OPTION
+	//----------------------------------------------
+	function disableOption($type)
+	{
 		$newMntOps=array();
 		foreach($this->_4_fs_mntops as $mntop)
 		{
 			switch($mntop)
 			{
-				case 'usrquota': break;
+				case $type: break;
 				default: $newMntOps[]=$mntop;
 			}
 		}
 		$this->_4_fs_mntops=$newMntOps;
 	}
 
+
 }
 
 class EtcFsTab
 {
+
+	//----------------------------------------------
+	// VALIDATE FILE SYSTEM
+	//----------------------------------------------
+
+	static function validateFileSystem($fileSystem,$device)
+	{
+		switch($fileSystem)
+		{
+			case 'no-uuid':	
+				ActionEngine::error('SYS_ERR_VOLUME_CANNOT_FIND_UUID',array('volume'=>$device));
+				break;
+			case 'no-filesystem-for-uuid':
+				$etcFstab=EtcFsTab::instance();
+				$deviceUUID=$etcFstab::findUUIDforDevice($device);
+				ActionEngine::error('SYS_ERR_VOLUME_CANNOT_FIND_VOLUME_NOR_UUID',
+					array('volume'=>$device,'uuid'=>$deviceUUID));
+				break;
+		}		
+	}
+
+	//----------------------------------------------
+
 	static $instance=null;	
 	var $fileSystems=null;
 

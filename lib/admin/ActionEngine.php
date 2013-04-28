@@ -17,6 +17,7 @@ requireLibFile('admin/action-engine/ActionNamingConvention.php');
 requireLibFile('admin/action-engine/UserReportRecord.php');
 requireLibFile('admin/action-engine/UserReportRecords.php');
 requireLibFile('admin/action-engine/DeviceQuota.php');
+requireLibFile('admin/action-engine/DeviceAcl.php');
 requireLibFile('admin/action-engine/Incrontab.php');
 
 class ActionEngine

@@ -38,4 +38,4 @@ rm -f /tmp/changelog.tmp
 
 # execute the build
 fakeroot -- dpkg-buildpackage -a$architecture -F -I.git
-
+rm -rf $builddir
