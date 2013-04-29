@@ -28,7 +28,7 @@ function syscommand_incrontab($incronLines)
 
 function syscommand_incrontab_list()
 {
-	return ShellCommand::exec("incrontab -u ".indiestor_INUSER()." --list");	
+	return ShellCommand::query("incrontab -u ".indiestor_INUSER()." --list");	
 }
 
 function syscommand_incrontab_show()
