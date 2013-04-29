@@ -118,6 +118,13 @@ class EtcFsTab
 	// VALIDATE FILE SYSTEM
 	//----------------------------------------------
 
+	static function isValidFileSystem($fileSystem)
+        {
+                if($fileSystem==='no-uuid' || $fileSystem==='no-filesystem-for-uuid') return false;
+                if($fileSystem===null) return false;
+                return true;
+        }
+
 	static function validateFileSystem($fileSystem,$device)
 	{
 		switch($fileSystem)

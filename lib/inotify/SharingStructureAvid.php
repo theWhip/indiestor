@@ -91,27 +91,34 @@ class SharingStructureAvid
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedSubOwner);
 		SharingOperations::fixFsObjectPermissions($sharedSubOwner,"755");
 
-		#the unprotected shared subfolder
-		$sharedUnprotected="$shared/Unprotected";
+                //figure out device
+                $device=sysquery_df_device_for_folder($shared);
+                //check if acl has been enabled
+		$etcFstab=EtcFsTab::instance();
+		$fileSystem=$etcFstab->findFileSystemForDevice($device);
+                if(EtcFsTab::isValidFileSystem($fileSystem) && $fileSystem->hasAclEnabled())
+                {
+		        #the unprotected shared subfolder
+		        $sharedUnprotected="$shared/Unprotected";
 
-                #the unprotected folder
-		$archivedUnprotected="$archived/Unprotected";
-		if(!is_dir($sharedUnprotected)) 
-		{
-			if(is_dir($archivedUnprotected))
-				rename($archivedUnprotected, $sharedUnprotected);
-			else
-				if(!file_exists($sharedUnprotected)) 
-                                {
-                                        mkdir($sharedUnprotected);
-                                }
-		}
-		SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedUnprotected);
-		SharingOperations::fixFsObjectPermissions($sharedUnprotected,"775");
-                $isGroupName='is_'.$groupName;
-                $facl=shell_exec("which setfacl");
-                if($facl!="") shell_exec("setfacl -d -m g:$isGroupName:rwX $sharedUnprotected");
-
+                        #the unprotected folder
+		        $archivedUnprotected="$archived/Unprotected";
+		        if(!is_dir($sharedUnprotected)) 
+		        {
+			        if(is_dir($archivedUnprotected))
+				        rename($archivedUnprotected, $sharedUnprotected);
+			        else
+				        if(!file_exists($sharedUnprotected)) 
+                                        {
+                                                mkdir($sharedUnprotected);
+                                        }
+		        }
+		        SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedUnprotected);
+		        SharingOperations::fixFsObjectPermissions($sharedUnprotected,"775");
+                        $isGroupName='is_'.$groupName;
+                        $facl=shell_exec("which setfacl");
+                        if($facl!="") shell_exec("setfacl -d -m g:$isGroupName:rwX $sharedUnprotected");
+                }
 		#avid copy 
 		$projectCopy=self::folderAvidToCopy($project);
 

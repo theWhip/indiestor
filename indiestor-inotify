@@ -48,6 +48,8 @@ function requireLibFile($path)
 requireLibFile("inotify/InEvent.php");
 requireLibFile("admin/etcfiles/EtcPasswd.php");
 requireLibFile("admin/etcfiles/EtcGroup.php");
+requireLibFile("admin/etcfiles/EtcFsTab.php");
+requireLibFile("admin/sysqueries/df.php");
 requireLibFile("admin/action-engine/Incrontab.php");
 requireLibFile("inotify/syslog.php");
 requireLibFile("inotify/SharingStructureDefault.php");
