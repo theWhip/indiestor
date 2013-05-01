@@ -110,7 +110,7 @@ class SharingStructureAvid
 			        if(is_dir($archivedUnprotected))
 				        rename($archivedUnprotected, $sharedUnprotected);
 			        else
-				        if(!file_exists($sharedUnprotected)) 
+				        if(!is_dir($sharedUnprotected)) 
                                         {
                                                 mkdir($sharedUnprotected);
                                         }
