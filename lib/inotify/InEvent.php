@@ -82,6 +82,11 @@ class InEvent
 		else terminate("Cannot determine home folder from MXF Folder '{$this->folderWatched}'");
 	}
 
+        function homeFolderForUnprotectedFolder()
+        {
+                return dirname(dirname(dirname($this->folderWatched)));
+        }
+
 	function homeFolder()
 	{
 		switch($this->watchType)
@@ -89,6 +94,7 @@ class InEvent
 			case "MAIN": return $this->folderWatched;
 			case "PRJ": return dirname($this->folderWatched);
 			case "MXF": return $this->homeFolderForMXFFolder();
+                        case "UNPROTECTED": return $this->homeFolderForUnprotectedFolder();
 			default: terminate("Unknown watch type '{$this->watchType}'");
 		}
 	}

@@ -68,6 +68,15 @@ class Incrontab
 
 			$userIncronLines.="$homeFolder/$folder".' '.$eventsToWatch.' '.
 				INCRON_SCRIPT_EVENT_HANDLER_PATH.' PRJ '.INCRON_ARGS."\n";
+                        
+                        #handle Shared folders
+                        $sharedFolders=SharingFolders::userSubFolders("$homeFolder/$avidFolder/Shared");
+                        foreach($sharedFolders as $sharedFolder)
+                                if(!is_link("$homeFolder/$avidFolder/Shared/$sharedFolder"))
+		                        $userIncronLines.="$homeFolder/$avidFolder/Shared/$sharedFolder".' '.
+                                                        'IN_ALL_EVENTS '.
+			                                INCRON_SCRIPT_EVENT_HANDLER_PATH.
+                                                        ' UNPROTECTED '.INCRON_ARGS."\n";
 		}
 	
 		#watch 'Avid MediaFiles'

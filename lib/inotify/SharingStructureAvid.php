@@ -98,6 +98,8 @@ class SharingStructureAvid
 		$fileSystem=$etcFstab->findFileSystemForDevice($device);
                 if(EtcFsTab::isValidFileSystem($fileSystem) && $fileSystem->hasAclEnabled())
                 {
+                        $aclEnabled=true;
+
 		        #the unprotected shared subfolder
 		        $sharedUnprotected="$shared/Unprotected";
 
@@ -118,6 +120,10 @@ class SharingStructureAvid
                         $isGroupName='is_'.$groupName;
                         shell_exec("setfacl -d -m g:$isGroupName:rwX $sharedUnprotected");
                 }
+                else
+                {
+                        $aclEnabled=false;
+                }
 		#avid copy 
 		$projectCopy=self::folderAvidToCopy($project);
 
@@ -130,8 +136,17 @@ class SharingStructureAvid
 				$target="{$sharingUser->homeFolder}/Avid Shared Projects".
                                         "/$projectCopy/Shared/{$sharingUser->name}";
 				SharingOperations::verifySymLink($linkName,$target,$userName);		
+
+                                if($aclEnabled)
+                                {
+                                        #verify Unprotected link
+		                        $linkName="$shared/Unprotected";
+		                        $target="{$sharingUser->homeFolder}/Avid Shared Projects".
+                                                "/$projectCopy/Shared/Unprotected";
+		                        SharingOperations::verifySymLink($linkName,$target,$userName);		
+                                }
 			}
-		}	
+		}
 	}
 
 	static function verifyProjectFiles($user,$project)

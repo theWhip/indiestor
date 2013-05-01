@@ -122,6 +122,14 @@ do
 		SharingStructureAvid::reshare($groupName,$members);
 		SharingStructureMXF::reshare($members);
 	}
+        elseif($inEvent->watchType=='UNPROTECTED')
+        {
+                if(basename($inEvent->folderWatched)=='Unprotected')
+                        $command="chmod -R 770 '{$inEvent->folderWatched}'";
+                else $command="chmod -R 750 '{$inEvent->folderWatched}'";
+                shell_exec($command);
+                syslog_notice("executed: $command");
+        }
 	else
 	{
 		SharingStructureDefault::reshare($groupName,$members);
