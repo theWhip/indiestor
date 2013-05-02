@@ -125,8 +125,8 @@ do
         elseif($inEvent->watchType=='UNPROTECTED')
         {
                 if(basename($inEvent->folderWatched)=='Unprotected')
-                        $command="chmod -R 770 '{$inEvent->folderWatched}'";
-                else $command="chmod -R 750 '{$inEvent->folderWatched}'";
+                        $command="chmod -R 775 '{$inEvent->folderWatched}'";
+                else $command="chmod -R 755 '{$inEvent->folderWatched}'";
                 shell_exec($command);
                 syslog_notice("executed: $command");
         }
