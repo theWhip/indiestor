@@ -136,15 +136,6 @@ class SharingStructureAvid
 				$target="{$sharingUser->homeFolder}/Avid Shared Projects".
                                         "/$projectCopy/Shared/{$sharingUser->name}";
 				SharingOperations::verifySymLink($linkName,$target,$userName);		
-
-                                if($aclEnabled)
-                                {
-                                        #verify Unprotected link
-		                        $linkName="$shared/Unprotected";
-		                        $target="{$sharingUser->homeFolder}/Avid Shared Projects".
-                                                "/$projectCopy/Shared/Unprotected";
-		                        SharingOperations::verifySymLink($linkName,$target,$userName);		
-                                }
 			}
 		}
 	}
