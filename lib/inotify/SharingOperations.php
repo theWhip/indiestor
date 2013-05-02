@@ -231,7 +231,8 @@ class SharingOperations
 		if(!is_dir($target))
 		{
 			unlink($projectLinkPath);
-			syslog_notice("Removed '$projectLinkPath'; target '$target' is not a valid link target");
+			syslog_notice("PurgeProjectLink: Removed '$projectLinkPath'; ".
+                                "target '$target' is not a valid link target");
 			return;
 		}
 

@@ -345,7 +345,7 @@ class SharingStructureAvid
 					if(!is_dir($target))
 					{
 						unlink($memberFolder);
-						syslog_notice("Removed '$memberFolder'; ".
+						syslog_notice("purgeInvalidSymlinksInProjects: Removed '$memberFolder'; ".
                                                         "target '$target' is not a valid link target");
 					}
 					//the link must point to member project folder
@@ -383,7 +383,7 @@ class SharingStructureAvid
 					if(!is_dir($target))
 					{
 						unlink($memberFolder);
-						syslog_notice("Removed '$memberFolder'; ".
+						syslog_notice("purgeInvalidSymlinksInAVSFolder: Removed '$memberFolder'; ".
                                                         "target '$target' is not a valid link target");
 					}
 
