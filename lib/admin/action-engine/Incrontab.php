@@ -64,9 +64,16 @@ class Incrontab
 
                         #check for this border case
                         if(!SharingFolders::folderHasValidAVPfile("$homeFolder/$avidFolder"))
-                                $eventsToWatch=INCRON_MAIN_EVENTS_WATCH_IN_MODIFY_TOO;
-                        else $eventsToWatch=INCRON_MAIN_EVENTS;
-
+                        {
+                                # onlywatch if the sharing has not yet started
+                                if(!is_dir("$homeFolder/$avidFolder/Shared"))
+                                        $eventsToWatch=INCRON_MAIN_EVENTS_WATCH_IN_MODIFY_TOO;
+                                else $eventsToWatch=INCRON_MAIN_EVENTS;
+                        }
+                        else
+                        {
+                                $eventsToWatch=INCRON_MAIN_EVENTS;
+                        }
 			$userIncronLines.="$homeFolder/$folder".' '.$eventsToWatch.' '.
 				INCRON_SCRIPT_EVENT_HANDLER_PATH.' PRJ '.INCRON_ARGS."\n";
                         
