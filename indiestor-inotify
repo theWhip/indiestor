@@ -154,7 +154,7 @@ do
         {
                 if(basename($inEvent->folderWatched)=='Unprotected') $mode=0775;
                 else $mode=0755;
-                chmodRecursive($inEvent->folderWatched, $mode) 
+                chmodRecursive($inEvent->folderWatched, $mode);
         }
 	else
 	{
