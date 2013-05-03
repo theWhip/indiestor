@@ -47,28 +47,32 @@ function requireLibFile($path)
 //--------------------------
 // CHMOD RECURSIVE
 //--------------------------
-function chmodRecursive($path, $mode) 
+
+function chmodBase($path,$mode1,$mode2)
+{
+        $stat=stat($path);
+        $currentMode=$stat['mode'];
+        if($currentMode!=$mode1 && $currentMode!=$mode2)
+        {
+                chmod($path, $mode1);
+                syslog_notice("chmodBase: $path: $currentMode => $mode1");
+        }
+}
+
+function chmodRecursive($path, $mode1,$mode2) 
 { 
         if (is_dir($path)) 
         {
-                $stat=stat($path);
-                $dirMode=$stat['mode'];
-                if($dirMode!=$mode)
-                        chmod($path, $mode);
+                chmodBase($path,$mode1,$mode2);
                 $dh = opendir($path); 
                 while (($file = readdir($dh)) !== false) 
                         if($file != '.' && $file != '..')
-                                chmodRecursive($path.'/'.$file, $mode); 
+                                chmodRecursive($path.'/'.$file, $mode1,$mode2); 
                 closedir($dh); 
         } 
         else
         if (!is_link($path))
-        {
-                $stat=stat($path);
-                $fileMode=$stat['mode'];
-                if($fileMode!=$mode)
-                        chmod($path, $mode);
-        } 
+                chmodBase($path,$mode1,$mode2);
 } 
 
 //--------------------------
@@ -152,9 +156,9 @@ do
 	}
         elseif($inEvent->watchType=='UNPROTECTED')
         {
-                if(basename($inEvent->folderWatched)=='Unprotected') $mode=0775;
-                else $mode=0755;
-                chmodRecursive($inEvent->folderWatched, $mode);
+                if(basename($inEvent->folderWatched)=='Unprotected') { $mode1=16893; $mode2=33277; }
+                else { $mode1=16877; $mode2=33261; }
+                chmodRecursive($inEvent->folderWatched, $mode1,$mode2);
         }
 	else
 	{
