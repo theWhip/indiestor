@@ -9,6 +9,7 @@
 */
 
 define('INCRON_ARGS','$@ $# $%');
+//We only look at events that have side effects; and not events that amount to just reading data
 define('INCRON_MAIN_EVENTS','IN_ATTRIB,IN_CREATE,IN_DELETE,IN_MOVED_FROM,IN_MOVED_TO');
 define('INCRON_MAIN_EVENTS_WATCH_IN_MODIFY_TOO',INCRON_MAIN_EVENTS.',IN_MODIFY');
 define('INCRON_SCRIPT_EVENT_HANDLER_PATH', indiestor_BIN().'/indiestor-inotify');
@@ -74,7 +75,7 @@ class Incrontab
                         foreach($sharedFolders as $sharedFolder)
                                 if(!is_link("$homeFolder/$avidFolder/Shared/$sharedFolder"))
 		                        $userIncronLines.="$homeFolder/$avidFolder/Shared/$sharedFolder".' '.
-                                                        'IN_ALL_EVENTS '.
+                                                        INCRON_MAIN_EVENTS.' '.
 			                                INCRON_SCRIPT_EVENT_HANDLER_PATH.
                                                         ' UNPROTECTED '.INCRON_ARGS."\n";
 		}

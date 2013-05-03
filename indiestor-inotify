@@ -43,6 +43,34 @@ function requireLibFile($path)
 	global $LIB;
 	require_once("$LIB/$path");
 }
+
+//--------------------------
+// CHMOD RECURSIVE
+//--------------------------
+function chmodRecursive($path, $mode) 
+{ 
+        if (is_dir($path)) 
+        {
+                $stat=stat($path);
+                $dirMode=$stat['mode'];
+                if($dirMode!=$mode)
+                        chmod($path, $mode);
+                $dh = opendir($path); 
+                while (($file = readdir($dh)) !== false) 
+                        if($file != '.' && $file != '..')
+                                chmodRecursive($path.'/'.$file, $mode); 
+                closedir($dh); 
+        } 
+        else
+        if (!is_link($path))
+        {
+                $stat=stat($path);
+                $fileMode=$stat['mode'];
+                if($fileMode!=$mode)
+                        chmod($path, $mode);
+        } 
+} 
+
 //--------------------------
 
 requireLibFile("inotify/InEvent.php");
@@ -124,11 +152,9 @@ do
 	}
         elseif($inEvent->watchType=='UNPROTECTED')
         {
-                if(basename($inEvent->folderWatched)=='Unprotected')
-                        $command="chmod -R 775 '{$inEvent->folderWatched}'";
-                else $command="chmod -R 755 '{$inEvent->folderWatched}'";
-                shell_exec($command);
-                syslog_notice("executed: $command");
+                if(basename($inEvent->folderWatched)=='Unprotected') $mode=0775;
+                else $mode=0755;
+                chmodRecursive($inEvent->folderWatched, $mode) 
         }
 	else
 	{
