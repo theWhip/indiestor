@@ -48,7 +48,7 @@ function requireLibFile($path)
 // CHMOD RECURSIVE
 //--------------------------
 
-function chmodBase($path,$mode)
+function chmodBase($path,$mode,$userName,$groupName)
 {
         $currentMode=fileperms($path) & 0777;
         if($currentMode!=$mode)
@@ -56,24 +56,42 @@ function chmodBase($path,$mode)
                 chmod($path, $mode);
                 $currentModeOct=decoct($currentMode);
                 $modeOct=decoct($mode);
-                syslog_notice("chmodBase: $path: $currentModeOct => $modeOct");
+                syslog_notice("chmodBase-permissions: $path: $currentModeOct => $modeOct");
+        }
+        //check ownership
+        if($mode==0755)
+        {
+                $userRecord=posix_getpwuid(fileowner($path));
+                $currentOwner=$userRecord['name'];
+                if($currentOwner!=$userName)
+                {
+                        chown($path,$userName);
+                        syslog_notice("chmodBase-owner: $path: $currentOwner => $userName");
+                }
+                $groupRecord=posix_getgrgid(filegroup($path));
+                $currentGroup=$groupRecord['name'];
+                if($currentGroup!=$groupName)
+                {
+                        chgrp($path,$groupName);
+                        syslog_notice("chmodBase-group: $path: $currentGroup => $groupName");
+                }
         }
 }
 
-function chmodRecursive($path, $mode) 
+function chmodRecursive($path, $mode,$userName,$groupName) 
 { 
         if (is_dir($path)) 
         {
-                chmodBase($path,$mode);
+                chmodBase($path,$mode,$userName,$groupName);
                 $dh = opendir($path); 
                 while (($file = readdir($dh)) !== false) 
                         if($file != '.' && $file != '..')
-                                chmodRecursive($path.'/'.$file, $mode); 
+                                chmodRecursive($path.'/'.$file, $mode,$userName,$groupName); 
                 closedir($dh); 
         } 
         else
         if (!is_link($path))
-                chmodBase($path,$mode);
+                chmodBase($path,$mode,$userName,$groupName);
 } 
 
 //--------------------------
@@ -159,8 +177,7 @@ do
         {
                 if(basename($inEvent->folderWatched)=='Unprotected') { $mode=0775; }
                 else { $mode=0755; }
-                chmodRecursive($inEvent->folderWatched, $mode);
-
+                chmodRecursive($inEvent->folderWatched, $mode,$userName,'is_'.$groupName);
         }
 	else
 	{
