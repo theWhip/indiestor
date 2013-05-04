@@ -161,8 +161,8 @@ do
                 else { $mode1=16877; $mode2=33261; }
                 chmodRecursive($inEvent->folderWatched, $mode1,$mode2);
 */
-                if(basename($inEvent->folderWatched)=='Unprotected') { $mode1=775; $mode2=775; }
-                else { $mode1=755; $mode2=755; }
+                if(basename($inEvent->folderWatched)=='Unprotected') { $mode1=0775; $mode2=0775; }
+                else { $mode1=0755; $mode2=0755; }
                 chmodRecursive($inEvent->folderWatched, $mode1,$mode2);
 
         }
