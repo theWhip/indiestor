@@ -54,7 +54,9 @@ function chmodBase($path,$mode)
         if($currentMode!=$mode)
         {
                 chmod($path, $mode);
-                syslog_notice("chmodBase: $path: $currentMode => $mode");
+                $currentModeOct=decoct($currentMode);
+                $modeOct=decoct($mode);
+                syslog_notice("chmodBase: $path: $currentModeOct => $modeOct");
         }
 }
 
