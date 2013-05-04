@@ -53,10 +53,14 @@ class SharingStructureDefault
 	{
 		foreach($users as $user)
 		{
-			$projectLinks=SharingFolders::userProjectLinks($user->homeFolder);
-			foreach($projectLinks as $projectLink)
-				SharingOperations::purgeProjectLink("{$user->homeFolder}/$projectLink",$users);
-		}
-	}
+                        $homeFolder=$user->homeFolder;
+		        $subFolders=SharingFolders::userSubFolders($homeFolder);
+		        foreach($subFolders as $subFolder)
+			        if((sharingFolders::isDefaultProjectFolder("$homeFolder/$subFolder"))
+                                      && is_link("$homeFolder/$subFolder"))
+                                        SharingOperations::purgeProjectLink("$homeFolder/$subFolder",$users);
+        	
+        	}
+        }
 }
 

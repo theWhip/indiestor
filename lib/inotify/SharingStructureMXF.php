@@ -100,11 +100,7 @@ class SharingStructureMXF
 		{
 			$linkName="$mxfFolder/$folder";
 
-			//file could have been deleted already by a concurrent process
-			if(!file_exists($linkName)) continue;
-
 			$target=readlink($linkName);
-
 
 			//if the link does not point to a folder, remove it
 			if(!is_dir($target))
