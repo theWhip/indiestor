@@ -28,6 +28,14 @@ class InEvent
 	{
 		global $argv;
 
+                //fix for .../Avid Shared Projects/...
+                if(preg_match('/Avid$/',$argv[2]) && $argv[3]=='Shared' && preg_match('/^Projects.*/',$argv[4])) 
+                {
+                        $argv[2]=$argv[2].' '.$argv[3].' '.$argv[4];
+                        $argv[3]=$argv[5];
+                        $argv[4]=$argv[6];
+                }
+
 		//fix argv for MXF
 		if($argv[1]=='MXF')
 		{
@@ -84,7 +92,14 @@ class InEvent
 
         function homeFolderForUnprotectedFolder()
         {
-                return dirname(dirname(dirname($this->folderWatched)));
+                if(preg_match("|Avid Shared Projects|",$this->folderWatched))
+                {
+                        return dirname(dirname(dirname(dirname($this->folderWatched))));
+                }
+                else
+                {
+                        return dirname(dirname(dirname($this->folderWatched)));
+                }
         }
 
 	function homeFolder()
