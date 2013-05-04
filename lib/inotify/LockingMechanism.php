@@ -87,7 +87,14 @@ class LockingMechanism
 		if(file_exists($this->pidFile()))
 		{
 			syslog_notice("locking pid file '{$this->pidFile()}' exists");
-			$pid=file_get_contents($this->pidFile());
+                        #strange but true, the file may have disappeared in the meanwhile
+			$pid=@file_get_contents($this->pidFile());
+                        if(empty($pid))
+                        {
+				syslog_notice("pid file disappeared in between checking its existence and reading it;".
+                                                " not free to run");
+				return true;
+                        }
 			if(file_exists("/proc/$pid"))
 			{
 				syslog_notice("previous process '/proc/$pid' still active; not free to run");
