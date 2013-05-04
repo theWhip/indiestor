@@ -48,31 +48,30 @@ function requireLibFile($path)
 // CHMOD RECURSIVE
 //--------------------------
 
-function chmodBase($path,$mode1,$mode2)
+function chmodBase($path,$mode)
 {
-        $stat=stat($path);
-        $currentMode=$stat['mode'];
-        if($currentMode!=$mode1 && $currentMode!=$mode2)
+        $currentMode=fileperms($path) & 0777;
+        if($currentMode!=$mode)
         {
-                chmod($path, $mode1);
-                syslog_notice("chmodBase: $path: $currentMode => $mode1");
+                chmod($path, $mode);
+                syslog_notice("chmodBase: $path: $currentMode => $mode");
         }
 }
 
-function chmodRecursive($path, $mode1,$mode2) 
+function chmodRecursive($path, $mode) 
 { 
         if (is_dir($path)) 
         {
-                chmodBase($path,$mode1,$mode2);
+                chmodBase($path,$mode);
                 $dh = opendir($path); 
                 while (($file = readdir($dh)) !== false) 
                         if($file != '.' && $file != '..')
-                                chmodRecursive($path.'/'.$file, $mode1,$mode2); 
+                                chmodRecursive($path.'/'.$file, $mode); 
                 closedir($dh); 
         } 
         else
         if (!is_link($path))
-                chmodBase($path,$mode1,$mode2);
+                chmodBase($path,$mode);
 } 
 
 //--------------------------
@@ -156,14 +155,9 @@ do
 	}
         elseif($inEvent->watchType=='UNPROTECTED')
         {
-/*
-                if(basename($inEvent->folderWatched)=='Unprotected') { $mode1=16893; $mode2=33277; }
-                else { $mode1=16877; $mode2=33261; }
-                chmodRecursive($inEvent->folderWatched, $mode1,$mode2);
-*/
-                if(basename($inEvent->folderWatched)=='Unprotected') { $mode1=0775; $mode2=0775; }
-                else { $mode1=0755; $mode2=0755; }
-                chmodRecursive($inEvent->folderWatched, $mode1,$mode2);
+                if(basename($inEvent->folderWatched)=='Unprotected') { $mode=0775; }
+                else { $mode=0755; }
+                chmodRecursive($inEvent->folderWatched, $mode);
 
         }
 	else

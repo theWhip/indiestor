@@ -91,39 +91,25 @@ class SharingStructureAvid
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedSubOwner);
 		SharingOperations::fixFsObjectPermissions($sharedSubOwner,"755");
 
-                //figure out device
-                $device=sysquery_df_device_for_folder($shared);
-                //check if acl has been enabled
-		$etcFstab=EtcFsTab::instance();
-		$fileSystem=$etcFstab->findFileSystemForDevice($device);
-                if(EtcFsTab::isValidFileSystem($fileSystem) && $fileSystem->hasAclEnabled())
-                {
-                        $aclEnabled=true;
 
-		        #the unprotected shared subfolder
-		        $sharedUnprotected="$shared/Unprotected";
+	        #the unprotected shared subfolder
+	        $sharedUnprotected="$shared/Unprotected";
 
-                        #the unprotected folder
-		        $archivedUnprotected="$archived/Unprotected";
-		        if(!is_dir($sharedUnprotected)) 
-		        {
-			        if(is_dir($archivedUnprotected))
-				        rename($archivedUnprotected, $sharedUnprotected);
-			        else
-				        if(!is_dir($sharedUnprotected)) 
-                                        {
-                                                mkdir($sharedUnprotected);
-                                        }
-		        }
-		        SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedUnprotected);
-		        SharingOperations::fixFsObjectPermissions($sharedUnprotected,"775");
-                        $isGroupName='is_'.$groupName;
-//                        shell_exec("setfacl -d -m g:$isGroupName:rwX $sharedUnprotected");
-                }
-                else
-                {
-                        $aclEnabled=false;
-                }
+                #the unprotected folder
+	        $archivedUnprotected="$archived/Unprotected";
+	        if(!is_dir($sharedUnprotected)) 
+	        {
+		        if(is_dir($archivedUnprotected))
+			        rename($archivedUnprotected, $sharedUnprotected);
+		        else
+			        if(!is_dir($sharedUnprotected)) 
+                                {
+                                        mkdir($sharedUnprotected);
+                                }
+	        }
+	        SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedUnprotected);
+	        SharingOperations::fixFsObjectPermissions($sharedUnprotected,"775");
+
 		#avid copy 
 		$projectCopy=self::folderAvidToCopy($project);
 
@@ -328,27 +314,27 @@ class SharingStructureAvid
 			foreach($sharedSubFolders as $sharedSubFolder)
 			{
 				$memberFolder="$sharedSubFolderRoot/$sharedSubFolder";
-				if(is_link($memberFolder))
-				{
-					$target=readlink($memberFolder);
-					
-					//if the link does not point to a folder, remove it
-					if(!is_dir($target))
-					{
-						unlink($memberFolder);
-						syslog_notice("purgeInvalidSymlinksInProjects: Removed '$memberFolder'; ".
+			        if(is_link($memberFolder))
+			        {
+				        $target=readlink($memberFolder);
+				
+				        //if the link does not point to a folder, remove it
+				        if(!is_dir($target))
+				        {
+					        unlink($memberFolder);
+					        syslog_notice("purgeInvalidSymlinksInProjects: Removed '$memberFolder'; ".
                                                         "target '$target' is not a valid link target");
-					}
-					//the link must point to member project folder
-					$targetHomeFolder=self::homeFolderSegmentForLinkTarget($target);
-					if(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
-					{
-						if(file_exists($memberFolder)) unlink($memberFolder);
-						syslog_notice("Removed '$memberFolder'; in target '$target' ".
-							"the home folder '$targetHomeFolder'".
+				        }
+				        //the link must point to member project folder
+				        $targetHomeFolder=self::homeFolderSegmentForLinkTarget($target);
+				        if(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
+				        {
+					        if(file_exists($memberFolder)) unlink($memberFolder);
+					        syslog_notice("Removed '$memberFolder'; in target '$target' ".
+						        "the home folder '$targetHomeFolder'".
                                                         " is not the home folder for a group member");
-					}
-				}	
+				        }
+			        }	
 			}			
 		}
 	}
@@ -366,28 +352,29 @@ class SharingStructureAvid
 			foreach($sharedSubFolders as $sharedSubFolder)
 			{
 				$memberFolder="$sharedSubFolderRoot/$sharedSubFolder";
-				if(is_link($memberFolder))
-				{
-					$target=readlink($memberFolder);
-					syslog_notice("ASP: memberFolder=$memberFolder target=$target");
-					//if the link does not point to a folder, remove it
-					if(!is_dir($target))
-					{
-						unlink($memberFolder);
-						syslog_notice("purgeInvalidSymlinksInAVSFolder: Removed '$memberFolder'; ".
+			        if(is_link($memberFolder))
+			        {
+				        $target=readlink($memberFolder);
+				        syslog_notice("ASP: memberFolder=$memberFolder target=$target");
+				        //if the link does not point to a folder, remove it
+				        if(!is_dir($target))
+				        {
+					        unlink($memberFolder);
+					        syslog_notice("purgeInvalidSymlinksInAVSFolder:".
+                                                        " Removed '$memberFolder'; ".
                                                         "target '$target' is not a valid link target");
-					}
+				        }
 
-					//the link must point to member project folder
-					$targetHomeFolder=self::homeFolderSegmentForLinkTarget($target);
-					if(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
-					{
-						if(file_exists($memberFolder)) unlink($memberFolder);
-						syslog_notice("Removed '$memberFolder'; in target '$target' ".
-							"the home folder '$targetHomeFolder'".
+				        //the link must point to member project folder
+				        $targetHomeFolder=self::homeFolderSegmentForLinkTarget($target);
+				        if(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
+				        {
+					        if(file_exists($memberFolder)) unlink($memberFolder);
+					        syslog_notice("Removed '$memberFolder'; in target '$target' ".
+						        "the home folder '$targetHomeFolder'".
                                                         " is not the home folder for a group member");
-					}
-				}	
+				        }
+			        }	
 			}			
 		}
 	}
