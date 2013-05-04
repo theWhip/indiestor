@@ -59,7 +59,7 @@ function chmodBase($path,$mode,$userName,$groupName)
                 syslog_notice("chmodBase-permissions: $path: $currentModeOct => $modeOct");
         }
         //check ownership
-        if($mode==0755)
+        if($mode==0775 || $mode==0664 )
         {
                 $userRecord=posix_getpwuid(fileowner($path));
                 $currentOwner=$userRecord['name'];
@@ -78,20 +78,20 @@ function chmodBase($path,$mode,$userName,$groupName)
         }
 }
 
-function chmodRecursive($path, $mode,$userName,$groupName) 
+function chmodRecursive($path, $modeFile,$modeFolder,$userName,$groupName) 
 { 
         if (is_dir($path)) 
         {
-                chmodBase($path,$mode,$userName,$groupName);
+                chmodBase($path,$modeFolder,$userName,$groupName);
                 $dh = opendir($path); 
                 while (($file = readdir($dh)) !== false) 
                         if($file != '.' && $file != '..')
-                                chmodRecursive($path.'/'.$file, $mode,$userName,$groupName); 
+                                chmodRecursive($path.'/'.$file, $modeFile,$modeFolder,$userName,$groupName); 
                 closedir($dh); 
         } 
         else
         if (!is_link($path))
-                chmodBase($path,$mode,$userName,$groupName);
+                chmodBase($path,$modeFile,$userName,$groupName);
 } 
 
 //--------------------------
@@ -176,9 +176,9 @@ do
 	}
         elseif($inEvent->watchType=='UNPROTECTED')
         {
-                if(basename($inEvent->folderWatched)=='Unprotected') { $mode=0775; }
-                else { $mode=0755; }
-                chmodRecursive($inEvent->folderWatched, $mode,$userName,'is_'.$groupName);
+                if(basename($inEvent->folderWatched)=='Unprotected') { $modeFolder=0775; $modeFile=0664; }
+                else { $modeFolder=0755; $modeFile=0644; }
+                chmodRecursive($inEvent->folderWatched, $modeFile,$modeFolder,$userName,'is_'.$groupName);
         }
 	else
 	{

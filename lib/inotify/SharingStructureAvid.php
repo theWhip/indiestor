@@ -107,8 +107,7 @@ class SharingStructureAvid
                                         mkdir($sharedUnprotected);
                                 }
 	        }
-	        SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedUnprotected);
-	        SharingOperations::fixFsObjectPermissions($sharedUnprotected,"775");
+                chmodRecursive($sharedUnprotected, 0664,0775,$userName,'is_'.$groupName);
 
 		#avid copy 
 		$projectCopy=self::folderAvidToCopy($project);
@@ -236,7 +235,7 @@ class SharingStructureAvid
         {
 	        if(!file_exists($target)) copy($source,$target);
 	        SharingOperations::fixUserObjectOwnership($memberName,$target);
-	        SharingOperations::fixFsObjectPermissions($target,"750");
+	        SharingOperations::fixFsObjectPermissions($target,"640");
         }
 
 	static function copyAvidProjectFiles($ownerProjectFolder,$sharingMemberCopyFolder,$memberName)

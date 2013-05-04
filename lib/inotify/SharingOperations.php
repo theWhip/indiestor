@@ -165,7 +165,7 @@ class SharingOperations
 	static function fixProjectFilePermissions($file)
 	{
 		//permissions must be owner=rwx group=rwx other=---
-		self::fixFsObjectPermissions($file,"770");
+		self::fixFsObjectPermissions($file,"660");
 	}
 
 	static function fixProjectFolderPermissions($folder)
