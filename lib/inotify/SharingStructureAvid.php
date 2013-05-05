@@ -169,6 +169,9 @@ class SharingStructureAvid
 
 	static function verifyProjectSharingMember($groupName,$owner,$user,$project,$users)
 	{
+                #if the user has no home directory, bail out (this could be an error when deleting the user)
+                if(!is_dir($user->homeFolder)) return;
+
 		#the user's Avid Shared Projects folder
 		$aspFolder="{$user->homeFolder}/Avid Shared Projects";
 		if(!is_dir($aspFolder)) mkdir($aspFolder);
@@ -355,7 +358,6 @@ class SharingStructureAvid
 			        if(is_link($memberFolder))
 			        {
 				        $target=readlink($memberFolder);
-				        syslog_notice("ASP: memberFolder=$memberFolder target=$target");
 				        //if the link does not point to a folder, remove it
 				        if(!is_dir($target))
 				        {

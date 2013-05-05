@@ -140,6 +140,7 @@ do
 while($lockingMechanism->mustReRun());
 $lockingMechanism->unlock();
 
+syslog_notice("generating incrontab");
 Incrontab::generate();
 
 //notify end run
