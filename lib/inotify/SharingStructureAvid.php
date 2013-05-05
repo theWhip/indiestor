@@ -427,8 +427,9 @@ class SharingStructureAvid
 				$baseOfCopy=basename($rootOfCopy);
 				if($baseOfCopy=='Avid Shared Projects')
 				{
-					//remove copy of project
-					shell_exec("rm -rf '$copy'");
+					//remove copy of project, if it is empty
+					$numberOfItems=intval(shell_exec("ls '$copy' | wc -l"));
+					if($numberOfItems==0) shell_exec("rm -rf '$copy'");
 					//check if this is the last copy
 					$numberOfItems=intval(shell_exec("ls '$rootOfCopy' | wc -l"));
 					if($numberOfItems==0) shell_exec("rm -rf '$rootOfCopy'");
