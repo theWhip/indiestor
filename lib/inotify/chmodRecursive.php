@@ -23,22 +23,19 @@ function chmodBase($path,$mode,$userName,$groupName)
                 syslog_notice("chmodBase-permissions: $path: $currentModeOct => $modeOct");
         }
         //check ownership
-        if($mode==0775 || $mode==0664 )
+        $userRecord=posix_getpwuid(fileowner($path));
+        $currentOwner=$userRecord['name'];
+        if($currentOwner!=$userName)
         {
-                $userRecord=posix_getpwuid(fileowner($path));
-                $currentOwner=$userRecord['name'];
-                if($currentOwner!=$userName)
-                {
-                        chown($path,$userName);
-                        syslog_notice("chmodBase-owner: $path: $currentOwner => $userName");
-                }
-                $groupRecord=posix_getgrgid(filegroup($path));
-                $currentGroup=$groupRecord['name'];
-                if($currentGroup!=$groupName)
-                {
-                        chgrp($path,$groupName);
-                        syslog_notice("chmodBase-group: $path: $currentGroup => $groupName");
-                }
+                chown($path,$userName);
+                syslog_notice("chmodBase-owner: $path: $currentOwner => $userName");
+        }
+        $groupRecord=posix_getgrgid(filegroup($path));
+        $currentGroup=$groupRecord['name'];
+        if($currentGroup!=$groupName)
+        {
+                chgrp($path,$groupName);
+                syslog_notice("chmodBase-group: $path: $currentGroup => $groupName");
         }
 }
 

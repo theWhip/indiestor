@@ -90,11 +90,14 @@ class Incrontab
                                 else
                                 {
                                         $target=readlink("$homeFolder/$avidFolder/Shared/$sharedFolder");
-                                        $target=preg_replace('/ /','\ ',$target);
-		                        $userIncronLines.="$target".' '.
-                                                        INCRON_MAIN_EVENTS.' '.
-			                                INCRON_SCRIPT_EVENT_HANDLER_PATH.
-                                                        ' UNPROTECTED '.INCRON_ARGS."\n";
+					if($target!==false)
+					{
+		                                $target=preg_replace('/ /','\ ',$target);
+				                $userIncronLines.="$target".' '.
+		                                                INCRON_MAIN_EVENTS.' '.
+					                        INCRON_SCRIPT_EVENT_HANDLER_PATH.
+		                                                ' UNPROTECTED '.INCRON_ARGS."\n";
+					}
                                 }
 		}
 	
