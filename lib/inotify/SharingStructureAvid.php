@@ -11,6 +11,7 @@
 requireLibFile('inotify/syslog.php');
 requireLibFile('inotify/SharingOperations.php');
 requireLibFile('inotify/SharingFolders.php');
+requireLibFile("inotify/chmodRecursive.php");
 
 class SharingStructureAvid
 {
