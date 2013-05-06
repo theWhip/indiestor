@@ -470,7 +470,7 @@ class SharingStructureAvid
 	static function archiveASPFolder($user)
 	{
 		$aspFolder="{$user->homeFolder}/Avid Shared Projects";
-		if(!file_exists($aspFolder)) return;
+		if(!is_dir($aspFolder)) return;
 		$copyFolders=SharingFolders::userSubFolders($aspFolder);
 		foreach($copyFolders as $copyFolder)
 		{
@@ -509,10 +509,27 @@ class SharingStructureAvid
 
 				        $archiveSubFolder="$archived/{$user->name}";
 				        shell_exec("chown -R $ownerName.$ownerName '$archiveSubFolder'");
+                                        syslog_notice("archiving $ownFolder in $archiveSubFolder");  
 				        rename($ownFolder,$archiveSubFolder);
                                 }
 			}
 		}
+                $unlinked="{$user->homeFolder}/Unlinked Avid Shared Projects";
+                if(is_dir($unlinked))
+                {
+                        syslog_notice("cp -R '$aspFolder'/* '$unlinked'");  
+                        shell_exec("cp -R '$aspFolder'/* '$unlinked'");
+                        syslog_notice("chown -R {$user->name}.{$user->name} '$unlinked'");  
+		        shell_exec("chown -R {$user->name}.{$user->name} '$unlinked'");
+                        syslog_notice("rm -Rf '$aspFolder'");  
+                        shell_exec("rm -Rf '$aspFolder'");
+                }
+                else 
+                {
+                        syslog_notice("mv '$aspFolder' '$unlinked'");  
+                        shell_exec("mv '$aspFolder' '$unlinked'");
+		        shell_exec("chown -R {$user->name}.{$user->name} '$unlinked'");
+                }
 	}
 }
 
