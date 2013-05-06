@@ -513,9 +513,6 @@ class SharingStructureAvid
                                 }
 			}
 		}
-		//delete ASP folder
-		shell_exec("rm -rf '{$user->homeFolder}/Avid Shared Projects'");
 	}
-
 }
 
