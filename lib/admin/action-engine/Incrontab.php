@@ -41,14 +41,25 @@ class Incrontab
 			if($group!=null)
 				//only watch member folders for groups with at least 2 members
 				if(count($group->members>=2))
-					$tab.=self::generateTabForUser($member,$etcUser->homeFolder);
+					$tab.=self::generateTabForUser($member,$etcUser->homeFolder,$group->members);
                 }
 
 		//write the lines
 		syscommand_incrontab($tab);
 	}
 
-	static function generateTabForUser($userName,$homeFolder)
+        static function isLocatedInValidHomeFolderOfGroupMember($folder,$userName,$groupMembers)
+        {
+                foreach($groupMembers as $member)
+                {
+			$etcMember=EtcPasswd::instance()->findUserByName($member);
+                        if(preg_match("|^{$etcMember->homeFolder}|",$folder))
+                                return true;
+                }
+                return false;
+        }
+
+	static function generateTabForUser($userName,$homeFolder,$groupMembers)
 	{
 		$userIncronLines='';
 
@@ -90,14 +101,15 @@ class Incrontab
                                 else
                                 {
                                         $target=readlink("$homeFolder/$avidFolder/Shared/$sharedFolder");
-					if($target!==false)
-					{
-		                                $target=preg_replace('/ /','\ ',$target);
-				                $userIncronLines.="$target".' '.
-		                                                INCRON_MAIN_EVENTS.' '.
-					                        INCRON_SCRIPT_EVENT_HANDLER_PATH.
-		                                                ' UNPROTECTED '.INCRON_ARGS."\n";
-					}
+					if($target!==false && is_dir($target) && 
+                                             self::isLocatedInValidHomeFolderOfGroupMember($target,$userName,$groupMembers))
+                                        {
+                                                $target=preg_replace('/ /','\ ',$target);
+		                                $userIncronLines.="$target".' '.
+                                                                INCRON_MAIN_EVENTS.' '.
+			                                        INCRON_SCRIPT_EVENT_HANDLER_PATH.
+       	                                                        ' UNPROTECTED '.INCRON_ARGS."\n";
+                                        }
                                 }
 		}
 	
