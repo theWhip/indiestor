@@ -32,14 +32,6 @@ class EtcOneFileSystem
 	}
 
 	//----------------------------------------------
-	// HAS ACL ENABLED
-	//----------------------------------------------
-	function hasAclEnabled()
-	{
-		return $this->hasOptionEnabled('acl');
-	}
-
-	//----------------------------------------------
 	// HAS OPTION ENABLED
 	//----------------------------------------------
 	function hasOptionEnabled($type)
@@ -59,14 +51,6 @@ class EtcOneFileSystem
 	}
 
 	//----------------------------------------------
-	// ENABLE ACL
-	//----------------------------------------------
-	function enableAcl()
-	{
-                $this->enableOption('acl');
-	}
-
-	//----------------------------------------------
 	// ENABLE OPTION
 	//----------------------------------------------
 	function enableOption($type)
@@ -81,14 +65,6 @@ class EtcOneFileSystem
 	function disableQuota()
 	{
                 $this->disableOption("usrquota");
-	}
-
-	//----------------------------------------------
-	// DISABLE ACL
-	//----------------------------------------------
-	function disableAcl()
-	{
-                $this->disableOption("acl");
 	}
 
 	//----------------------------------------------

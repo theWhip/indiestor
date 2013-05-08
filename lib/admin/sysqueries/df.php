@@ -88,10 +88,6 @@ function sysquery_df()
 				else $dfFileSystem->quotaYN='?'; 
 			}
 
-                        //check ACL
-                        $acl=ShellCommand::query("mount | grep {$dfFileSystem->device} | grep acl");
-                        if($acl=="") $dfFileSystem->aclYN='N'; else $dfFileSystem->aclYN='Y';
-
 			$dfFileSystems[$dfFileSystem->device]=$dfFileSystem;
 		}
 	}
