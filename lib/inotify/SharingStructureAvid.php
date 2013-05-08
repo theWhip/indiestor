@@ -377,8 +377,33 @@ class SharingStructureAvid
                                                         " is not the home folder for a group member");
 				        }
 			        }	
-			}			
+			}
+                        //check if there exists an .avid folder for this .copy folder
+                        $baseOfCopy=preg_replace('/(.*)\.copy/','${1}',$copyFolder);
+                        $originalProjectFound=false;
+                        foreach($users as $member)
+                        {
+                                $originalAvidProject="{$member->homeFolder}/$baseOfCopy.avid";
+                                if(is_dir($originalAvidProject)) $originalProjectFound=true;
+                        }
+                        if(!$originalProjectFound)
+                        {
+                                $copyFolderPath="$avpFolder/$copyFolder";
+                                $numberOfFiles=shell_exec("find '$copyFolderPath' -type f | grep -v '.avp$' | wc -l");
+                                if($numberOfFiles==0) 
+                                {
+                                        syslog_notice("rm -rf '$copyFolderPath'");
+                                        shell_exec("rm -rf '$copyFolderPath'");
+                                }
+                        }
+			
 		}
+                $numberOfRemainingCopyFolders=shell_exec("ls '$avpFolder' | wc -l");
+                if($numberOfRemainingCopyFolders==0)
+                {
+                        syslog_notice("rm -rf '$avpFolder'");
+                        shell_exec("rm -rf '$avpFolder'");
+                }
 	}
 
 	static function purgeOldProjectsForUser($user)
@@ -427,6 +452,7 @@ class SharingStructureAvid
 				$baseOfCopy=basename($rootOfCopy);
 				if($baseOfCopy=='Avid Shared Projects')
 				{
+
 					//remove copy of project, if it is empty
 					$numberOfItems=intval(shell_exec("ls '$copy' | wc -l"));
 					if($numberOfItems==0) shell_exec("rm -rf '$copy'");
