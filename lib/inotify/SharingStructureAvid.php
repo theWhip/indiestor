@@ -514,22 +514,6 @@ class SharingStructureAvid
                                 }
 			}
 		}
-                $unlinked="{$user->homeFolder}/Unlinked Avid Shared Projects";
-                if(is_dir($unlinked))
-                {
-                        syslog_notice("cp -R '$aspFolder'/* '$unlinked'");  
-                        shell_exec("cp -R '$aspFolder'/* '$unlinked'");
-                        syslog_notice("chown -R {$user->name}.{$user->name} '$unlinked'");  
-		        shell_exec("chown -R {$user->name}.{$user->name} '$unlinked'");
-                        syslog_notice("rm -Rf '$aspFolder'");  
-                        shell_exec("rm -Rf '$aspFolder'");
-                }
-                else 
-                {
-                        syslog_notice("mv '$aspFolder' '$unlinked'");  
-                        shell_exec("mv '$aspFolder' '$unlinked'");
-		        shell_exec("chown -R {$user->name}.{$user->name} '$unlinked'");
-                }
 	}
 }
 
