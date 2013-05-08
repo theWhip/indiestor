@@ -597,5 +597,22 @@ class User extends EntityType
 			ActionEngine::regenerateIncrontab();			
 		}
 	}
+
+        static function reshare($commandAction)
+        {
+                $userName=ProgramActions::$entityName;
+		$group=EtcGroup::instance()->findGroupForUserName($userName);
+                if($group===null)
+                {
+                        $group=new EtcOneGroup();
+                        $group->name='';
+                        $group->members=array($userName);
+                }
+		$members=EtcPasswd::instance()->findUsersForEtcGroup($group);
+		SharingStructureAvid::reshare($group->name,$members);
+                SharingStructureMXF::reshare($members);
+                SharingStructureDefault::reshare($group->name,$members);
+        }
+
 }
 
