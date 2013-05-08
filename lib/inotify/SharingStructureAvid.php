@@ -383,8 +383,11 @@ class SharingStructureAvid
                         $originalProjectFound=false;
                         foreach($users as $member)
                         {
-                                $originalAvidProject="{$member->homeFolder}/$baseOfCopy.avid";
-                                if(is_dir($originalAvidProject)) $originalProjectFound=true;
+                                if($user->name != $member->name)
+                                {
+                                        $originalAvidProject="{$member->homeFolder}/$baseOfCopy.avid";
+                                        if(is_dir($originalAvidProject)) $originalProjectFound=true;
+                                }
                         }
                         if(!$originalProjectFound)
                         {
