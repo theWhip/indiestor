@@ -589,11 +589,8 @@ class User extends EntityType
 	{
 		if(ProgramActions::hasUpdateCommand())
 		{
-			//reshare group
 			$userName=ProgramActions::$entityName;
-                        EtcGroup::reset();
-			$group=EtcGroup::instance()->findGroupForUserName($userName);
-			if($group!=null) self::reshareGroup($group->name);
+                        self::reshareUser($userName);
 			ActionEngine::regenerateIncrontab();			
 		}
 	}
@@ -601,6 +598,11 @@ class User extends EntityType
         static function reshare($commandAction)
         {
                 $userName=ProgramActions::$entityName;
+                self::reshareUser($userName);
+        }
+
+        static function reshareUser($userName)
+        {
 		$group=EtcGroup::instance()->findGroupForUserName($userName);
                 if($group===null)
                 {
@@ -613,6 +615,7 @@ class User extends EntityType
                 SharingStructureMXF::reshare($members);
                 SharingStructureDefault::reshare($group->name,$members);
         }
+
 
 }
 
