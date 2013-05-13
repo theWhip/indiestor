@@ -28,6 +28,7 @@ case "$1" in
 	/etc/init.d/incron restart
 	nmbd restart
 	smbd restart
+	indiestor --users -reshare
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
