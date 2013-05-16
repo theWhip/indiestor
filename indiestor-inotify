@@ -90,6 +90,10 @@ if($inEvent->watchType=='MAIN' &&
 	$inEvent->fsObject!='Avid MediaFiles'
 ) terminate("folder concerned '{$inEvent->fsObject}' not a project folder");
 
+//for Avid MediaFiles, only handle folders; not files
+if($inEvent->watchType=='MXF' && !is_dir("{$inEvent->folderWatched}/{$inEvent->fsObject}"))
+	terminate("MXF: file concerned '{$inEvent->folderWatched}/{$inEvent->fsObject}' not a folder");
+
 //only handle .avp/.avs files
 if($inEvent->watchType=='PRJ' && 
 	!SharingFolders::endsWith($inEvent->fsObject,'.avp') &&
