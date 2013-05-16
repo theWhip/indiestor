@@ -9,5 +9,11 @@
 #------------------------------------------------------------
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
+args=''
+for i in "$@"
+do
+    args="$args \"$i\""
+done
+eval set -- $args
 super indiestor-inotify "$@"
 

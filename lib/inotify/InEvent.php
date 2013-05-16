@@ -24,26 +24,22 @@ class InEvent
 		return trim($arg);
 	}
 
+        function unquoteArgs()
+        {
+		global $argv;
+                foreach($argv as $i=>$arg)
+                {
+                        $myArg=$arg;
+                        if(substr($myArg,0,1)=='"') $myArg=substr($myArg,1);
+                        if(substr($myArg,-1)=='"') $myArg=substr($myArg,0,-1);
+                        $argv[$i]=$myArg;
+                }                
+        }
+
 	function __construct()
 	{
 		global $argv;
-
-                //fix for .../Avid Shared Projects/...
-                if(preg_match('/Avid$/',$argv[2]) && $argv[3]=='Shared' && preg_match('/^Projects.*/',$argv[4])) 
-                {
-                        $argv[2]=$argv[2].' '.$argv[3].' '.$argv[4];
-                        $argv[3]=$argv[5];
-                        $argv[4]=$argv[6];
-                }
-
-		//fix argv for MXF
-		if($argv[1]=='MXF')
-		{
-			$argv[2]=$argv[2].' '.$argv[3]; //Avid MediaFiles
-			$argv[3]=$argv[4];
-			$argv[4]=$argv[5];
-			$argv[5]='';
-		}
+                self::unquoteArgs();
 
 		$this->date=date(DATE_RFC822);
 		$this->watchType=$argv[1];

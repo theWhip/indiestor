@@ -8,7 +8,7 @@
         Licensed under the GPL
 */
 
-define('INCRON_ARGS','$@ $# $%');
+define('INCRON_ARGS','"$@" "$#" "$%"');
 //We only look at events that have side effects; and not events that amount to just reading data
 define('INCRON_MAIN_EVENTS','IN_ATTRIB,IN_CREATE,IN_DELETE,IN_MOVED_FROM,IN_MOVED_TO');
 define('INCRON_MAIN_EVENTS_WATCH_IN_MODIFY_TOO',INCRON_MAIN_EVENTS.',IN_MODIFY');

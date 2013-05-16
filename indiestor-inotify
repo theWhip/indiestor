@@ -84,23 +84,26 @@ register_shutdown_function('handleShutdown');
 //prepare commandline args
 $inEvent=new InEvent();
 
+$fsObjectPath=$inEvent->folderWatched."/".$inEvent->fsObject;
+
 //only handle project folders or Avid MediaFiles folder
 if($inEvent->watchType=='MAIN' && 
 	!SharingFolders::isProjectFolder($inEvent->fsObject) &&
 	$inEvent->fsObject!='Avid MediaFiles'
-) terminate("folder concerned '{$inEvent->fsObject}' not a project folder");
+) terminate("MAIN: folder concerned '$fsObjectPath' not a project folder");
 
 //for Avid MediaFiles, only handle folders; not files
-if($inEvent->watchType=='MXF' && !is_dir("{$inEvent->folderWatched}/{$inEvent->fsObject}"))
-	terminate("MXF: file concerned '{$inEvent->folderWatched}/{$inEvent->fsObject}' not a folder; skipping");
-
+if($inEvent->watchType=='MXF' && !is_dir($fsObjectPath))
+{
+	terminate("MXF: file concerned '$fsObjectPath' not a folder; skipping");
+}
 //For Avid MediaFiles, do not handle hidden objects
 if($inEvent->watchType=='MXF' && !substr($inEvent->fsObject,0,1)=='.')
-	terminate("MXF: file concerned '{$inEvent->folderWatched}/{$inEvent->fsObject}' is a hidden folder; skipping");
+	terminate("MXF: file concerned '$fsObjectPath' is a hidden folder; skipping");
 
 //For Avid MediaFiles, do not handle resource.frk
 if($inEvent->watchType=='MXF' && $inEvent->fsObject=='resource.frk')
-	terminate("MXF: file concerned '{$inEvent->folderWatched}/{$inEvent->fsObject}' is a resource.frk; skipping");
+	terminate("MXF: file concerned '$fsObjectPath' is a resource.frk; skipping");
 
 //only handle .avp/.avs files
 if($inEvent->watchType=='PRJ' && 
