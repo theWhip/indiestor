@@ -73,8 +73,10 @@ class SharingStructureMXF
 		{	
 			$result=mkdir($mxfSubFolder,0777,true);
 			if(!$result) syslog_notice("Cannot create folder '$mxfSubFolder'");
+			syslog_notice("chown($mxfSubFolder,{$sharingUser->name})");
 			chown($mxfSubFolder,$sharingUser->name);
 			if(!$result) syslog_notice("Cannot chown folder '$mxfSubFolder' to {$sharingUser->name}");
+			syslog_notice("chgrp($mxfSubFolder,{$sharingUser->name}");
 			chgrp($mxfSubFolder,$sharingUser->name);
 			if(!$result) syslog_notice("Cannot chgrp folder '$mxfSubFolder' to {$sharingUser->name}");
 		}
