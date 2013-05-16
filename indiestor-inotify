@@ -94,8 +94,13 @@ if($inEvent->watchType=='MAIN' &&
 if($inEvent->watchType=='MXF' && !is_dir("{$inEvent->folderWatched}/{$inEvent->fsObject}"))
 	terminate("MXF: file concerned '{$inEvent->folderWatched}/{$inEvent->fsObject}' not a folder; skipping");
 
+//For Avid MediaFiles, do not handle hidden objects
 if($inEvent->watchType=='MXF' && !substr($inEvent->fsObject,0,1)=='.')
 	terminate("MXF: file concerned '{$inEvent->folderWatched}/{$inEvent->fsObject}' is a hidden folder; skipping");
+
+//For Avid MediaFiles, do not handle resource.frk
+if($inEvent->watchType=='MXF' && $inEvent->fsObject=='resource.frk')
+	terminate("MXF: file concerned '{$inEvent->folderWatched}/{$inEvent->fsObject}' is a resource.frk; skipping");
 
 //only handle .avp/.avs files
 if($inEvent->watchType=='PRJ' && 

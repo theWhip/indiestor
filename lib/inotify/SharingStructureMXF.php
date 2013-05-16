@@ -169,7 +169,8 @@ class SharingStructureMXF
 				if(
 					!SharingFolders::isRejectedFolderEntry($entry)  && 
 					self::isRequiredMxfSubFolderType($target,$type) &&
-					substr($entry,0,1)!='.' //don't deal with hidden fsobjects
+					substr($entry,0,1)!='.' && //don't deal with hidden fsobjects
+                                        $entry!='resource.frk' //don't deal with these folder/files either (MAC OSX)
 				)
 				$folders[$entry]=$entry;
 			}
