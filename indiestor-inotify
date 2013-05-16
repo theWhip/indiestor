@@ -92,7 +92,10 @@ if($inEvent->watchType=='MAIN' &&
 
 //for Avid MediaFiles, only handle folders; not files
 if($inEvent->watchType=='MXF' && !is_dir("{$inEvent->folderWatched}/{$inEvent->fsObject}"))
-	terminate("MXF: file concerned '{$inEvent->folderWatched}/{$inEvent->fsObject}' not a folder");
+	terminate("MXF: file concerned '{$inEvent->folderWatched}/{$inEvent->fsObject}' not a folder; skipping");
+
+if($inEvent->watchType=='MXF' && !substr($inEvent->fsObject,0,1)=='.')
+	terminate("MXF: file concerned '{$inEvent->folderWatched}/{$inEvent->fsObject}' is a hidden folder; skipping");
 
 //only handle .avp/.avs files
 if($inEvent->watchType=='PRJ' && 

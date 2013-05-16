@@ -152,6 +152,7 @@ class SharingStructureMXF
 
 	static function isRequiredMxfSubFolderType($target,$type)
 	{
+		if(is_file($target)) return false;
 		if($type=='folder' && is_link($target)) return false;
 		if($type=='link' && !is_link($target)) return false;
 		return true;
@@ -167,7 +168,8 @@ class SharingStructureMXF
 				$target="$mxfFolder/$entry";
 				if(
 					!SharingFolders::isRejectedFolderEntry($entry)  && 
-					self::isRequiredMxfSubFolderType($target,$type)
+					self::isRequiredMxfSubFolderType($target,$type) &&
+					substr($entry,0,1)!='.' //don't deal with hidden fsobjects
 				)
 				$folders[$entry]=$entry;
 			}
