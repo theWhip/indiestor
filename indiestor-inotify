@@ -92,10 +92,15 @@ if($inEvent->watchType=='MAIN' &&
 	$inEvent->fsObject!='Avid MediaFiles'
 ) terminate("MAIN: folder concerned '$fsObjectPath' not a project folder");
 
-//for Avid MediaFiles, only handle folders; not files
-if($inEvent->watchType=='MXF' && !is_dir($fsObjectPath))
+//for Avid MediaFiles, don't handle files
+if($inEvent->watchType=='MXF' && is_file($fsObjectPath))
 {
-	terminate("MXF: file concerned '$fsObjectPath' not a folder; skipping");
+	terminate("MXF: fsObject concerned '$fsObjectPath' is a file; skipping");
+}
+//for Avid MediaFiles, don't handle symlinks
+if($inEvent->watchType=='MXF' && is_link($fsObjectPath))
+{
+	terminate("MXF: fsObject concerned '$fsObjectPath' is a symlink; skipping");
 }
 //For Avid MediaFiles, do not handle hidden objects
 if($inEvent->watchType=='MXF' && !substr($inEvent->fsObject,0,1)=='.')

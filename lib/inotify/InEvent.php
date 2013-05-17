@@ -19,11 +19,6 @@ class InEvent
 	var $event=null;
 	var $isDir=null;
 
-	function cleanArg($arg)
-	{
-		return trim($arg);
-	}
-
         function unquoteArgs()
         {
 		global $argv;
@@ -32,7 +27,10 @@ class InEvent
                         $myArg=$arg;
                         if(substr($myArg,0,1)=='"') $myArg=substr($myArg,1);
                         if(substr($myArg,-1)=='"') $myArg=substr($myArg,0,-1);
-                        $argv[$i]=$myArg;
+                        $myArg2='';
+                        for($j=0;$j<strlen($myArg);$j++)
+                                if($myArg[$j]!='\\') $myArg2.=$myArg[$j];
+                        $argv[$i]=$myArg2;
                 }                
         }
 
@@ -40,11 +38,20 @@ class InEvent
 	{
 		global $argv;
                 self::unquoteArgs();
+#syslog_notice("after:".print_r($argv,true));
+
+                //this is a bug in the commandline argument parsing somewhere ...
+                if($argv[3]=='MediaFiles/MXF')
+                {
+                        $argv[2]=$argv[2].' '.$argv[3];
+                        $argv[3]=$argv[4];
+                        $argv[4]=$argv[5];
+                }
 
 		$this->date=date(DATE_RFC822);
 		$this->watchType=$argv[1];
-		$this->folderWatched=self::cleanArg($argv[2]);
-		$this->fsObject=self::cleanArg($argv[3]);
+		$this->folderWatched=$argv[2];
+		$this->fsObject=$argv[3];
 		$this->events=$argv[4];
 		$this->pid=getmypid();
 		$this->analyzeEventFlags();
