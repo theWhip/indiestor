@@ -19,34 +19,29 @@ class InEvent
 	var $event=null;
 	var $isDir=null;
 
-        function unquoteArgs()
+        function fixArgs()
         {
 		global $argv;
                 foreach($argv as $i=>$arg)
-                {
-                        $myArg=$arg;
-                        if(substr($myArg,0,1)=='"') $myArg=substr($myArg,1);
-                        if(substr($myArg,-1)=='"') $myArg=substr($myArg,0,-1);
-                        $myArg2='';
-                        for($j=0;$j<strlen($myArg);$j++)
-                                if($myArg[$j]!='\\') $myArg2.=$myArg[$j];
-                        $argv[$i]=$myArg2;
-                }                
+                        $argv[$i]=preg_replace(array('/"/','/\\\\/','/\|/'),array('','',' '),$arg);;
+        }
+
+        function dumpArgs($status)
+        {
+		global $argv;
+                $line="$status:";
+                foreach($argv as $arg)
+                        $line.=" =$arg=";
+                syslog_notice($line);       
         }
 
 	function __construct()
 	{
 		global $argv;
-                self::unquoteArgs();
-#syslog_notice("after:".print_r($argv,true));
-
-                //this is a bug in the commandline argument parsing somewhere ...
-                if($argv[3]=='MediaFiles/MXF')
-                {
-                        $argv[2]=$argv[2].' '.$argv[3];
-                        $argv[3]=$argv[4];
-                        $argv[4]=$argv[5];
-                }
+                global $argc;
+                self::dumpArgs('as received');
+                self::fixArgs();
+                self::dumpArgs('as unquoted');
 
 		$this->date=date(DATE_RFC822);
 		$this->watchType=$argv[1];
@@ -72,12 +67,12 @@ class InEvent
 			}
 			else
 			{
-				terminate("second event flag is not IN_ISDIR: '$eventFlags'");
+				terminate("second event flag is not IN_ISDIR: '{$this->events}'");
 			}
 		}
 		else if(count($flags)>2)
 		{
-			terminate("Cannot handle more than two event flags: '$eventFlags'");
+			terminate("Cannot handle more than two event flags: '{$this->events}'");
 		}
 	}
 

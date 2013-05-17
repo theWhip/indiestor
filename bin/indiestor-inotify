@@ -12,8 +12,10 @@ export PATH
 args=''
 for i in "$@"
 do
-    args="$args \"$i\""
+    arg=$(echo "$i" | tr ' ' '|') 
+    args="$args $arg"
 done
 eval set -- $args
-super indiestor-inotify "$@"
+echo $args
+super indiestor-inotify $args
 
