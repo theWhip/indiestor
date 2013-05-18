@@ -22,6 +22,5 @@ do
         arg=$(echo "$arg" | tr -d '\\') 
         argsEsc="$argsEsc $arg"
 done
-echo "argsEsc:$argsEsc"
 super indiestor-inotify $argsEsc
 
