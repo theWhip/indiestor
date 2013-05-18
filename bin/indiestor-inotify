@@ -12,15 +12,17 @@ export PATH
 args=''
 for i in "$@"
 do
-        args="$args \"$i\""
+        arg=$(echo "$i" | tr -d '\\') 
+        args="$args $arg"
 done
+logger "args: $args"
 eval set -- $args
 argsEsc=''
 for i in "$@"
 do
         arg=$(echo "$i" | tr ' ' '|') 
-        arg=$(echo "$arg" | tr -d '\\') 
         argsEsc="$argsEsc $arg"
 done
+logger "argsEsc: $args"
 super indiestor-inotify $argsEsc
 
