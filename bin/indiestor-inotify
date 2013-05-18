@@ -19,7 +19,9 @@ argsEsc=''
 for i in "$@"
 do
         arg=$(echo "$i" | tr ' ' '|') 
+        arg=$(echo "$arg" | tr -d '\\') 
         argsEsc="$argsEsc $arg"
 done
+echo "argsEsc:$argsEsc"
 super indiestor-inotify $argsEsc
 
