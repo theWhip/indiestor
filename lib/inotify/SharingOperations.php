@@ -103,7 +103,7 @@ class SharingOperations
 		//group must be the indiestor group
 
 		$currentGroup=SharingOperations::groupByGid($stat['gid']);
-		if($currentGroup!='is_'.$groupName)
+		if(!empty($groupName) && !empty($currentGroup) && $currentGroup!='is_'.$groupName)
 		{
 			$result=chgrp($fsObject,'is_'.$groupName);
 			if(!$result)
