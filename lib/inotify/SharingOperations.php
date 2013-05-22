@@ -9,6 +9,7 @@
 */
 
 requireLibFile('inotify/syslog.php');
+requireLibFile('inotify/shellSilent.php');
 
 class SharingOperations
 {
@@ -62,7 +63,7 @@ class SharingOperations
 
 		if($owner!=$userName || $group!=$userName) 
 		{
-			shell_exec("chown --no-dereference $userName.$userName '$linkName'");
+			shellSilent("chown --no-dereference $userName.$userName '$linkName'");
 			syslog_notice("changed ownership of '$linkName' to '$userName.$userName'");
 		}
 	}
