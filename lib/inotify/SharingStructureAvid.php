@@ -54,7 +54,7 @@ class SharingStructureAvid
 		if(is_dir($archived)) 
 		{
 			//check if archive is empty
-			$numberOfItems=intval(shellSilent("ls '$archived' | wc -l"));
+			$numberOfItems=intval(shellSilent("ls '$archived' 2> /dev/null | wc -l"));
 			if($numberOfItems==0) shellSilent("rm -rf '$archived'");
 		}
 	}
@@ -397,7 +397,8 @@ class SharingStructureAvid
                         if(!$originalProjectFound)
                         {
                                 $copyFolderPath="$avpFolder/$copyFolder";
-                                $numberOfFiles=shellSilent("find '$copyFolderPath' -type f | grep -v '.avp$' | wc -l");
+                                $numberOfFiles=shellSilent("find '$copyFolderPath' -type f 2> /dev/null ".
+                                                "| grep -v '.avp$' 2> /dev/null | wc -l");
                                 if($numberOfFiles==0) 
                                 {
                                         syslog_notice("rm -rf '$copyFolderPath'");
@@ -406,7 +407,7 @@ class SharingStructureAvid
                         }
 			
 		}
-                $numberOfRemainingCopyFolders=shellSilent("ls '$avpFolder' | wc -l");
+                $numberOfRemainingCopyFolders=shellSilent("ls '$avpFolder' 2> /dev/null | wc -l");
                 if($numberOfRemainingCopyFolders==0)
                 {
                         syslog_notice("rm -rf '$avpFolder'");
@@ -462,10 +463,10 @@ class SharingStructureAvid
 				{
 
 					//remove copy of project, if it is empty
-					$numberOfItems=intval(shellSilent("ls '$copy' | wc -l"));
+					$numberOfItems=intval(shellSilent("ls '$copy' 2> /dev/null | wc -l"));
 					if($numberOfItems==0) shellSilent("rm -rf '$copy'");
 					//check if this is the last copy
-					$numberOfItems=intval(shellSilent("ls '$rootOfCopy' | wc -l"));
+					$numberOfItems=intval(shellSilent("ls '$rootOfCopy' 2> /dev/null | wc -l"));
 					if($numberOfItems==0) shellSilent("rm -rf '$rootOfCopy'");
 				}
 			}
