@@ -350,12 +350,13 @@ class User extends EntityType
 		$renameOps=SharingStructureAvid::renameUserAvidProjects($user);
 		$membersOld=EtcPasswd::instance()->findUsersForEtcGroup($group);
 
+/*
                 //remove the user before resharing the group
                 $members=array();
                 foreach($membersOld as $member)
                         if($member->name!=$userName)
                                 $members[]=$member;
-
+*/
 		SharingStructureAvid::reshare($group->name,$members); //for archiving own folders
 		SharingStructureAvid::archiveASPFolder($user); //archive 'Avid Shared Projects'
 		return $renameOps;
