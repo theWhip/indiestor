@@ -109,7 +109,11 @@ class SharingStructureAvid
                                         mkdir($sharedUnprotected);
                                 }
 	        }
-                chmodRecursive($sharedUnprotected, 0664,0775,$userName,'is_'.$groupName);
+
+                if(!empty($groupName))
+                        chmodRecursive($sharedUnprotected, 0664,0775,$userName,'is_'.$groupName);
+                else
+                        chmodRecursive($sharedUnprotected, 0664,0775,$userName,$userName);
 
 		#avid copy 
 		$projectCopy=self::folderAvidToCopy($project);
