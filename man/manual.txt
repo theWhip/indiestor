@@ -1,7 +1,7 @@
 .\" Process this file with
 .\" groff -man -Tascii indiestor.1
 .\"
-.TH indiestor 1 "OCT 2012" Linux "User Manuals"
+.TH indiestor 1 "MAY 2013" Linux "User Manuals"
 .SH NAME
 indiestor - Project & MXF media sharing for Avid Media Composer
 .SH SYNOPSIS
@@ -14,11 +14,13 @@ indiestor - Project & MXF media sharing for Avid Media Composer
 
  --group [-add -delete -show-members]
 
- --users [-show -show-incrontab -regenerate-incrontab]
+ --users [-show -show-incrontab -regenerate-incrontab -reshare]
 
  --user [<arg> -add -delete -expel -set-home <arg> -remove-home -set-group <arg> -unset-group -set-quota <arg> -remove-quota -set-passwd <arg> -lock -add-to-samba]
 
  --user [<arg> -remove-from-indiestor -remove-from-samba]
+
+ --user [<arg> -reshare]
 
  --help
 .SH DESCRIPTION
@@ -44,7 +46,7 @@ trigger, indiestor will automatically create and distribute a
 .B .copy
 version of the project to each member of the group. Media sharing is automatically enabled as soon as media exists in /USER/Avid MediaFiles/MXF.
 
-Once inside the project bins are easily exchanged via the 'sharing tree' - a network of folders, which are offered read-only to group members. Upon opening another editors bin we recommend that editors simply drag clips and sequences to their own bins for modification/IN/OUT etc.
+Once inside the project bins are easily exchanged via the 'sharing tree' - a network of folders, which are offered read-only to group members. Upon opening another editors bin we recommend that editors simply drag clips and sequences to their own bins for modification/IN/OUT etc. An Unprotected folder is provided for conveniently exchanging bins.
 
 As a sanity check indiestor is designed to reject .avid trigger requests for folders without valid .avp files.
 
@@ -167,6 +169,9 @@ shows the list of folders being watched by incron for the user indienotify. See 
 .B  -regenerate-incrontab:
 for debugging purposes. If the incrontab seems inconsistent, regenerate it.
 
+.B  -reshare:
+reshares all project folders and media manually, should you need to prompt the system.
+
 *none if the user does not belong to an indiestor group.
 
 .IP --user
@@ -221,6 +226,10 @@ Removes the user <arg> from indiestor. This action cannot be combined with other
 .IP --user <arg>:
 .B -remove-from-samba:
 Removes the user <arg> from samba. This action cannot be combined with other actions.
+
+.IP --user <arg>:
+.B -reshare:
+reshares all project folders and media manually (for the specified user).
 
 .IP --help:
 Shows the command the synopsis.
@@ -306,11 +315,10 @@ The following global and share entries are required:
  wide links = yes
  map read only = permissions
  inherit permissions = no
- force create mode = 0750
- force directory mode = 0750
- create mask = 0750
- directory mask = 0750
- force group = indiestor-users
+ force create mode = 0644
+ force directory mode = 0755
+ create mask = 0644
+ directory mask = 0755
 
 .B [indiestor-mac]
  comment = indiestor home directories for OS X clients
@@ -323,11 +331,10 @@ The following global and share entries are required:
  wide links = yes
  map read only = permissions
  inherit permissions = no
- force create mode = 0750
- force directory mode = 0750
- create mask = 0750
- directory mask = 0750
- force group = indiestor-users
+ force create mode = 0644
+ force directory mode = 0755
+ create mask = 0644
+ directory mask = 0755
 
 .RE
 .I /var/lib/samba
@@ -407,5 +414,5 @@ Further diagnostic information can be found on the Technical FAQs page at:
 .B http://www.indiestor.com/documentation/getting-started/admin-faq
 
 .SH AUTHOR
-Alex Gardiner (alex@indiestor.com) & Erik Poupaert (erik@sankuru.biz)
+Alex Gardiner (alex@indiestor.com) & Erik Poupaert (erik@indiestor.com)
 
