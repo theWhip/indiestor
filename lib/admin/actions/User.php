@@ -364,6 +364,8 @@ class User extends EntityType
 		SharingStructureAvid::renameBackUserAvidProjects($user,$renameOps);
 		$members=EtcPasswd::instance()->findUsersForEtcGroup($group);
 		SharingStructureAvid::reshare($groupName,$members); //for purging invalid symlinks
+                SharingStructureMXF::reshare($members);//for purging invalid symlinks
+                SharingStructureDefault::reshare($groupName,$members); //for purging invalid symlinks
 		//default
 		SharingStructureDefault::purgeProjectLinks(array($user));
                 SharingStructureMXF::purgeAvidForUser($user,array()); //remove MXF folders
