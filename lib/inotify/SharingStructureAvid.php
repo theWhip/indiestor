@@ -451,7 +451,7 @@ class SharingStructureAvid
 				$source=$pathSharedSubFolder;
 			}
 			if(file_exists($source)) rename($source,$subArchiveFolder);
-			shellSilent("chown -R {$user->name}.{$user->name} $subArchiveFolder");
+			shellSilent("chown -R {$user->name}.{$user->name} '$subArchiveFolder'");
 
 			//purge copy
 			if($islink)

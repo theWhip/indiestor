@@ -101,31 +101,25 @@ class SharingStructureMXF
 		foreach($folders as $folder)
 		{
 			$linkName="$mxfFolder/$folder";
-
 			$target=readlink($linkName);
+			$rootFolder=dirname($target);
+			$targetHomeFolder=dirname(dirname($rootFolder));
 
 			//if the link does not point to a folder, remove it
 			if(!is_dir($target))
 			{
 				unlink($linkName);
 				syslog_notice("Removed '$linkName'; target '$target' is not a folder");
-				return;
 			}
-
 			//the link must point to an mxf folder
-			$rootFolder=dirname($target);
-			if(!SharingFolders::endsWith($rootFolder,MXF_SUBFOLDER))
+			elseif(!SharingFolders::endsWith($rootFolder,MXF_SUBFOLDER))
 			{
 				unlink($linkName);
 				syslog_notice("Removed '$linkName'; in target '$target' ".
 					"the target is not a valid mxf folder");
-				return;
 			}
-
 			//the link must point to member project folder
-			$targetHomeFolder=dirname(dirname($rootFolder));
-
-			if(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
+			elseif(!SharingFolders::isGroupMemberHomeFolder($users,$targetHomeFolder))
 			{
 				//file could have been deleted already by a concurrent process
 				if(file_exists($linkName))
@@ -133,7 +127,6 @@ class SharingStructureMXF
                                         unlink($linkName);
         				syslog_notice("Removed '$linkName'; in target '$target' ".
 					"the home folder '$targetHomeFolder' is not the home folder for a group member");
-        				return;
                                 }
 			}
 
