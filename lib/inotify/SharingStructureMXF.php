@@ -26,6 +26,11 @@ class SharingStructureMXF
 		{
 			$projects=sharingFolders::userProjects($user->homeFolder);
 			$avidProjectsPresent=$avidProjectsPresent || self::hasAtLeastOneAvidProject($projects);
+
+                        //always ensure permissions & ownership of existing AMF folder
+		        $amfSubFolder="{$user->homeFolder}/".AMF_SUBFOLDER;
+                        if(is_dir($amfSubFolder))
+                                chmodRecursive($amfSubFolder, 0644,0755,$user->name,$user->name);
 		}
 
 		if($avidProjectsPresent)
@@ -75,7 +80,7 @@ class SharingStructureMXF
 		$mxfSubFolder="{$sharingUser->homeFolder}/".MXF_SUBFOLDER;
 		if(!is_dir($mxfSubFolder))
 		{	
-			$result=mkdir($mxfSubFolder,0777,true);
+			$result=mkdir($mxfSubFolder,0755,true);
 			if(!$result) syslog_notice("Cannot create folder '$mxfSubFolder'");
 			syslog_notice("chown($mxfSubFolder,{$sharingUser->name})");
 			chown($mxfSubFolder,$sharingUser->name);
@@ -83,11 +88,6 @@ class SharingStructureMXF
 			syslog_notice("chgrp($mxfSubFolder,{$sharingUser->name}");
 			chgrp($mxfSubFolder,$sharingUser->name);
 			if(!$result) syslog_notice("Cannot chgrp folder '$mxfSubFolder' to {$sharingUser->name}");
-		}
-		else
-		{
-			SharingOperations::fixOwnerGroup($sharingUser->name,$sharingUser->name,$amfSubFolder);
-			SharingOperations::fixOwnerGroup($sharingUser->name,$sharingUser->name,$mxfSubFolder);
 		}
 
 		$linkName="$mxfSubFolder/{$entry}_$fromUserName";
