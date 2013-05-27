@@ -82,6 +82,31 @@ class SharingOperations
 		return $group;
 	}
 
+	static function fixOwnerGroup($groupName,$userName,$fsObject)
+	{
+		$stat=stat($fsObject);
+		if($stat==null)
+		{
+			syslog_notice("Cannot stat '$fsObject'");
+			return;
+		}
+		$currentOwner=SharingOperations::ownerByUid($stat['uid']);	
+		if($currentOwner!=$userName) 
+		{
+			$result=chown($fsObject,$userName);
+			if(!$result)
+				syslog_notice("cannot chown '$fsObject' to '$userName'");
+		}
+
+		$currentGroup=SharingOperations::groupByGid($stat['gid']);
+		if(!empty($groupName) && !empty($currentGroup) && $currentGroup!=$groupName)
+		{
+			$result=chgrp($fsObject,$groupName);
+			if(!$result)
+				syslog_notice("cannot chgrp '$fsObject' to '$groupName'");
+		}
+	}
+
 	static function fixProjectFsObjectOwnership($groupName,$userName,$fsObject)
 	{
 		$stat=stat($fsObject);

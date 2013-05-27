@@ -57,17 +57,6 @@ class SharingStructureMXF
 		$mxfFolder=$user->homeFolder.'/'.MXF_SUBFOLDER;
 		if(!file_exists($mxfFolder)) return;
 
-		//retrieve group
-		$etcGroup=EtcGroup::instance();
-		$group=$etcGroup->findGroupForUserName($user->name);
-
-		//if user is member of a group, use his is_ group
-		if($group!=null) $groupName=$group->name; else $groupName=$user->name;
-
-		//make sure they have the right group ownership
-		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$amfFolder);
-		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$mxfFolder);
-
 		$folders=self::mxfSubFolders($mxfFolder);
 		foreach($folders as $folder)
 		{
@@ -82,6 +71,7 @@ class SharingStructureMXF
 
 	static function reshareAvidMXFToUser($sharingUser,$target,$entry,$fromUserName)
 	{
+		$amfSubFolder="{$sharingUser->homeFolder}/".AMF_SUBFOLDER;
 		$mxfSubFolder="{$sharingUser->homeFolder}/".MXF_SUBFOLDER;
 		if(!is_dir($mxfSubFolder))
 		{	
@@ -94,6 +84,12 @@ class SharingStructureMXF
 			chgrp($mxfSubFolder,$sharingUser->name);
 			if(!$result) syslog_notice("Cannot chgrp folder '$mxfSubFolder' to {$sharingUser->name}");
 		}
+		else
+		{
+			SharingOperations::fixOwnerGroup($sharingUser->name,$sharingUser->name,$amfSubFolder);
+			SharingOperations::fixOwnerGroup($sharingUser->name,$sharingUser->name,$mxfSubFolder);
+		}
+
 		$linkName="$mxfSubFolder/{$entry}_$fromUserName";
 		if(!is_link($linkName))
 			SharingOperations::createSymlink($linkName,$target,$sharingUser->name);
