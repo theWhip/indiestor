@@ -93,6 +93,7 @@ class LockingMechanism
                         {
 				syslog_notice("pid file disappeared in between checking its existence and reading it;".
                                                 " not free to run");
+				@unlink($this->pidFile());
 				return true;
                         }
 			if(file_exists("/proc/$pid"))
