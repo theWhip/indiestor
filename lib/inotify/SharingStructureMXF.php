@@ -12,7 +12,8 @@ requireLibFile('inotify/syslog.php');
 requireLibFile('inotify/SharingOperations.php');
 requireLibFile('inotify/SharingFolders.php');
 
-define('MXF_SUBFOLDER','Avid MediaFiles/MXF');
+define('AMF_SUBFOLDER','Avid MediaFiles');
+define('MXF_SUBFOLDER',AMF_SUBFOLDER.'/'.'MXF');
 
 class SharingStructureMXF
 {
@@ -52,8 +53,21 @@ class SharingStructureMXF
 
 	static function reshareAvidFromUser($user,$users)
 	{
+		$amfFolder=$user->homeFolder.'/'.AMF_SUBFOLDER;
 		$mxfFolder=$user->homeFolder.'/'.MXF_SUBFOLDER;
 		if(!file_exists($mxfFolder)) return;
+
+		//retrieve group
+		$etcGroup=EtcGroup::instance();
+		$group=$etcGroup->findGroupForUserName($user->name);
+
+		//if user is member of a group, use his is_ group
+		if($group!=null) $groupName=$group->name; else $groupName=$user->name;
+
+		//make sure they have the right group ownership
+		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$amfFolder);
+		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$mxfFolder);
+
 		$folders=self::mxfSubFolders($mxfFolder);
 		foreach($folders as $folder)
 		{
