@@ -61,6 +61,12 @@ class SharingStructureAvid
 
 	static function verifyProject($groupName,$user,$project,$users)
 	{
+		//verify ownership/groupship on .avid folder
+		$userName=$user->name;
+		$homeFolder=$user->homeFolder;
+		$projectFolder=$homeFolder."/".$project;
+		chmodBase($projectFolder,null,$userName,$userName);
+
 		self::verifyProjectFiles($user,$project);
 		self::verifyProjectSharedFolder($groupName,$user,$project,$users);
 	}

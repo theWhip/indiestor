@@ -14,14 +14,17 @@
 
 function chmodBase($path,$mode,$userName,$groupName)
 {
-        $currentMode=fileperms($path) & 0777;
-        if($currentMode!=$mode)
-        {
-                chmod($path, $mode);
-                $currentModeOct=decoct($currentMode);
-                $modeOct=decoct($mode);
-                syslog_notice("chmodBase-permissions: $path: $currentModeOct => $modeOct");
-        }
+	if($mode!=null)
+	{
+		$currentMode=fileperms($path) & 0777;
+		if($currentMode!=$mode)
+		{
+		        chmod($path, $mode);
+		        $currentModeOct=decoct($currentMode);
+		        $modeOct=decoct($mode);
+		        syslog_notice("chmodBase-permissions: $path: $currentModeOct => $modeOct");
+		}
+	}
         //check ownership
         $userRecord=posix_getpwuid(fileowner($path));
         $currentOwner=$userRecord['name'];
