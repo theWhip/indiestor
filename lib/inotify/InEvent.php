@@ -39,9 +39,9 @@ class InEvent
 	{
 		global $argv;
                 global $argc;
-                self::dumpArgs('as received');
+#                self::dumpArgs('as received');
                 self::fixArgs();
-                self::dumpArgs('as unquoted');
+#                self::dumpArgs('as unquoted');
 
 		$this->date=date(DATE_RFC822);
 		$this->watchType=$argv[1];
