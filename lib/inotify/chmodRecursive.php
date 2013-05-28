@@ -14,17 +14,6 @@
 
 function chmodBase($path,$mode,$userName,$groupName)
 {
-	if($mode!=null)
-	{
-		$currentMode=fileperms($path) & 0777;
-		if($currentMode!=$mode)
-		{
-		        chmod($path, $mode);
-		        $currentModeOct=decoct($currentMode);
-		        $modeOct=decoct($mode);
-		        syslog_notice("chmodBase-permissions: $path: $currentModeOct => $modeOct");
-		}
-	}
         //check ownership
         $userRecord=posix_getpwuid(fileowner($path));
         $currentOwner=$userRecord['name'];
@@ -44,17 +33,18 @@ function chmodBase($path,$mode,$userName,$groupName)
 
 function chmodRecursive($path, $modeFile,$modeFolder,$userName,$groupName) 
 { 
-        if (is_dir($path)) 
-        {
-                chmodBase($path,$modeFolder,$userName,$groupName);
-                $dh = opendir($path); 
-                while (($file = readdir($dh)) !== false) 
-                        if($file != '.' && $file != '..')
-                                chmodRecursive($path.'/'.$file, $modeFile,$modeFolder,$userName,$groupName); 
-                closedir($dh); 
-        } 
-        else
         if (!is_link($path))
-                chmodBase($path,$modeFile,$userName,$groupName);
+        {
+                if (is_dir($path)) 
+                {
+                        chmodBase($path,$modeFolder,$userName,$groupName);
+                        $dh = opendir($path); 
+                        while (($file = readdir($dh)) !== false) 
+                                if($file != '.' && $file != '..')
+                                        chmodRecursive($path.'/'.$file, $modeFile,$modeFolder,$userName,$groupName); 
+                        closedir($dh); 
+                } 
+                else chmodBase($path,$modeFile,$userName,$groupName);
+        }
 } 
 
