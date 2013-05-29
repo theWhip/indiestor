@@ -65,7 +65,7 @@ class SharingStructureAvid
 		$userName=$user->name;
 		$homeFolder=$user->homeFolder;
 		$projectFolder=$homeFolder."/".$project;
-		chmodBase($projectFolder,null,$userName,$userName);
+		chmodBase($projectFolder,0755,$userName,$userName);
 
 		self::verifyProjectFiles($user,$project);
 		self::verifyProjectSharedFolder($groupName,$user,$project,$users);
