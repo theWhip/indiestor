@@ -139,23 +139,9 @@ $lockingMechanism=new LockingMechanism($groupName);
 $lockingMechanism->lock();
 do
 {
-	if(($inEvent->watchType=='MAIN' && SharingFolders::isAvidProjectFolder($inEvent->fsObject)) ||
-		$inEvent->watchType=='PRJ')
-	{
-		SharingStructureAvid::reshare($groupName,$members);
-		SharingStructureMXF::reshare($members);
-	}
-        elseif($inEvent->watchType=='UNPROTECTED')
-        {
-                if(basename($inEvent->folderWatched)=='Unprotected') { $modeFolder=0775; $modeFile=0664; }
-                else { $modeFolder=0755; $modeFile=0644; }
-                chmodRecursive($inEvent->folderWatched, $modeFile,$modeFolder,$userName,'is_'.$groupName);
-        }
-	else
-	{
-		SharingStructureDefault::reshare($groupName,$members);
-	}
+	SharingStructureAvid::reshare($groupName,$members);
 	SharingStructureMXF::reshare($members);
+	SharingStructureDefault::reshare($groupName,$members);
 }
 while($lockingMechanism->mustReRun());
 $lockingMechanism->unlock();
