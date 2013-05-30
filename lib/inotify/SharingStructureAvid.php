@@ -139,12 +139,6 @@ class SharingStructureAvid
 				$target="{$sharingUser->homeFolder}/Avid Shared Projects".
                                         "/$projectCopy/Shared/{$sharingUser->name}";
 				SharingOperations::verifySymLink($linkName,$target,$userName);		
-
-                                if(!empty($groupName))
-                                        chmodRecursive($target, 0644,0755,$sharingUser->name,'is_'.$groupName);
-                                else
-                                        chmodRecursive($target, 0644,0755,$sharingUser->name,$sharingUser->name);
-
 			}
 		}
 	}
@@ -216,6 +210,12 @@ class SharingStructureAvid
 		if(!is_dir($shared)) mkdir($shared);
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$shared);
 		SharingOperations::fixFsObjectPermissions($shared,"755");
+
+                if(!empty($groupName))
+                        chmodRecursive($shared, 0644,0755,$user->name,'is_'.$groupName);
+                else
+                        chmodRecursive($shared, 0644,0755,$user->name,$user->name);
+
 
 		#the link from the project owner
 		$sharedSubOwner="$shared/{$owner->name}";
