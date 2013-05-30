@@ -85,12 +85,6 @@ class SharingStructureAvid
 		#the owner's own shared subfolder
 		$sharedSubOwner="$shared/$userName";
 
-                if(!empty($groupName))
-                        chmodRecursive($sharedSubOwner, 0644,0755,$userName,'is_'.$groupName);
-                else
-                        chmodRecursive($sharedSubOwner, 0644,0755,$userName,$userName);
-
-
 		#owner's archive, if it exists
 		$archived="$projectFolder/Archived";
 
@@ -105,6 +99,11 @@ class SharingStructureAvid
 		}
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$userName,$sharedSubOwner);
 		SharingOperations::fixFsObjectPermissions($sharedSubOwner,"755");
+
+                if(!empty($groupName))
+                        chmodRecursive($sharedSubOwner, 0644,0755,$userName,'is_'.$groupName);
+                else
+                        chmodRecursive($sharedSubOwner, 0644,0755,$userName,$userName);
 
 
 	        #the unprotected shared subfolder
