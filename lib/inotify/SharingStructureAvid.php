@@ -84,6 +84,12 @@ class SharingStructureAvid
 		#the owner's own shared subfolder
 		$sharedSubOwner="$shared/$userName";
 
+                if(!empty($groupName))
+                        chmodRecursive($sharedSubOwner, 0644,0755,$userName,'is_'.$groupName);
+                else
+                        chmodRecursive($sharedSubOwner, 0644,0755,$userName,$userName);
+
+
 		#owner's archive, if it exists
 		$archived="$projectFolder/Archived";
 
@@ -133,6 +139,12 @@ class SharingStructureAvid
 				$target="{$sharingUser->homeFolder}/Avid Shared Projects".
                                         "/$projectCopy/Shared/{$sharingUser->name}";
 				SharingOperations::verifySymLink($linkName,$target,$userName);		
+
+                                if(!empty($groupName))
+                                        chmodRecursive($target, 0644,0755,$sharingUser->name,'is_'.$groupName);
+                                else
+                                        chmodRecursive($target, 0644,0755,$sharingUser->name,$sharingUser->name);
+
 			}
 		}
 	}
