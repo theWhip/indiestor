@@ -17,35 +17,23 @@ define('MXF_SUBFOLDER',AMF_SUBFOLDER.'/'.'MXF');
 
 class SharingStructureMXF
 {
-	static function reshare($users)
-	{
-		if($users==null) $users=array();
 
-		$avidProjectsPresent=false;
+        static function ensureAMFPermsOwnership($users)
+        {
 		foreach($users as $user)
 		{
-			$projects=sharingFolders::userProjects($user->homeFolder);
-			$avidProjectsPresent=$avidProjectsPresent || self::hasAtLeastOneAvidProject($projects);
-
-                        //always ensure permissions & ownership of existing AMF folder
-		        $amfSubFolder="{$user->homeFolder}/".AMF_SUBFOLDER;
+		        $amfSubFolder=$user->homeFolder.'/'.AMF_SUBFOLDER;
                         if(is_dir($amfSubFolder))
                                 chmodRecursive($amfSubFolder, 0644,0755,$user->name,$user->name);
 		}
+        }
 
-		if($avidProjectsPresent)
-			self::reshareAvid($users);
-
-		self::purgeAvid($users);
-	}
-
-	static function hasAtLeastOneAvidProject($projects)
+	static function reshare($users)
 	{
-		foreach($projects as $project)
-		{
-			if(SharingFolders::endsWith($project,'.avid')) return true;
-		}
-		return false;
+		if($users==null) $users=array();
+                self::ensureAMFPermsOwnership($users);
+		self::reshareAvid($users);
+		self::purgeAvid($users);
 	}
 
 	static function reshareAvid($users)
