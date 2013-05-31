@@ -415,12 +415,14 @@ class SharingStructureAvid
                         if(!$originalProjectFound)
                         {
                                 $copyFolderPath="$avpFolder/$copyFolder";
-                                $numberOfFiles=shellSilent("find '$copyFolderPath' -type f 2> /dev/null ".
+                                $finderCmd1="find '$copyFolderPath' -type f 2> /dev/null ".
                                                 "| grep -v '.avp$' 2> /dev/null ".
                                                 "| grep -v '.avs$' 2> /dev/null ".
                                                 "| grep -v '/Statistics' 2> /dev/null ".
-                                                "| grep -v '/SearchData' 2> /dev/null ".
-						"| wc -l");
+                                                "| grep -v '/SearchData' 2> /dev/null ";
+                                syslog_notice("finderCmd: $finderCmd1");
+                                $finderCmd="$finderCmd1 | wc -l";
+                                $numberOfFiles=shellSilent($finderCmd);
                                 if($numberOfFiles==0) 
                                 {
                                         syslog_notice("rm -rf '$copyFolderPath'");
