@@ -15,12 +15,16 @@ function syslog_notice($msg)
 
 function syslog_notice_start_running()
 {
-	syslog_notice("indiestor-inotify running");
+	syslog_notice("-------------------------------------------");
+	syslog_notice("---------START NEW INDIESTOR EVENT---------");
+	syslog_notice("-------------------------------------------");
 }
 
 function syslog_notice_end_running()
 {
-	syslog_notice('indiestor, end run');
+	syslog_notice("-------------------------------------------");
+	syslog_notice("------------END INDIESTOR EVENT------------");
+	syslog_notice("-------------------------------------------");
 }
 
 function terminate($msg)

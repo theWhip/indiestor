@@ -20,7 +20,7 @@ class SharingStructureAvid
 	static function reshare($groupName,$users)
 	{
 		if($users==null) $users=array();
-		syslog_notice("resharing group '$groupName'for avid folders");
+		syslog_notice("resharing group '$groupName' for avid folders");
 		self::verifyProjects($groupName,$users);
 		self::purgeProjectLinks($users);
 	}
