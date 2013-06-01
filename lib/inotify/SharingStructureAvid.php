@@ -212,9 +212,9 @@ class SharingStructureAvid
 		SharingOperations::fixFsObjectPermissions($shared,"755");
 
                 if(!empty($groupName))
-                        chmodRecursive($shared, 0644,0755,$user->name,'is_'.$groupName);
+                        chmodRecursive($shared, 0664,0775,$user->name,'is_'.$groupName);
                 else
-                        chmodRecursive($shared, 0644,0755,$user->name,$user->name);
+                        chmodRecursive($shared, 0664,0775,$user->name,$user->name);
 
 
 		#the link from the project owner
@@ -238,7 +238,7 @@ class SharingStructureAvid
 			else
 			{
 				rename($archivedUser,$sharedSubUser);
-				shellSilent("chown -R {$user->name}.{$user->name} '$sharedSubUser'");
+				shellSilent("chown -R {$user->name}.is_$groupName '$sharedSubUser'");
 			}
 		}
 
