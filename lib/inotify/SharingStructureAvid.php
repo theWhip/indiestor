@@ -17,13 +17,26 @@ requireLibFile('inotify/shellSilent.php');
 class SharingStructureAvid
 {
 
+        static $repurgeRequired=false;
+
 	static function reshare($groupName,$users)
 	{
 		if($users==null) $users=array();
 		syslog_notice("resharing group '$groupName' for avid folders");
 		self::verifyProjects($groupName,$users);
-		self::purgeProjectLinks($users);
+                self::$repurgeRequired=true;
+                while(self::$repurgeRequired)
+                {
+                        self::$repurgeRequired=false;
+        		self::purgeProjectLinks($users);
+                }
 	}
+
+        static function renameRepurge($from,$to)
+        {
+                rename($from,$to);
+                self::$repurgeRequired=true;
+        }
 
 	static function verifyProjects($groupName,$users)
 	{
@@ -423,10 +436,16 @@ class SharingStructureAvid
                                 syslog_notice("finderCmd1: $finderCmd1");
                                 $finderCmd="$finderCmd1 | wc -l";
                                 $numberOfFiles=shellSilent($finderCmd);
+                                syslog_notice("finderCmd1: files found = $numberOfFiles");
                                 if(intval($numberOfFiles)==0) 
                                 {
                                         syslog_notice("rm -rf '$copyFolderPath'");
                                         shellSilent("rm -rf '$copyFolderPath'");
+                                }
+                                else
+                                {
+                                        syslog_notice("finderCmd1:".
+                                                shellSilent($finderCmd1));                                        
                                 }
                         }
 			
@@ -476,7 +495,7 @@ class SharingStructureAvid
 				$islink=false;
 				$source=$pathSharedSubFolder;
 			}
-			if(file_exists($source)) rename($source,$subArchiveFolder);
+			if(file_exists($source)) self::renameRepurge($source,$subArchiveFolder);
 			shellSilent("chown -R {$user->name}.{$user->name} '$subArchiveFolder'");
 
 			//purge copy
@@ -571,7 +590,7 @@ class SharingStructureAvid
 				        $archiveSubFolder="$archived/{$user->name}";
 				        shellSilent("chown -R $ownerName.$ownerName '$archiveSubFolder'");
                                         syslog_notice("archiving $ownFolder in $archiveSubFolder");  
-				        rename($ownFolder,$archiveSubFolder);
+				        self::renameRepurge($ownFolder,$archiveSubFolder);
                                 }
 			}
 		}
