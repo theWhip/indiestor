@@ -48,7 +48,7 @@ class Users extends EntityType
                 }
                 if($indiestorGroup->members==null) 
                 {
-                        ActionEngine::error('AE_ERR_INDIESTOR_GROUP_MEMBERS_DO_NOT_EXIST');
+#                       ActionEngine::error('AE_ERR_INDIESTOR_GROUP_MEMBERS_DO_NOT_EXIST');
                         return;
                 }
                 foreach($indiestorGroup->members as $member)
