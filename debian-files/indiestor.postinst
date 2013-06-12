@@ -17,6 +17,10 @@
 
 case "$1" in
     configure)
+	indiestorUsers=$(cat /etc/group | grep "indiestor-users")
+	if [ -z "$indiestorUsers" ]; then
+		groupadd "indiestor-users"
+	fi
 	indiewheel=$(cat /etc/group | grep indiewheel)
 	if [ -z "$indiewheel" ]; then
 		groupadd indiewheel

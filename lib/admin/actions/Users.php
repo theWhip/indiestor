@@ -41,12 +41,12 @@ class Users extends EntityType
         static function reshare($commandAction)
         {
                 $indiestorGroup=EtcGroup::instance()->indiestorGroup;
-                if($indiestorGroup===null) 
+                if($indiestorGroup==null) 
                 {
                         ActionEngine::error('AE_ERR_INDIESTOR_GROUP_DOES_NOT_EXIST');
                         return;
                 }
-                if($indiestorGroup->members===null) 
+                if($indiestorGroup->members==null) 
                 {
                         ActionEngine::error('AE_ERR_INDIESTOR_GROUP_MEMBERS_DO_NOT_EXIST');
                         return;
