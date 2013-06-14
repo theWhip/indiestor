@@ -59,6 +59,21 @@ class Incrontab
                 return false;
         }
 
+	static function generateTabWatchTree($folder,$incronLineSuffix)
+	{
+		$result="";
+              	$folder=preg_replace('/ /','\ ',$folder);
+
+		$folders=ShellCommand::query("find $folder -type d")."\n";
+		$folders=explode("\n",$folders);
+		foreach($folders as $folder)
+		{
+			$folder=trim($folder);
+			if($folder!="") $result.=$folder.' '.$incronLineSuffix;
+		}
+		return $result;
+	}
+
 	static function generateTabForUser($userName,$homeFolder,$groupMembers)
 	{
 		$userIncronLines='';
@@ -90,27 +105,27 @@ class Incrontab
                         
                         #handle Shared folders
                         $sharedFolders=SharingFolders::userSubFolders("$homeFolder/$avidFolder/Shared");
+			$incronLineSuffix=INCRON_MAIN_EVENTS.' '.
+			             	INCRON_SCRIPT_EVENT_HANDLER_PATH.
+                                        ' UNPROTECTED '.INCRON_ARGS."\n";
                         foreach($sharedFolders as $sharedFolder)
-                                if(!is_link("$homeFolder/$avidFolder/Shared/$sharedFolder"))
-                                {
-		                        $userIncronLines.="$homeFolder/$avidFolder/Shared/$sharedFolder".' '.
-                                                        INCRON_MAIN_EVENTS.' '.
-			                                INCRON_SCRIPT_EVENT_HANDLER_PATH.
-                                                        ' UNPROTECTED '.INCRON_ARGS."\n";
-                                }
+			{
+				$folder="$homeFolder/$avidFolder/Shared/$sharedFolder";
+                                if(!is_link($folder))
+				{
+					$userIncronLines.=self::generateTabWatchTree($folder,$incronLineSuffix);
+				}
                                 else
                                 {
-                                        $target=readlink("$homeFolder/$avidFolder/Shared/$sharedFolder");
+                                        $target=readlink($folder);
 					if($target!==false && is_dir($target) && 
-                                             self::isLocatedInValidHomeFolderOfGroupMember($target,$userName,$groupMembers))
+                                             self::isLocatedInValidHomeFolderOfGroupMember(
+								$target,$userName,$groupMembers))
                                         {
-                                                $target=preg_replace('/ /','\ ',$target);
-		                                $userIncronLines.="$target".' '.
-                                                                INCRON_MAIN_EVENTS.' '.
-			                                        INCRON_SCRIPT_EVENT_HANDLER_PATH.
-       	                                                        ' UNPROTECTED '.INCRON_ARGS."\n";
+						$userIncronLines.=self::generateTabWatchTree($target,$incronLineSuffix);
                                         }
                                 }
+			}
 		}
 	
 		#watch 'Avid MediaFiles'
