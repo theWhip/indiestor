@@ -63,8 +63,11 @@ class Incrontab
 	{
 		$result="";
               	$folder=preg_replace('/ /','\ ',$folder);
-
-		$folders=ShellCommand::query("find $folder -type d")."\n";
+		$searchFilter="\\( ! -regex '.*/\..*' ".
+			"-and ! -name 'resource.frk' ".
+			"-and ! -regex '.*/Statistics' ".
+			"-and ! -regex '.*/SearchData'  \\)";
+		$folders=ShellCommand::query("find $folder -type d $searchFilter");
 		$folders=explode("\n",$folders);
 		foreach($folders as $folder)
 		{
