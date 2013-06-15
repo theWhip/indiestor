@@ -124,7 +124,24 @@ class EtcPasswd
 		}
 		return $users;
 	}
-	
+
+	//----------------------------------------------
+	// FIND HOME USER BY PATH
+	//----------------------------------------------
+
+	static function startsWith($haystack, $needle)
+	{
+	    return strpos($haystack, $needle, 0) === 0;
+	}
+
+	function findHomeUserByPath($path)
+	{
+		foreach($this->users as $user)
+			if($user->homeFolder!='/')
+				if(self::startsWith($path,$user->homeFolder))
+					return $user;
+		return null;
+	}
 	//----------------------------------------------
 	// FIND USER BY HOME FOLDER
 	//----------------------------------------------

@@ -433,10 +433,8 @@ class SharingStructureAvid
                                                 "| grep -v '.avs$' 2> /dev/null ".
                                                 "| grep -v '/Statistics' 2> /dev/null ".
                                                 "| grep -v '/SearchData' 2> /dev/null ";
-                                syslog_notice("finderCmd1: $finderCmd1");
                                 $finderCmd="$finderCmd1 | wc -l";
                                 $numberOfFiles=shellSilent($finderCmd);
-                                syslog_notice("finderCmd1: files found = $numberOfFiles");
                                 if(intval($numberOfFiles)==0) 
                                 {
                                         syslog_notice("rm -rf '$copyFolderPath'");
@@ -451,7 +449,6 @@ class SharingStructureAvid
 			
 		}
                 $finderCmd2="ls '$avpFolder' 2> /dev/null";
-                syslog_notice("finderCmd2: $finderCmd2");
                 $numberOfRemainingCopyFolders=shellSilent("$finderCmd2 | wc -l");
                 if(intval($numberOfRemainingCopyFolders)==0)
                 {

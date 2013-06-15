@@ -86,22 +86,14 @@ $inEvent=new InEvent();
 
 $fsObjectPath=$inEvent->folderWatched."/".$inEvent->fsObject;
 
-//only handle project folders or Avid MediaFiles folder
-if($inEvent->watchType=='MAIN' && 
-	!SharingFolders::isProjectFolder($inEvent->fsObject) &&
-	$inEvent->fsObject!='Avid MediaFiles'
-) terminate("MAIN: folder concerned '$fsObjectPath' not a project folder");
-
 //for Avid MediaFiles, don't handle files
 if($inEvent->watchType=='MXF' && is_file($fsObjectPath))
-{
 	terminate("MXF: fsObject concerned '$fsObjectPath' is a file; skipping");
-}
+
 //for Avid MediaFiles, don't handle symlinks
 if($inEvent->watchType=='MXF' && is_link($fsObjectPath))
-{
 	terminate("MXF: fsObject concerned '$fsObjectPath' is a symlink; skipping");
-}
+
 //For Avid MediaFiles, do not handle hidden objects
 if($inEvent->watchType=='MXF' && !substr($inEvent->fsObject,0,1)=='.')
 	terminate("MXF: file concerned '$fsObjectPath' is a hidden folder; skipping");
@@ -111,17 +103,18 @@ if($inEvent->watchType=='MXF' && $inEvent->fsObject=='resource.frk')
 	terminate("MXF: file concerned '$fsObjectPath' is a resource.frk; skipping");
 
 //only handle .avp/.avs files
-if($inEvent->watchType=='PRJ' && 
+if($inEvent->watchType=='AVID-PRJ' && 
 	!SharingFolders::endsWith($inEvent->fsObject,'.avp') &&
 	!SharingFolders::endsWith($inEvent->fsObject,'.avs')
 ) terminate("avid file concerned '{$inEvent->fsObject}' not a .avp nor .avs file");
 
-//find user for folder
-$homeFolder=$inEvent->homeFolder();
+//find home user for path
 $etcPasswd=EtcPasswd::instance();
-$user=$etcPasswd->findUserByHomeFolder($homeFolder);
-if($user==null) terminate("Cannot find user for home folder '$homeFolder'");
+$user=$etcPasswd->findHomeUserByPath($inEvent->folderWatched);
+if($user==null) terminate("Cannot find user for folder '{$inEvent->folderWatched}'");
+$homeFolder=$user->homeFolder;
 $userName=$user->name;
+syslog_notice("processing user '$userName', home folder '$homeFolder'");
 
 //find group for user
 $etcGroup=EtcGroup::instance();

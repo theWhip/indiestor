@@ -81,35 +81,5 @@ class InEvent
 		return "pid:{$this->pid} args: {$this->watchType} {$this->folderWatched} {$this->fsObject} {$this->events}";
 	}
 
-	function homeFolderForMXFFolder()
-	{
-		if(preg_match('|(.*)/Avid MediaFiles.*|', $this->folderWatched, $matches))
-			return 	trim($matches[1]);
-		else terminate("Cannot determine home folder from MXF Folder '{$this->folderWatched}'");
-	}
-
-        function homeFolderForUnprotectedFolder()
-        {
-                if(preg_match("|Avid Shared Projects|",$this->folderWatched))
-                {
-                        return dirname(dirname(dirname(dirname($this->folderWatched))));
-                }
-                else
-                {
-                        return dirname(dirname(dirname($this->folderWatched)));
-                }
-        }
-
-	function homeFolder()
-	{
-		switch($this->watchType)
-		{
-			case "MAIN": return $this->folderWatched;
-			case "PRJ": return dirname($this->folderWatched);
-			case "MXF": return $this->homeFolderForMXFFolder();
-                        case "UNPROTECTED": return $this->homeFolderForUnprotectedFolder();
-			default: terminate("Unknown watch type '{$this->watchType}'");
-		}
-	}
 }
 
