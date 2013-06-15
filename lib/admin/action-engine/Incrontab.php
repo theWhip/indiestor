@@ -69,6 +69,7 @@ class Incrontab
 		foreach($folders as $folder)
 		{
 			$folder=trim($folder);
+	              	$folder=preg_replace('/ /','\ ',$folder);
 			if($folder!="") $result.=$folder.' '.$incronLineSuffix;
 		}
 		return $result;
