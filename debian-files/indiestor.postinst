@@ -33,6 +33,7 @@ case "$1" in
 	nmbd restart
 	smbd restart
 	indiestor --users -reshare
+	indiestor --users -regenerate-incrontab
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
