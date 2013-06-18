@@ -18,8 +18,8 @@ else
 	if [  "$(pgrep -f indiestor-inotify.php)" = "" ] ; then
 		logger "indiestor-inotify: indiestor-inotify.php not running; starting"
 		super indiestor-inotify
-	else
-		logger "indiestor-inotify: indiestor-inotify.php running; skipping"
+#	else
+#		logger "indiestor-inotify: indiestor-inotify.php running; skipping"
 	fi
 fi
 

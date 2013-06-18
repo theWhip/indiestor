@@ -23,8 +23,8 @@ else
 		logger "indiestor-touch: indiestor-inotify.php not running; removing stale lock"
 		rm -f $groupFile
 		/usr/bin/touch $groupFile
-	else
-		logger "indiestor-touch: indiestor-inotify.php running; skipping"
+#	else
+#		logger "indiestor-touch: indiestor-inotify.php running; skipping"
 	fi
 fi
 
