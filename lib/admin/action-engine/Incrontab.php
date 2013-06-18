@@ -17,6 +17,16 @@ define('INCRON_SCRIPT_EVENT_HANDLER_PATH', indiestor_BIN().'/indiestor-inotify')
 requireLibFile('admin/etcfiles/all.php');
 requireLibFile('inotify/SharingFolders.php');
 
+function chownIndienotify($path)
+{
+	if(!file_exists($path)) mkdir($path);
+	//make sure indienotify owns it
+	$userRecord=posix_getpwuid(fileowner($path));
+	$currentOwner=$userRecord['name'];
+	if($currentOwner!='indienotify')
+	        chown($path,'indienotify');
+}
+
 class Incrontab
 {
 	static function generate()
@@ -41,8 +51,18 @@ class Incrontab
 			if($group!=null)
 				//only watch member folders for groups with at least 2 members
 				if(count($group->members>=2))
-					$tab.=self::generateTabForUser($member,$etcUser->homeFolder,$group->members);
+				{
+					$command="/usr/bin/indiestor-touch {$group->name}";
+					$tab.=self::generateTabForUser($member,
+						$etcUser->homeFolder,$group->members,$command);
+				}
                 }
+
+		chownIndienotify('/var/lock/indiestor');
+		chownIndienotify('/var/run/indiestor');
+
+		//watch the lock folder
+		$tab.="/var/lock/indiestor IN_CREATE /usr/bin/indiestor-inotify";
 
 		//write the lines
 		syscommand_incrontab($tab);
@@ -78,13 +98,12 @@ class Incrontab
 		return $result;
 	}
 
-	static function generateTabForUser($userName,$homeFolder,$groupMembers)
+	static function generateTabForUser($userName,$homeFolder,$groupMembers,$command)
 	{
 		$userIncronLines='';
 
 		#watch home folder
-		$userIncronLines.=$homeFolder.' '.INCRON_MAIN_EVENTS.' '.
-			INCRON_SCRIPT_EVENT_HANDLER_PATH.' HOME '.INCRON_ARGS."\n";
+		$userIncronLines.=$homeFolder.' '.INCRON_MAIN_EVENTS.' '.$command."\n";
 
 		#watch Avid folders
 		$avidFolders=SharingFolders::userAvidProjects($homeFolder);
@@ -104,14 +123,11 @@ class Incrontab
                         {
                                 $eventsToWatch=INCRON_MAIN_EVENTS;
                         }
-			$userIncronLines.="$homeFolder/$folder".' '.$eventsToWatch.' '.
-				INCRON_SCRIPT_EVENT_HANDLER_PATH.' AVID-PRJ '.INCRON_ARGS."\n";
+			$userIncronLines.="$homeFolder/$folder".' '.$eventsToWatch.' '.$command."\n";
                         
                         #handle Shared folders
                         $sharedFolders=SharingFolders::userSubFolders("$homeFolder/$avidFolder/Shared");
-			$incronLineSuffix=INCRON_MAIN_EVENTS.' '.
-			             	INCRON_SCRIPT_EVENT_HANDLER_PATH.
-                                        ' AVID-SHARE '.INCRON_ARGS."\n";
+			$incronLineSuffix=INCRON_MAIN_EVENTS.' '.$command."\n";
                         foreach($sharedFolders as $sharedFolder)
 			{
 				$folder="$homeFolder/$avidFolder/Shared/$sharedFolder";
@@ -135,15 +151,13 @@ class Incrontab
 		#watch 'Avid MediaFiles'
 		if(file_exists("$homeFolder/Avid MediaFiles"))
 		{
-			$userIncronLines.="$homeFolder/Avid\ MediaFiles".' '.INCRON_MAIN_EVENTS.' '.
-				INCRON_SCRIPT_EVENT_HANDLER_PATH.' MXF '.INCRON_ARGS."\n";
+			$userIncronLines.="$homeFolder/Avid\ MediaFiles".' '.INCRON_MAIN_EVENTS.' '.$command."\n";
 		}
 
 		#watch 'Avid MediaFiles/MXF'
 		if(file_exists("$homeFolder/Avid MediaFiles/MXF"))
 		{
-			$userIncronLines.="$homeFolder/Avid\ MediaFiles/MXF".' '.INCRON_MAIN_EVENTS.' '.
-				INCRON_SCRIPT_EVENT_HANDLER_PATH.' MXF '.INCRON_ARGS."\n";
+			$userIncronLines.="$homeFolder/Avid\ MediaFiles/MXF".' '.INCRON_MAIN_EVENTS.' '.$command."\n";
 		}
 		
 		return $userIncronLines;

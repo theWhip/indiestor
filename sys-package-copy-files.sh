@@ -34,8 +34,8 @@ cp -R lib/* $share
 #-------------
 prg=$share/prg
 mkdir -p $prg
-cp indiestor $prg
-cp indiestor-inotify $prg
+cp indiestor.php $prg
+cp indiestor-inotify.php $prg
 #-------------
 #man
 #-------------

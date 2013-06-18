@@ -15,6 +15,6 @@ if [ ! -d /usr/share/indiestor ]; then
 	mkdir /usr/share/indiestor/prg
 fi
 cp -r lib/* /usr/share/indiestor
-cp indiestor /usr/share/indiestor/prg
-cp indiestor-inotify /usr/share/indiestor/prg
+cp indiestor.php /usr/share/indiestor/prg
+cp indiestor-inotify.php /usr/share/indiestor/prg
 

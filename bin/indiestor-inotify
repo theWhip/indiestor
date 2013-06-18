@@ -9,18 +9,17 @@
 #------------------------------------------------------------
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
-args=''
-for i in "$@"
-do
-        arg=$(echo "$i" | tr -d '\\') 
-        args="$args $arg"
-done
-eval set -- $args
-argsEsc=''
-for i in "$@"
-do
-        arg=$(echo "$i" | tr ' ' '|') 
-        argsEsc="$argsEsc $arg"
-done
-super indiestor-inotify $argsEsc
+pidFile="/var/run/indiestor/process.pid"
+if [ ! -f $pidFile ]; then 
+	logger "indiestor-inotify: no pid file; starting indiestor-inotify"
+	echo $$ > $pidFile
+	super indiestor-inotify
+else
+	if [  "$(pgrep -f indiestor-inotify.php)" = "" ] ; then
+		logger "indiestor-inotify: indiestor-inotify.php not running; starting"
+		super indiestor-inotify
+	else
+		logger "indiestor-inotify: indiestor-inotify.php running; skipping"
+	fi
+fi
 
