@@ -14,7 +14,8 @@ if [ "$group" = "" ] ; then
 	exit 1
 fi
 
-groupFile="/var/lock/indiestor/$group"
+INDIE_SPOOL='/var/spool/indiestor'
+groupFile="${INDIE_SPOOL}/$group"
 
 if [ ! -f $groupFile ]; then
 	/usr/bin/touch $groupFile
@@ -23,8 +24,6 @@ else
 		logger "indiestor-touch: indiestor-inotify.php not running; removing stale lock"
 		rm -f $groupFile
 		/usr/bin/touch $groupFile
-#	else
-#		logger "indiestor-touch: indiestor-inotify.php running; skipping"
 	fi
 fi
 

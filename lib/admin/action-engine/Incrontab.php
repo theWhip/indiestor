@@ -58,11 +58,10 @@ class Incrontab
 				}
                 }
 
-		chownIndienotify('/var/lock/indiestor');
-		chownIndienotify('/var/run/indiestor');
+		$INDIE_SPOOL='/var/spool/indiestor';
 
-		//watch the lock folder
-		$tab.="/var/lock/indiestor IN_CREATE /usr/bin/indiestor-inotify";
+		chownIndienotify($INDIE_SPOOL);
+		$tab.="$INDIE_SPOOL IN_CREATE /usr/bin/indiestor-inotify";
 
 		//write the lines
 		syscommand_incrontab($tab);

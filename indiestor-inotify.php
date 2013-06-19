@@ -76,38 +76,19 @@ function handleShutdown()
 }
 register_shutdown_function('handleShutdown');
 
-/*
-	while(true)
-		retrieve the group
-		process the group
-	remove pid file
-*/
-
-define('PID_FILE','/var/run/indiestor/process.pid');
-
-function lockProcess()
-{
-	file_put_contents(PID_FILE,getmypid()."\n");
-	chown(PID_FILE,'indienotify');
-}
-
-function unlockProcess()
-{
-	if(file_exists(PID_FILE)) unlink(PID_FILE);
-}
-
 syslog_notice_start_running();
 
-lockProcess();
+$INDIE_SPOOL='/var/spool/indiestor';
+
 while(true)
 {
 
-	$groupFiles=glob("/var/lock/indiestor/*");
+	$groupFiles=glob("$INDIE_SPOOL/*");
 	//pick the first group available or terminate
 
 	if($groupFiles===FALSE)
 	{
-		syslog_notice("error reading /var/lock/indiestor");
+		syslog_notice("error reading $INDIE_SPOOL");
 		break;		
 	}
 	if(count($groupFiles)==0) break;
@@ -120,7 +101,7 @@ while(true)
 	$group=EtcGroup::instance()->findGroup($groupName);
 	if($group==null)
 	{
-		syslog_notice("cannot find group '$GroupName'; skipping");
+		syslog_notice("cannot find group '$groupName'; skipping");
 		continue;
 	}
 
@@ -133,7 +114,6 @@ while(true)
 	SharingStructureDefault::reshare($groupName,$members);
 }
 
-unlockProcess();
 syslog_notice("generating incrontab");
 Incrontab::generate();
 
