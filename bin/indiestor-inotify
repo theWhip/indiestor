@@ -10,7 +10,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
 
-if [  "$(pgrep -f indiestor-inotify.php)" = "" ] ; then
-		super indiestor-inotify
+if [  "$(pgrep -f '/usr/bin/php /usr/share/indiestor/prg/indiestor-inotify.php')" = "" ] ; then
+	super indiestor-inotify
 fi
 

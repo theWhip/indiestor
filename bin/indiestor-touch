@@ -14,14 +14,12 @@ if [ "$group" = "" ] ; then
 	exit 1
 fi
 
-INDIE_SPOOL='/var/spool/indiestor'
-groupFile="${INDIE_SPOOL}/$group"
+groupFile="/var/spool/indiestor/$group"
 
 if [ ! -f $groupFile ]; then
 	/usr/bin/touch $groupFile
 else
-	if [ "$(pgrep -f indiestor-inotify.php)" = "" ] ; then
-		logger "indiestor-touch: indiestor-inotify.php not running; removing stale lock"
+	if [  "$(pgrep -f '/usr/bin/php /usr/share/indiestor/prg/indiestor-inotify.php')" = "" ] ; then
 		rm -f $groupFile
 		/usr/bin/touch $groupFile
 	fi
