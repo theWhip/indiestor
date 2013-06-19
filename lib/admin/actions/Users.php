@@ -8,6 +8,15 @@
         Licensed under the GPL
 */
 
+function chownIndienotify($path)
+{
+	if(!file_exists($path)) mkdir($path);
+	//make sure indienotify owns it
+	$userRecord=posix_getpwuid(fileowner($path));
+	$currentOwner=$userRecord['name'];
+	if($currentOwner!='indienotify')
+	        chown($path,'indienotify');
+}
 
 class Users extends EntityType
 {
@@ -40,6 +49,8 @@ class Users extends EntityType
 
         static function reshare($commandAction)
         {
+		chownIndienotify('/var/spool/indiestor');
+
                 $indiestorGroup=EtcGroup::instance()->indiestorGroup;
                 if($indiestorGroup==null) 
                 {
@@ -48,7 +59,6 @@ class Users extends EntityType
                 }
                 if($indiestorGroup->members==null) 
                 {
-#                       ActionEngine::error('AE_ERR_INDIESTOR_GROUP_MEMBERS_DO_NOT_EXIST');
                         return;
                 }
                 foreach($indiestorGroup->members as $member)

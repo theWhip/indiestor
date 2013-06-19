@@ -17,16 +17,6 @@ define('INCRON_SCRIPT_EVENT_HANDLER_PATH', indiestor_BIN().'/indiestor-inotify')
 requireLibFile('admin/etcfiles/all.php');
 requireLibFile('inotify/SharingFolders.php');
 
-function chownIndienotify($path)
-{
-	if(!file_exists($path)) mkdir($path);
-	//make sure indienotify owns it
-	$userRecord=posix_getpwuid(fileowner($path));
-	$currentOwner=$userRecord['name'];
-	if($currentOwner!='indienotify')
-	        chown($path,'indienotify');
-}
-
 class Incrontab
 {
 	static function generate()
@@ -58,10 +48,7 @@ class Incrontab
 				}
                 }
 
-		$INDIE_SPOOL='/var/spool/indiestor';
-
-		chownIndienotify($INDIE_SPOOL);
-		$tab.="$INDIE_SPOOL IN_CREATE /usr/bin/indiestor-inotify";
+		$tab.="/var/spool/indiestor IN_CREATE /usr/bin/indiestor-inotify";
 
 		//write the lines
 		syscommand_incrontab($tab);
