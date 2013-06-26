@@ -21,7 +21,10 @@ class SharingOperations
 			$currentTarget=readlink($linkName);
 			if($currentTarget!=$target)
 			{
-				syslog_notice("Target:'$currentTarget' is different. Removing existing target.");
+				if(!file_exists($target))
+					mkdir($target,0755,true);
+				syslog_notice("moving content of '$currentTarget' to '$target'.");
+				shell_exec("mv -f '$currentTarget'/* '$target'");
 				unlink($linkName);
 				self::createSymLink($linkName,$target,$owner);
 			}
