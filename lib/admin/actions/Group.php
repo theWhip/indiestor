@@ -152,6 +152,7 @@ class Group extends EntityType
 	{
 		$watchFolders=array();
 		$homeFolder=$user->homeFolder;
+		$watchFolders[]="$homeFolder";
 		$avidFolders=SharingFolders::userAvidProjects($homeFolder);
 		foreach($avidFolders as $avidFolder)
 		{
