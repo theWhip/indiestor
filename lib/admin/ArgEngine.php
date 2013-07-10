@@ -49,7 +49,7 @@ class ArgEngine
 	{
 		$errNum=NoticeDefinitions::instance()->usageError($messageCode,$parameters);
 		$this->usage();
-		exit($errNum);
+		exit(1);
 	}
 
 	function argsError($messageCode,$parameters=array())

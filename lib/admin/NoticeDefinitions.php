@@ -61,8 +61,8 @@ class NoticeDefinitions
 
 	function error($messageCode,$parameters=array(),$errorStage='VALIDATION')
 	{
-		$errNum=$this->output($messageCode,$parameters,'stderr',$errorStage,'ERROR');
-		exit($errNum);
+		$this->output($messageCode,$parameters,'stderr',$errorStage,'ERROR');
+		exit(1);
 	}
 
 	function usageError($messageCode,$parameters=array(),$errorStage='VALIDATION')
