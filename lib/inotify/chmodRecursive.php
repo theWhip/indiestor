@@ -17,8 +17,7 @@ function chmodBase($path,$mode,$userName,$groupName)
 
         //check permission
 
-	$currentMode=@fileperms($path) & 0777;
-	if($currentMode==0) return; //could happen ...
+	$currentMode=fileperms($path) & 0777;
 	if($currentMode!=$mode)
 	{
 	        chmod($path, $mode);
@@ -44,8 +43,9 @@ function chmodBase($path,$mode,$userName,$groupName)
         }
 }
 
-function chmodRecursive($path, $modeFile,$modeFolder,$userName,$groupName) 
+function chmodRecursive($path, $modeFile,$modeFolder,$userName,$groupName,$clearStatCache=true) 
 { 
+	if($clearStatCache) clearstatcache();
         if (!is_link($path))
         {
                 if (is_dir($path)) 
@@ -54,7 +54,8 @@ function chmodRecursive($path, $modeFile,$modeFolder,$userName,$groupName)
                         $dh = opendir($path); 
                         while (($file = readdir($dh)) !== false) 
                                 if($file != '.' && $file != '..')
-                                        chmodRecursive($path.'/'.$file, $modeFile,$modeFolder,$userName,$groupName); 
+                                        chmodRecursive($path.'/'.$file, $modeFile,
+						$modeFolder,$userName,$groupName,false); 
                         closedir($dh); 
                 } 
                 else chmodBase($path,$modeFile,$userName,$groupName);

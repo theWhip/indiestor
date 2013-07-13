@@ -11,6 +11,6 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
 
 if [  "$(pgrep -f '/usr/bin/php /usr/share/indiestor/prg/indiestor-inotify.php')" = "" ] ; then
-	nice -n 19 super indiestor-inotify
+	super indiestor-inotify
 fi
 
