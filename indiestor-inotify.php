@@ -49,7 +49,7 @@ function requireLibFile($path)
 requireLibFile("admin/etcfiles/EtcPasswd.php");
 requireLibFile("admin/etcfiles/EtcGroup.php");
 requireLibFile("admin/sysqueries/df.php");
-requireLibFile("admin/action-engine/Incrontab.php");
+requireLibFile("admin/action-engine/InotifyWait.php");
 requireLibFile("inotify/syslog.php");
 requireLibFile("inotify/SharingStructureDefault.php");
 requireLibFile("inotify/SharingStructureAvid.php");
@@ -78,17 +78,14 @@ register_shutdown_function('handleShutdown');
 
 syslog_notice_start_running();
 
-$INDIE_SPOOL='/var/spool/indiestor';
-
 while(true)
 {
-
-	$groupFiles=glob("$INDIE_SPOOL/*");
+	$groupFiles=glob('/var/spool/indiestor/*');
 	//pick the first group available or terminate
 
 	if($groupFiles===FALSE)
 	{
-		syslog_notice("error reading $INDIE_SPOOL");
+		syslog_notice("error reading files in /var/spool/indiestor");
 		break;		
 	}
 	if(count($groupFiles)==0) break;
@@ -112,10 +109,10 @@ while(true)
 	SharingStructureAvid::reshare($groupName,$members);
 	SharingStructureMXF::reshare($members);
 	SharingStructureDefault::reshare($groupName,$members);
-}
 
-syslog_notice("generating incrontab");
-Incrontab::generate();
+	//restart watching
+	InotifyWait::startWatching($groupName);
+}
 
 //notify end run
 syslog_notice_end_running();

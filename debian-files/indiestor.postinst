@@ -34,6 +34,8 @@ case "$1" in
 	smbd restart
 	indiestor --users -reshare
 	indiestor --users -regenerate-incrontab
+	indiestor --groups -start-watching
+	update-rc.d indiestor-watch defaults
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

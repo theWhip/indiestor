@@ -18,6 +18,8 @@ requireLibFile('admin/action-engine/UserReportRecord.php');
 requireLibFile('admin/action-engine/UserReportRecords.php');
 requireLibFile('admin/action-engine/DeviceQuota.php');
 requireLibFile('admin/action-engine/Incrontab.php');
+requireLibFile('admin/action-engine/InotifyWatchFolders.php');
+requireLibFile('admin/action-engine/InotifyWait.php');
 
 class ActionEngine
 {
@@ -112,9 +114,10 @@ class ActionEngine
                 $className::execute();
         }
 
-	static function regenerateIncrontab()
+	static function restartWatching()
 	{
 		Incrontab::generate();
+		InotifyWait::startWatchingAll();
 	}
 }
 

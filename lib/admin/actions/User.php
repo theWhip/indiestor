@@ -360,7 +360,7 @@ class User extends EntityType
 		$user=EtcPasswd::instance()->findUserByName($userName);
 		$group=EtcGroup::instance()->findGroup($groupName);
 		//avid
-		ActionEngine::regenerateIncrontab();			
+		ActionEngine::restartWatching();			
 		SharingStructureAvid::renameBackUserAvidProjects($user,$renameOps);
 		$members=EtcPasswd::instance()->findUsersForEtcGroup($group);
 		SharingStructureAvid::reshare($groupName,$members); //for purging invalid symlinks
@@ -594,7 +594,7 @@ class User extends EntityType
 		{
 			$userName=ProgramActions::$entityName;
                         self::reshareUser($userName);
-			ActionEngine::regenerateIncrontab();			
+			ActionEngine::restartWatching();			
 		}
 	}
 

@@ -31,5 +31,16 @@ class Groups extends EntityType
                         echo "$group->name\n";
                 }
         }
+
+	static function startWatching($commandAction)
+	{
+		InotifyWait::startWatchingAll();
+	}
+
+	static function stopWatching($commandAction)
+	{
+		InotifyWait::stopWatchingAll();
+	}
+
 }
 
