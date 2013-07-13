@@ -17,7 +17,8 @@ function chmodBase($path,$mode,$userName,$groupName)
 
         //check permission
 
-	$currentMode=fileperms($path) & 0777;
+	$currentMode=@fileperms($path) & 0777;
+	if($currentMode==0) return; //could happen ...
 	if($currentMode!=$mode)
 	{
 	        chmod($path, $mode);
