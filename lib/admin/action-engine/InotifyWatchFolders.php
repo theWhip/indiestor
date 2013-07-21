@@ -57,12 +57,11 @@ class InotifyWatchFolders
 	{
 		$watchFolders=array();
 		$homeFolder=$user->homeFolder;
-		$watchFolders[]="$homeFolder";
+		$watchFolders[]=$homeFolder;
 		$avidFolders=SharingFolders::userAvidProjects($homeFolder);
 		foreach($avidFolders as $avidFolder)
 		{
-			$folder=str_replace(' ','\ ',$avidFolder);
-			$watchFolders[]="$homeFolder/$folder";
+			$watchFolders[]="$homeFolder/$avidFolder";
                         $sharedFolders=SharingFolders::userSubFolders("$homeFolder/$avidFolder/Shared");
                         foreach($sharedFolders as $sharedFolder)
 			{
