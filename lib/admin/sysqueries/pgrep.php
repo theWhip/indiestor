@@ -16,7 +16,7 @@
 function sysquery_pgrep($pattern)
 {
 	$pids=array();
-	$query="pgrep --full '$pattern'";
+	$query="pgrep -f '$pattern'";
 	$result=ShellCommand::query($query,true);
 	if($result->returnCode!=0) return $pids;
 	$lines=explode("\n",$result->stdout);
