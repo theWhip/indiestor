@@ -16,10 +16,11 @@ function chmodBase($path,$mode,$userName,$groupName)
 {
 
         //check permission
-
+	if(!file_exists($path)) return; //this could happen
 	$currentMode=fileperms($path) & 0777;
 	if($currentMode!=$mode)
 	{
+		if(!file_exists($path)) return; //this could happen
 	        chmod($path, $mode);
 	        $currentModeOct=decoct($currentMode);
 	        $modeOct=decoct($mode);
@@ -27,6 +28,7 @@ function chmodBase($path,$mode,$userName,$groupName)
 	}
 
         //check ownership
+	if(!file_exists($path)) return; //this could happen
         $userRecord=posix_getpwuid(fileowner($path));
         $currentOwner=$userRecord['name'];
         if($currentOwner!=$userName)
@@ -34,10 +36,12 @@ function chmodBase($path,$mode,$userName,$groupName)
                 chown($path,$userName);
                 syslog_notice("chmodBase-owner: $path: $currentOwner => $userName");
         }
+	if(!file_exists($path)) return; //this could happen
         $groupRecord=posix_getgrgid(filegroup($path));
         $currentGroup=$groupRecord['name'];
         if($currentGroup!=$groupName)
         {
+		if(!file_exists($path)) return; //this could happen
                 chgrp($path,$groupName);
                 syslog_notice("chmodBase-group: $path: $currentGroup => $groupName");
         }
