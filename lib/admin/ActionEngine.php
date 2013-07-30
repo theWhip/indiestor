@@ -116,6 +116,8 @@ class ActionEngine
 
 	static function restartWatching()
 	{
+		EtcGroup::reset();
+		EtcPasswd::reset();
 		Incrontab::generate();
 		InotifyWait::startWatchingAll();
 	}
