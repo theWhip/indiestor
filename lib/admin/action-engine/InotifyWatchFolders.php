@@ -18,6 +18,7 @@ class InotifyWatchFolders
                 foreach($group->members as $member)
 		{
 			$user=EtcPasswd::instance()->findUserByName($member);
+			/* user could have been deleted */
 			if($user!=null)
 				$folders=array_merge($folders,self::watchesMainUser($group,$user));
 		}
