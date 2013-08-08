@@ -12,16 +12,18 @@
 //--------------------------
 //Check deployment location
 //--------------------------
+global $appRoot;
+$appRoot=dirname(dirname(dirname(dirname(dirname(__FILE__)))));
+global $libRoot;
+$LIB="$appRoot/usr/share/indiestor/lib";
+$BIN="$appRoot/usr/bin";
+
 if (dirname(__FILE__)=='/usr/share/indiestor/prg')
 {
-	$BIN='/usr/bin';
-	$LIB='/usr/share/indiestor';
 	$INUSER='indienotify';
 }
 else
 {
-	$BIN=dirname(__FILE__);
-	$LIB=dirname(__FILE__).'/lib';
 	$INUSER='root';
 }
 
