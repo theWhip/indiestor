@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #------------------------------------------------------------
 # Indiestor program
 # Concept, requirements, specifications, and unit testing
@@ -7,13 +7,10 @@
 # Commissioned at peopleperhour.com 
 # Licensed under the GPL
 #------------------------------------------------------------
-# deletes the debian folder and the packages generated
-# reverses the sys-package-build.sh command
-# -----------------------------------------------------------
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+export PATH
 
-# load the default environment
-source ./build.conf
+if [  "$(pgrep -f '/usr/bin/php /usr/share/indiestor/prg/indiestor-inotify.php')" = "" ] ; then
+	super indiestor-inotify
+fi
 
-rm -rf debian
-rm -f build-stamp
-rm -f ../${package}_*

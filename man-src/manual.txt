@@ -1,7 +1,7 @@
 .\" Process this file with
 .\" groff -man -Tascii indiestor.1
 .\"
-.TH indiestor 1 "MAY 2013" Linux "User Manuals"
+.TH indiestor 1 "AUGUST 2013" Linux "User Manuals"
 .SH NAME
 indiestor - Project & MXF media sharing for Avid Media Composer
 .SH SYNOPSIS
@@ -10,9 +10,11 @@ indiestor - Project & MXF media sharing for Avid Media Composer
 
  --volume [<arg> -quota-on -quota-off -quota-remove]
 
- --groups [-show]
+ --groups [-show -start-watching -stop-watching]
 
- --group [-add -delete -show-members]
+ --group [-add -delete -show-members -start-watching -stop-watching -show-watch-processes]
+
+ --group [<arg> -show-watches <arg>]
 
  --users [-show -show-incrontab -regenerate-incrontab -reshare]
 
@@ -111,6 +113,12 @@ Shows the list of indiestor groups. Not all groups listed in
 .B /etc/group
 are indiestor groups. 
 
+.B -start-watching:
+Starts indiestor-inotify watching for share triggers
+
+.B -stop-watching:
+Stops indiestor-inotify watching for share triggers
+
 .IP --group <arg>
  
 The
@@ -125,6 +133,20 @@ deletes the named indiestor group.
 
 .B -show-members:
 shows the users in the named indiestor group.
+
+.B -start-watching:
+Starts indiestor-inotify watching for share triggers assigned to a specified group
+
+.B -stop-watching:
+Stops indiestor-inotify watching for share triggers assigned to a specified group
+
+.B -show-watch-processes:
+Displays the 2 watch processes for the specified group.
+
+.IP --group <arg>
+
+.B -show-watches <arg>
+Displays the watch table for the arguments 'main' and 'avp'. All watches are main type unless a user attempts to trigger .avid sharing without a valid avp project file. In this case we use an 'avp' watch to monitor the situation. The project will only trigger when the .avp is appropriately named and has physical KB size.
 
 .IP --users
 
@@ -163,16 +185,16 @@ samba flags. Normally U=user.
 .B 	conn.: 
 Currently connected through samba. Y=yes. N=no.
 
+*none if the user does not belong to an indiestor group.
+
 .B -show-incrontab:
-shows the list of folders being watched by incron for the user indienotify. See incrontab for the meaning of the columns.
+depreciated in 0.9.4 in favor of -show-watches. Please see --group section.
 
 .B  -regenerate-incrontab:
-for debugging purposes. If the incrontab seems inconsistent, regenerate it.
+for debugging purposes. If the incrontab seems inconsistent, you can forcably regenerate it.
 
 .B  -reshare:
-reshares all project folders and media manually, should you need to prompt the system.
-
-*none if the user does not belong to an indiestor group.
+reshares all triggers and updates share permission, should you need to prompt the system.
 
 .IP --user
 .B <arg>
@@ -249,7 +271,7 @@ The command above adds the user "john" to indiestor, to the group "grp1", sets h
 .SH FILES
 .I /etc/passwd
 .RS
-This is where the system stores the user records. There is a special user indienotify, which monitors the filesystem through incron.
+This is where the system stores the user records. There is a special user, which monitors the filesystem through incron.
 .RE
 .I /etc/group
 .RS
@@ -267,6 +289,10 @@ The incron table for the indienotify system user. The indiestor and indiestor-in
 .I /etc/init.d/indiestor-quota
 .RS
 This init.d script keeps quotas switched on following a system restart. It can be manually started and stopped using "sudo /etc/init.d/indiestor-quota start/stop"
+.RE
+.I /etc/init.d/indiestor-watch
+.RS
+This init.d script starts/stops all watches. It is deployed on installation and positioned to initialise when the system boots.
 .RE
 .I /srv/indiestor.quota
 .RS

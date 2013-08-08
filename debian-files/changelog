@@ -1,5 +1,0 @@
-=package= (=package_version=) =distrib_release=; urgency=low
-
-  * Version =package_version=
-
- -- Packaging service <info@indiestor.com>  Fri, 26 Oct 2012 20:36:12 +0700

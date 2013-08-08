@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #------------------------------------------------------------
 # Indiestor program
 # Concept, requirements, specifications, and unit testing
@@ -7,23 +7,6 @@
 # Commissioned at peopleperhour.com 
 # Licensed under the GPL
 #------------------------------------------------------------
-# pushes a commit to git repository
-# -----------------------------------------------------------
-message="$1"
-
-function usage()
-{
-	echo "USAGE:"
-	echo "$0 'message'"
-}
-
-if [ "$message" = "" ]; then
-	usage
-	exit
-fi
-
-git add -A .
-git commit -m "$message"
-git pull origin master
-git push origin master
-
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+export PATH
+super indiestor "$@"

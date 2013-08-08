@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #------------------------------------------------------------
 # Indiestor program
 # Concept, requirements, specifications, and unit testing
@@ -7,11 +7,21 @@
 # Commissioned at peopleperhour.com 
 # Licensed under the GPL
 #------------------------------------------------------------
-# removes rapid local deployment (for testing purposes)
-# reverses the sys-indiestor-local-test-deploy.sh command
-# -----------------------------------------------------------
-rm -f /usr/bin/indiestor
-rm -f /usr/bin/indiestor-inotify
-rm -rf /usr/share/indiestor
+group=$1
 
+if [ "$group" = "" ] ; then
+	echo "group argument required" >&2 
+	exit 1
+fi
+
+groupFile="/var/spool/indiestor/$group"
+
+if [ ! -f $groupFile ]; then
+	touch $groupFile
+else
+	if [  "$(pgrep -f '/usr/bin/php /usr/share/indiestor/prg/indiestor-inotify.php')" = "" ] ; then
+		rm -f $groupFile
+		/usr/bin/touch $groupFile
+	fi
+fi
 
