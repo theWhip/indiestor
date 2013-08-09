@@ -19,7 +19,7 @@ groupFile="/var/spool/indiestor/$group"
 if [ ! -f $groupFile ]; then
 	touch $groupFile
 else
-	if [  "$(pgrep -f '/usr/bin/php /usr/share/indiestor/prg/indiestor-inotify.php')" = "" ] ; then
+	if [  "$(pgrep -f '/usr/bin/php /usr/share/indiestor-core/prg/indiestor-inotify.php')" = "" ] ; then
 		rm -f $groupFile
 		/usr/bin/touch $groupFile
 	fi

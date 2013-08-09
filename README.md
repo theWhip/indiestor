@@ -63,3 +63,4 @@ For example, version is 0.9.0.1. `sys-release.sh` will execute:
 ----------------------
 On a third user machine, the user can install the package by executing/following the procedure in `sys-user-install-indiestor.sh`. It is an example procedure for ubuntu/precise.
 
+

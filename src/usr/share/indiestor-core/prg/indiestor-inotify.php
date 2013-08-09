@@ -13,10 +13,10 @@
 //--------------------------
 //Check deployment location
 //--------------------------
-if (dirname(__FILE__)=='/usr/share/indiestor/prg')
+if (dirname(__FILE__)=='/usr/share/indiestor-core/prg')
 {
 	$BIN='/usr/bin';
-	$LIB='/usr/share/indiestor';
+	$LIB='/usr/share/indiestor-core/lib';
 	$INUSER='indienotify';
 }
 else
