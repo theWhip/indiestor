@@ -13,12 +13,14 @@
 //Check deployment location
 //--------------------------
 global $appRoot;
+global $appPrefix;
 $appRoot=dirname(dirname(dirname(dirname(dirname(__FILE__)))));
-global $libRoot;
-$LIB="$appRoot/usr/share/indiestor/lib";
-$BIN="$appRoot/usr/bin";
+if($appRoot=="/") $appPrefix=""; else $appPrefix=$appRoot;
 
-if (dirname(__FILE__)=='/usr/share/indiestor/prg')
+$LIB="$appPrefix/usr/share/indiestor-core/lib";
+$BIN="$appPrefix/usr/bin";
+
+if (dirname(__FILE__)=='/usr/share/indiestor-core/prg')
 {
 	$INUSER='indienotify';
 }
