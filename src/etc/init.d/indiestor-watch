@@ -1,12 +1,10 @@
 ### BEGIN INIT INFO
-# Provides:          indiestor-quota
+# Provides:
 # Required-Start:
 # Required-Stop:
 # Default-Start:
 # Default-Stop:
 ### END INIT INFO
-
-VOLUMES_WITH_QUOTA=/srv/indiestor.quota
 
 case "$1" in
   start)
