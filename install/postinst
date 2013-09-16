@@ -35,7 +35,12 @@ case "$1" in
 	indiestor --users -reshare
 	indiestor --users -regenerate-incrontab
 	indiestor --groups -start-watching
-	update-rc.d indiestor-watch defaults
+	release=$(lsb_release -a | grep Codename | sed 's/Codename:\t\(.*\)/\1/')
+	if [ "$release" = "wheezy" ] ; then
+		insserv -n indiestor-watch
+	else
+		update-rc.d indiestor-watch defaults
+	fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

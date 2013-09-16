@@ -1,9 +1,9 @@
 ### BEGIN INIT INFO
-# Provides:          indiestor-quota
-# Required-Start:
-# Required-Stop:
-# Default-Start:
-# Default-Stop:
+# Provides: indiestor-quota
+# Required-Start: $all
+# Required-Stop: $all
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
 ### END INIT INFO
 
 VOLUMES_WITH_QUOTA=/srv/indiestor.quota
