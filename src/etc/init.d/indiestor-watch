@@ -1,5 +1,5 @@
 ### BEGIN INIT INFO
-# Provides:
+# Provides: indiestor-watch
 # Required-Start:
 # Required-Stop:
 # Default-Start:
