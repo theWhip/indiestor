@@ -37,7 +37,7 @@ case "$1" in
 	indiestor --groups -start-watching
 	release=$(lsb_release -a | grep Codename | sed 's/Codename:\t\(.*\)/\1/')
 	if [ "$release" = "wheezy" ] ; then
-		insserv -n indiestor-watch
+		insserv indiestor-watch
 	else
 		update-rc.d indiestor-watch defaults
 	fi
