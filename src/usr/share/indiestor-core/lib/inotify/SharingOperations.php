@@ -252,6 +252,24 @@ class SharingOperations
 		self::renameProjectFileIfNeeded($userName,$oldName,$newName);
 	}
 
+static function renameXmlProjectFile($userName,$homeFolder,$project,$file)
+	{
+		$oldName="$homeFolder/$project/$file";
+
+		/*
+		/home/user/hello/hello.avid.xml
+		/home/user/hello/hello.avid Settings.xml
+		With max. lenght of hello.avid maximum 18 chars.
+		With max. total length 27 chars.
+		*/
+
+		$prefix=substr($project,0,18);
+		$xmlFile="$prefix Settings.xml";
+		$newName="$homeFolder/$project/$xmlFile";
+
+		self::renameProjectFileIfNeeded($userName,$oldName,$newName);
+	}
+
 	static function purgeProjectLink($projectLinkPath,$users)
 	{
 		$target=readlink($projectLinkPath);

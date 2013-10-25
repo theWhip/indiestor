@@ -170,13 +170,15 @@ class SharingStructureAvid
 						SharingOperations::renameAvpProjectFile($userName,$homeFolder,$project,$entry);
 					if(SharingFolders::endsWith($entry,'.avs'))
 						SharingOperations::renameAvsProjectFile($userName,$homeFolder,$project,$entry);
+					if(SharingFolders::endsWith($entry,'.xml'))
+						SharingOperations::renameXmlProjectFile($userName,$homeFolder,$project,$entry);
 				}
 			}
 			closedir($handle);
 		}
 		else
 		{
-			syslog_notice("Cannot open folder '$homeFolder/$project' for renaming .avp and .avs files");
+			syslog_notice("Cannot open folder '$homeFolder/$project' for renaming .avp, .avs and .xml files");
 		}
 	}
 
@@ -215,7 +217,7 @@ class SharingStructureAvid
 		SharingOperations::fixProjectFsObjectOwnership($groupName,$user->name,$prjCopyFolder);
 		SharingOperations::fixFsObjectPermissions($prjCopyFolder,"750");
 
-		#copy avp and avs files
+		#copy avp, .avs and .xml files
 		self::copyAvidProjectFiles("{$owner->homeFolder}/$project",$prjCopyFolder,$user->name);
 
 		#the user's shared folder
@@ -293,6 +295,8 @@ class SharingStructureAvid
                                                 self::copyAvidProjectFile($memberName,$source,$target);
 					else if(SharingFolders::endsWith($entry,'.avs'))
                                                 self::copyAvidProjectFile($memberName,$source,$target);
+					else if(SharingFolders::endsWith($entry,'.xml'))
+                                                self::copyAvidProjectFile($memberName,$source,$target);
 				}
 			}
 			closedir($handle);
@@ -300,7 +304,7 @@ class SharingStructureAvid
 		else
 		{
 			syslog_notice("Cannot open folder '$ownerProjectFolder'".
-                                " for copying .avp and .avs files");
+                                " for copying .avp, .avs and .xml files");
 		}
 	}
 
