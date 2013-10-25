@@ -435,6 +435,7 @@ class SharingStructureAvid
                                 $finderCmd1="find '$copyFolderPath' -type f 2> /dev/null ".
                                                 "| grep -v '.avp$' 2> /dev/null ".
                                                 "| grep -v '.avs$' 2> /dev/null ".
+                                                "| grep -v '.xml$' 2> /dev/null ".
                                                 "| grep -v '/Statistics' 2> /dev/null ".
                                                 "| grep -v '/SearchData' 2> /dev/null ";
                                 $finderCmd="$finderCmd1 | wc -l";
