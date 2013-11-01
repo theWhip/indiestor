@@ -109,4 +109,8 @@ function sysquery_df_device_for_folder($folder)
 	return $device;
 }
 
+function sysquery_df_filesystem_for_folder($folder)
+{
+	return ShellCommand::query_fail_if_error("df -T $folder | tail -n1 | awk '{print $2}'");
+}
 

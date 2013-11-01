@@ -245,6 +245,16 @@ class User extends EntityType
 			}
 			//execute
 			syscommand_adduser($userName,$homeFolder);
+
+			//handle ZFS volumes
+			if($homeFolder==null) $homeFolder="/home/$userName";
+			if(sysquery_df_filesystem_for_folder(dirname($homeFolder))=='zfs')
+			{
+				$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
+				ShellCommand::exec_fail_if_error("zfs create $homeFolderWithoutLeadingSlash");
+				ShellCommand::exec_fail_if_error("chown $userName.$userName $homeFolder");
+			}
+
 			EtcPasswd::reset();
 		}
 		//make sure indiestor user group exists
@@ -268,6 +278,12 @@ class User extends EntityType
         {
 		$userName=ProgramActions::$entityName;
 		syscommand_deluser($userName,ProgramActions::actionExists('remove-home'));
+		//handle ZFS volumes
+		if(sysquery_df_filesystem_for_folder(dirname($homeFolder))=='zfs')
+		{
+			$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
+			ShellCommand::exec_fail_if_error("zfs destroy $homeFolderWithoutLeadingSlash");
+		}
 		EtcPasswd::reset();
 		syscommand_pdbedit_delete($userName);
         }
@@ -453,6 +469,15 @@ class User extends EntityType
 		}
 		syscommand_chown_R($homeFolder,$userName,$userName);
 		syscommand_usermod_home($userName,$homeFolder);
+
+		//handle ZFS volumes
+		if(sysquery_df_filesystem_for_folder(dirname($homeFolder))=='zfs')
+		{
+			$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
+			ShellCommand::exec_fail_if_error("zfs create $homeFolderWithoutLeadingSlash");
+			ShellCommand::exec_fail_if_error("chown $userName.$userName $homeFolder");
+		}
+
 		EtcPasswd::reset();
 		EtcGroup::reset();
 	}
