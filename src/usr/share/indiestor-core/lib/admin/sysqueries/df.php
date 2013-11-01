@@ -111,6 +111,6 @@ function sysquery_df_device_for_folder($folder)
 
 function sysquery_df_filesystem_for_folder($folder)
 {
-	return ShellCommand::query_fail_if_error("df -T $folder | tail -n1 | awk '{print $2}'");
+	return trim(ShellCommand::query_fail_if_error("df -T $folder | tail -n1 | awk '{print $2}'"));
 }
 

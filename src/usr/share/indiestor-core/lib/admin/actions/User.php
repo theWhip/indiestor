@@ -243,15 +243,23 @@ class User extends EntityType
 				//leave to default
 				$homeFolder=null;
 			}
-			//execute
-			syscommand_adduser($userName,$homeFolder);
 
 			//handle ZFS volumes
 			if($homeFolder==null) $homeFolder="/home/$userName";
-			if(sysquery_df_filesystem_for_folder(dirname($homeFolder))=='zfs')
+
+			$fileSystem=sysquery_df_filesystem_for_folder(dirname($homeFolder));
+			if($fileSystem=='zfs')
 			{
+				syscommand_mkdir($homeFolder);
 				$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
 				ShellCommand::exec_fail_if_error("zfs create $homeFolderWithoutLeadingSlash");
+			}
+
+			//execute
+			syscommand_adduser($userName,$homeFolder);
+
+			if($fileSystem=='zfs')
+			{
 				ShellCommand::exec_fail_if_error("chown $userName.$userName $homeFolder");
 			}
 
@@ -462,6 +470,17 @@ class User extends EntityType
 		//if the add action is present, the set-home action has already been executed
 		if(ProgramActions::actionExists('add')) return;
 		$homeFolder=$commandAction->actionArg;
+
+		//handle ZFS volumes
+		$fileSystem=sysquery_df_filesystem_for_folder(dirname($homeFolder));
+		if($fileSystem=='zfs')
+		{
+			syscommand_mkdir($homeFolder);
+			$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
+			ShellCommand::exec_fail_if_error("zfs create $homeFolderWithoutLeadingSlash");
+			ShellCommand::exec_fail_if_error("chown $userName.$userName $homeFolder");
+		}
+
 		if(!file_exists($homeFolder))
 		{
 			syscommand_mkdir($homeFolder);
@@ -469,14 +488,6 @@ class User extends EntityType
 		}
 		syscommand_chown_R($homeFolder,$userName,$userName);
 		syscommand_usermod_home($userName,$homeFolder);
-
-		//handle ZFS volumes
-		if(sysquery_df_filesystem_for_folder(dirname($homeFolder))=='zfs')
-		{
-			$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
-			ShellCommand::exec_fail_if_error("zfs create $homeFolderWithoutLeadingSlash");
-			ShellCommand::exec_fail_if_error("chown $userName.$userName $homeFolder");
-		}
 
 		EtcPasswd::reset();
 		EtcGroup::reset();
