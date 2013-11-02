@@ -288,7 +288,8 @@ class User extends EntityType
 		//handle ZFS volumes
 		$user=EtcPasswd::instance()->findUserByName($userName);
 		$homeFolder=$user->homeFolder;
-		if(sysquery_df_filesystem_for_folder(dirname($homeFolder))=='zfs')
+		if(ProgramActions::actionExists('remove-home') && 
+			sysquery_df_filesystem_for_folder(dirname($homeFolder))=='zfs')
 		{
 			$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
 			ShellCommand::exec_fail_if_error("zfs destroy $homeFolderWithoutLeadingSlash");
