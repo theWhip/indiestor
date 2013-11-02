@@ -287,6 +287,8 @@ class User extends EntityType
 		$userName=ProgramActions::$entityName;
 		syscommand_deluser($userName,ProgramActions::actionExists('remove-home'));
 		//handle ZFS volumes
+		$user=EtcPasswd::instance()->findUserByName($userName);
+		$homeFolder=$user->homeFolder;
 		if(sysquery_df_filesystem_for_folder(dirname($homeFolder))=='zfs')
 		{
 			$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
