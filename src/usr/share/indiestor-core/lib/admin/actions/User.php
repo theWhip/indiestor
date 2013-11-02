@@ -285,7 +285,6 @@ class User extends EntityType
         static function delete($commandAction)
         {
 		$userName=ProgramActions::$entityName;
-		syscommand_deluser($userName,ProgramActions::actionExists('remove-home'));
 		//handle ZFS volumes
 		$user=EtcPasswd::instance()->findUserByName($userName);
 		$homeFolder=$user->homeFolder;
@@ -294,6 +293,7 @@ class User extends EntityType
 			$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
 			ShellCommand::exec_fail_if_error("zfs destroy $homeFolderWithoutLeadingSlash");
 		}
+		syscommand_deluser($userName,ProgramActions::actionExists('remove-home'));
 		EtcPasswd::reset();
 		syscommand_pdbedit_delete($userName);
         }
