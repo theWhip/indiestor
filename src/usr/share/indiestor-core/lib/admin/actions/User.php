@@ -292,7 +292,7 @@ class User extends EntityType
 			sysquery_df_filesystem_for_folder(dirname($homeFolder))=='zfs')
 		{
 			$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
-			ShellCommand::exec_fail_if_error("zfs destroy $homeFolderWithoutLeadingSlash");
+			ShellCommand::exec_fail_if_error("zfs destroy $homeFolderWithoutLeadingSlash 2> /dev/null");
 		}
 		syscommand_deluser($userName,ProgramActions::actionExists('remove-home'));
 		EtcPasswd::reset();
