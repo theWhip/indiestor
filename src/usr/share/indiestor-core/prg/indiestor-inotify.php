@@ -62,7 +62,10 @@ requireLibFile("inotify/chmodRecursive.php");
 function customError($errno,$errmsg,$errfile,$errline)
 {
         if($errno==0) return true; //ignore errors prepended with @
-	syslog_notice("err:$errno,$errmsg in file $errfile, line $errline");
+	$msg="err:$errno,$errmsg in file $errfile, line $errline";
+	syslog_notice($msg);
+	echo $msg;
+	debug_print_backtrace();
 	die();
 }
 set_error_handler("customError");
