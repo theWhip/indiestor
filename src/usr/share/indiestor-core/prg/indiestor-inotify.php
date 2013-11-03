@@ -64,7 +64,7 @@ function customError($errno,$errmsg,$errfile,$errline)
         if($errno==0) return true; //ignore errors prepended with @
 	$msg="err:$errno,$errmsg in file $errfile, line $errline";
 	syslog_notice($msg);
-	echo $msg;
+	echo $msg."\n\n";
 	debug_print_backtrace();
 	die();
 }
