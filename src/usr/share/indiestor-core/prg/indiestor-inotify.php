@@ -66,6 +66,10 @@ function customError($errno,$errmsg,$errfile,$errline)
 	syslog_notice($msg);
 	echo $msg."\n\n";
 	debug_print_backtrace();
+	ob_start();
+	var_dump($someVar);
+	$trace = ob_get_clean();
+	syslog_notice($trace);
 	die();
 }
 set_error_handler("customError");
