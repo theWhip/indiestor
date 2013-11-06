@@ -34,7 +34,7 @@ class SharingStructureAvid
 
         static function renameRepurge($from,$to)
         {
-                rename($from,$to);
+                renameUsingShell($from,$to);
                 self::$repurgeRequired=true;
         }
 
@@ -106,7 +106,7 @@ class SharingStructureAvid
 		if(!is_dir($sharedSubOwner)) 
 		{
 			if(is_dir($archivedOwner))
-				rename($archivedOwner, $sharedSubOwner);
+				renameUsingShell($archivedOwner, $sharedSubOwner);
 			else
 				if(!file_exists($sharedSubOwner)) mkdir($sharedSubOwner);
 		}
@@ -127,7 +127,7 @@ class SharingStructureAvid
 	        if(!is_dir($sharedUnprotected)) 
 	        {
 		        if(is_dir($archivedUnprotected))
-			        rename($archivedUnprotected, $sharedUnprotected);
+			        renameUsingShell($archivedUnprotected, $sharedUnprotected);
 		        else
 			        if(!is_dir($sharedUnprotected)) 
                                 {
@@ -252,7 +252,7 @@ class SharingStructureAvid
 				mkdir($sharedSubUser);
 			else
 			{
-				rename($archivedUser,$sharedSubUser);
+				renameUsingShell($archivedUser,$sharedSubUser);
 				shellSilent("chown -R {$user->name}.is_$groupName '$sharedSubUser'");
 			}
 		}
@@ -532,7 +532,7 @@ class SharingStructureAvid
 		foreach($projects as $project)
 		{
 			$projectTmp="__{$project}__tmp__";
-			rename("{$user->homeFolder}/$project","{$user->homeFolder}/$projectTmp");
+			renameUsingShell("{$user->homeFolder}/$project","{$user->homeFolder}/$projectTmp");
 			$renameOps[]=array('tmp'=>$projectTmp,'project'=>$project);
 		}
 		return $renameOps;
@@ -544,7 +544,7 @@ class SharingStructureAvid
 		{
 			$projectTmp=$renameOp['tmp'];
 			$project=$renameOp['project'];
-			rename("{$user->homeFolder}/$projectTmp","{$user->homeFolder}/$project");
+			renameUsingShell("{$user->homeFolder}/$projectTmp","{$user->homeFolder}/$project");
 			self::verifyProjectFiles($user,$project);
 		}
 	}
