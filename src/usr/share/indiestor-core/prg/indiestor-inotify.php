@@ -50,6 +50,7 @@ requireLibFile("admin/etcfiles/EtcPasswd.php");
 requireLibFile("admin/etcfiles/EtcGroup.php");
 requireLibFile("admin/sysqueries/df.php");
 requireLibFile("admin/action-engine/InotifyWait.php");
+requireLibFile("admin/renameUsingShell.php");
 requireLibFile("inotify/syslog.php");
 requireLibFile("inotify/SharingStructureDefault.php");
 requireLibFile("inotify/SharingStructureAvid.php");
