@@ -506,7 +506,7 @@ class User extends EntityType
 		if($fileSystem=='zfs')
 		{
 			$homeFolderWithoutLeadingSlash=substr($homeFolder,1);
-			ShellCommand::exec_fail_if_error("zfs set quota=$GBG $homeFolderWithoutLeadingSlash");
+			ShellCommand::exec_fail_if_error("zfs set quota={$GB}G $homeFolderWithoutLeadingSlash");
 		}
 		else
 		{
