@@ -146,6 +146,7 @@ class User extends EntityType
 		$GB=$commandAction->actionArg;
 		self::checkForValidQuota($GB);
 
+		$homeFolder=self::homeFolderForUser($userName);
 		$fileSystem=sysquery_df_filesystem_for_folder(dirname($homeFolder));
 		if($fileSystem!='zfs')
 		{
@@ -155,8 +156,6 @@ class User extends EntityType
 			$device=self::deviceForUser($userName);
 			//fail on openVZ
 			ActionEngine::failOnOpenVZ($device);
-			//check if it worked
-			$homeFolder=self::homeFolderForUser($userName);
 			//do not exceed the maximum available for the device
 			self::checkIfQuotaNotOverMaximumAvailable($userName,$homeFolder,$device,$GB);
 			//make sure quota is enabled
@@ -503,6 +502,7 @@ class User extends EntityType
 	static function setQuota($commandAction)
 	{
 		$userName=ProgramActions::$entityName;
+		$homeFolder=self::homeFolderForUser($userName);
 		//quota
 		$GB=$commandAction->actionArg;
 		//handle ZFS volumes

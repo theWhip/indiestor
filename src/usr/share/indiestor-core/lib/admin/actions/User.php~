@@ -142,23 +142,26 @@ class User extends EntityType
 
 	static function validateSetQuota($userName)
 	{
-		//check if quota package is installed
-		self::checkIfQuotaPackageInstalled();
-		//quota
 		$commandAction=ProgramActions::findByName('set-quota');
 		$GB=$commandAction->actionArg;
 		self::checkForValidQuota($GB);
-		//device for user
-		$device=self::deviceForUser($userName);
-		//fail on openVZ
-		ActionEngine::failOnOpenVZ($device);
-		//check if it worked
+
 		$homeFolder=self::homeFolderForUser($userName);
-		//do not exceed the maximum available for the device
-		self::checkIfQuotaNotOverMaximumAvailable($userName,$homeFolder,$device,$GB);
-		//make sure quota is enabled
-		DeviceQuota::switchOn($device);
-		self::checkQuotaSwitchedOn($device,$homeFolder);
+		$fileSystem=sysquery_df_filesystem_for_folder(dirname($homeFolder));
+		if($fileSystem!='zfs')
+		{
+			//check if quota package is installed
+			self::checkIfQuotaPackageInstalled();
+			//device for user
+			$device=self::deviceForUser($userName);
+			//fail on openVZ
+			ActionEngine::failOnOpenVZ($device);
+			//do not exceed the maximum available for the device
+			self::checkIfQuotaNotOverMaximumAvailable($userName,$homeFolder,$device,$GB);
+			//make sure quota is enabled
+			DeviceQuota::switchOn($device);
+			self::checkQuotaSwitchedOn($device,$homeFolder);
+		}
 	}
 
 	static function checkIfQuotaNotOverMaximumAvailable($userName,$homeFolder,$device,$GB)
@@ -499,6 +502,7 @@ class User extends EntityType
 	static function setQuota($commandAction)
 	{
 		$userName=ProgramActions::$entityName;
+		$homeFolder=self::homeFolderForUser($userName);
 		//quota
 		$GB=$commandAction->actionArg;
 		//handle ZFS volumes
