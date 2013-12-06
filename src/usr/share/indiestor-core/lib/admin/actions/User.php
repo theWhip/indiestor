@@ -543,6 +543,9 @@ class User extends EntityType
 	{
 		if(!is_numeric($GB))
 			ActionEngine::error('AE_ERR_USER_QUOTA_NOT_NUMERIC',array('GB'=>$GB));
+		if(intval($GB)==0)
+			ActionEngine::error('AE_ERR_USER_QUOTA_MAY_NOT_BE_ZERO');
+
 	}
 
 	static function	checkQuotaSwitchedOn($device,$homeFolder)

@@ -68,7 +68,6 @@
 425     AE_ERR_INDIESTOR_GROUP_DOES_NOT_EXIST The 'indiestor-users' group does not exist
 426     AE_ERR_INDIESTOR_GROUP_MEMBERS_DO_NOT_EXIST The 'indiestor-users' group member set does not exist
 427     AE_ERR_GROUP_WATCH_TYPE_DOES_NOT_EXISTS The watch type '{watchType}' does not exist
-428	AE_ERR_USER_QUOTA_MAY_NOT_BE_ZERO The number of GB specified '{GB}' for the quota may not be zero
 #--------------------------------------
 #ACTION ENGINE WARNINGS
 #--------------------------------------
