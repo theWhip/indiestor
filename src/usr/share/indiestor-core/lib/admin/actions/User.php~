@@ -521,14 +521,25 @@ class User extends EntityType
 		}
 	}
 
-	static function removeQuota($commandAction)
-	{
-		$userName=ProgramActions::$entityName;
-		//find device for user
-		$device=self::deviceForUser($userName);
-		//set the quota to zero; which effectively removes the quota
-		syscommand_quotatool($userName,$device,0);
-	}
+        static function removeQuota($commandAction)
+        {
+                $userName=ProgramActions::$entityName;
+                $homeFolder=self::homeFolderForUser($userName);
+                //handle ZFS volumes
+                $fileSystem=sysquery_df_filesystem_for_folder(dirname($homeFolder));
+                if($fileSystem=='zfs')
+                {
+                        $homeFolderWithoutLeadingSlash=substr($homeFolder,1);
+                        ShellCommand::exec_fail_if_error("zfs set quota=none $homeFolderWithoutLeadingSlash");
+                }
+                else
+                {
+                        //find device for user
+    		        $device=self::deviceForUser($userName);
+                        //set the quota to zero; which effectively removes the quota
+                        syscommand_quotatool($userName,$device,0);
+                }
+        }
 
 	static function show($commandAction)
 	{
@@ -543,6 +554,9 @@ class User extends EntityType
 	{
 		if(!is_numeric($GB))
 			ActionEngine::error('AE_ERR_USER_QUOTA_NOT_NUMERIC',array('GB'=>$GB));
+		if(intval($GB)==0)
+			ActionEngine::error('AE_ERR_USER_QUOTA_MAY_NOT_BE_ZERO');
+
 	}
 
 	static function	checkQuotaSwitchedOn($device,$homeFolder)

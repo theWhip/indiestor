@@ -216,15 +216,20 @@ class User extends EntityType
 
 	static function validateRemoveQuota($userName)
 	{
-		//check if quota package is installed
-		self::checkIfQuotaPackageInstalled();
-		//device for user
-		$device=self::deviceForUser($userName);
-		//make sure it's on
-		ActionEngine::failOnOpenVZ($device);
-		if(sysquery_quotaon_p($device)!==true)
-			ActionEngine::warning('AE_WARN_USER_REMOVE_QUOTA_ON_DEVICE_QUOTA_NOT_ENABLED',
-						array('userName'=>$userName,'volume'=>$device));
+		$homeFolder=self::homeFolderForUser($userName);
+		$fileSystem=sysquery_df_filesystem_for_folder(dirname($homeFolder));
+		if($fileSystem!='zfs')
+		{
+			//check if quota package is installed
+			self::checkIfQuotaPackageInstalled();
+			//device for user
+			$device=self::deviceForUser($userName);
+			//make sure it's on
+			ActionEngine::failOnOpenVZ($device);
+			if(sysquery_quotaon_p($device)!==true)
+				ActionEngine::warning('AE_WARN_USER_REMOVE_QUOTA_ON_DEVICE_QUOTA_NOT_ENABLED',
+								array('userName'=>$userName,'volume'=>$device));
+		}
 	}
 
         static function add($commandAction)
