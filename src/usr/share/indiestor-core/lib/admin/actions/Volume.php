@@ -17,33 +17,54 @@ class Volume extends EntityType
 	{
 		$device=ProgramActions::$entityName;
 		ActionEngine::failOnOpenVZ($device);
-		self::checkIfQuotaPackageInstalled();
-		self::checkValidCharactersInVolumeName($device);
-		self::checkIfQuotaAlreadyOnForDevice($device);
-		DeviceQuota::switchOn($device);
-                SrvIndiestorQuota::addVolume($device);
+		$fileSystem=self::findFileSystemForDevice($device);
+		if($fileSystem!='zfs')
+		{
+			self::checkIfQuotaPackageInstalled();
+			self::checkValidCharactersInVolumeName($device);
+			self::checkIfQuotaAlreadyOnForDevice($device);
+			DeviceQuota::switchOn($device);
+		        SrvIndiestorQuota::addVolume($device);
+		}
 	}
 
 	static function quotaOff($commandAction)
 	{
 		$device=ProgramActions::$entityName;
 		ActionEngine::failOnOpenVZ($device);
-		self::checkIfQuotaPackageInstalled();
-		self::checkValidCharactersInVolumeName($device);
-		self::checkIfQuotaAlreadyOffForDevice($device);
-		DeviceQuota::switchOff($device);
-                SrvIndiestorQuota::removeVolume($device);
+		$fileSystem=self::findFileSystemForDevice($device);
+		if($fileSystem!='zfs')
+		{
+			self::checkIfQuotaPackageInstalled();
+			self::checkValidCharactersInVolumeName($device);
+			self::checkIfQuotaAlreadyOffForDevice($device);
+			DeviceQuota::switchOff($device);
+		        SrvIndiestorQuota::removeVolume($device);
+		}
 	}
 
 	static function quotaRemove($commandAction)
 	{
 		$device=ProgramActions::$entityName;
 		ActionEngine::failOnOpenVZ($device);
-		self::checkIfQuotaPackageInstalled();
-		self::checkValidCharactersInVolumeName($device);
-		self::checkIfQuotaAlreadyRemovedForDevice($device);
-		DeviceQuota::remove($device);
-                SrvIndiestorQuota::removeVolume($device);
+		$fileSystem=self::findFileSystemForDevice($device);
+		if($fileSystem!='zfs')
+		{
+			self::checkIfQuotaPackageInstalled();
+			self::checkValidCharactersInVolumeName($device);
+			self::checkIfQuotaAlreadyRemovedForDevice($device);
+			DeviceQuota::remove($device);
+		        SrvIndiestorQuota::removeVolume($device);
+		}
+	}
+
+	static function findFileSystemForDevice($device)
+	{
+		$fileSystem=sysquery_df_filesystem_for_device($device);
+		if($fileSystem===null)
+			ActionEngine::error('AE_ERR_VOLUME_CANNOT_DETERMINE_FILESYSTEM_FOR_DEVICE',
+				array('device'=>$device));
+		else return $fileSystem;
 	}
 
 	static function checkIfQuotaPackageInstalled()
