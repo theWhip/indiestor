@@ -70,9 +70,14 @@ class Volume extends EntityType
 		}
 	}
 
-	static function findFileSystemForDevice($device)
+	static function findFileSystemForDevice($deviceOrFolder)
 	{
-		$fileSystem=sysquery_df_filesystem_for_device($device);
+		if(substr($deviceOrFolder,0,1)!="/")
+			$dOrF="/$deviceOrFolder";
+		else
+			$dOrF=$deviceOrFolder;
+
+		$fileSystem=sysquery_df_filesystem_for_folder($dOrF);
 		if($fileSystem===null)
 			ActionEngine::error('AE_ERR_VOLUME_CANNOT_DETERMINE_FILESYSTEM_FOR_DEVICE',
 				array('device'=>$device));

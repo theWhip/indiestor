@@ -109,17 +109,6 @@ function sysquery_df_device_for_folder($folder)
 	return $device;
 }
 
-function sysquery_df_filesystem_for_device($device)
-{
-	$dfFileSystems=sysquery_df();
-	foreach($dfFileSystems as $dfFileSystem)
-	{
-		if($dfFileSystem->device==$device) 
-			return $dfFileSystem->type;
-	}
-	return null;
-}
-
 function sysquery_df_filesystem_for_folder($folder)
 {
 	return trim(ShellCommand::query_fail_if_error("df -T $folder | tail -n1 | awk '{print $2}'"));
