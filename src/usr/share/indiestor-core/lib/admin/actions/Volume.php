@@ -20,7 +20,7 @@ class Volume extends EntityType
 		$fileSystem=self::findFileSystemForDevice($device);
 		if($fileSystem=='zfs')
 		{
-			ActionEngine::warning('AE_CANNOT_SWITCH_ON_QUOTA_ON_ZFS_VOLUME',array('volume'=>$device));
+			ActionEngine::error('AE_CANNOT_SWITCH_ON_QUOTA_ON_ZFS_VOLUME',array('volume'=>$device));
 		}
 		else
 		{
@@ -39,7 +39,7 @@ class Volume extends EntityType
 		$fileSystem=self::findFileSystemForDevice($device);
 		if($fileSystem=='zfs')
 		{
-			ActionEngine::warning('AE_CANNOT_SWITCH_OFF_QUOTA_ON_ZFS_VOLUME',array('volume'=>$device));
+			ActionEngine::error('AE_CANNOT_SWITCH_OFF_QUOTA_ON_ZFS_VOLUME',array('volume'=>$device));
 		}
 		else
 		{
@@ -58,7 +58,7 @@ class Volume extends EntityType
 		$fileSystem=self::findFileSystemForDevice($device);
 		if($fileSystem=='zfs')
 		{
-			ActionEngine::warning('AE_CANNOT_REMOVE_QUOTA_ON_ZFS_VOLUME',array('volume'=>$device));
+			ActionEngine::error('AE_CANNOT_REMOVE_QUOTA_ON_ZFS_VOLUME',array('volume'=>$device));
 		}
 		else
 		{
