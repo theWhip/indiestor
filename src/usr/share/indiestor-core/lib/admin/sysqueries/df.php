@@ -114,3 +114,32 @@ function sysquery_df_filesystem_for_folder($folder)
 	return trim(ShellCommand::query_fail_if_error("df -T $folder | tail -n1 | awk '{print $2}'"));
 }
 
+/*
+
+# df -h /tank/home/jeff
+Filesystem            Size  Used Avail Use% Mounted on
+tank/home/jeff         10G  306K   10G   1% /tank/home/jeff
+
+Output: Quota record 
+rara 306K 10G
+
+*/
+
+function sysquery_df_quota_for_folder($userName,$folder)
+{
+	$fileSystemLine=ShellCommand::query_fail_if_error("df -h $folder | tail -n +2 | awk '{ print  $2,$3 }' ");	
+	$user=array();
+	$user['name']=$userName;
+	if(trim($fileSystemLine)!='')
+	{
+		$fields=explode(' ',$fileSystemLine);
+		if(count($fields)>=2)
+		{
+			$user['used']=$fields[1];
+			$user['quota']=$fields[0];
+			$users[$name]=$user;
+		}
+	}
+	return $user;
+}
+

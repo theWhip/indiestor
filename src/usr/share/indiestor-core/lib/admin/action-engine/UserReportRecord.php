@@ -33,7 +33,12 @@ class UserReportRecord
 		$group=$etcGroup->findGroupForUserName($userName);
 		if($group==null) $this->groupName=null;
 		else $this->groupName=$group->name;
-		$quotaRecord=sysquery_repquota_for_user($this->device,$userName);
+
+		if(sysquery_df_filesystem_for_folder($this->homeFolder)=='zfs')
+			$quotaRecord=sysquery_df_quota_for_folder($userName,$this->homeFolder);
+		else
+			$quotaRecord=sysquery_repquota_for_user($this->device,$userName);
+
 		if($quotaRecord!=null)
 		{
 			$this->hasQuotaRecord=true;
