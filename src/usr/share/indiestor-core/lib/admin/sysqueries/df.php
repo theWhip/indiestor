@@ -137,7 +137,6 @@ function sysquery_df_quota_for_folder($userName,$folder)
 		{
 			$user['used']=$fields[1];
 			$user['quota']=$fields[0];
-			$users[$name]=$user;
 		}
 	}
 	return $user;
