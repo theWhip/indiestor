@@ -30,7 +30,7 @@ class Volumes extends EntityType
 				//for zfs only show pools, not user-level quota
 				if($dfFileSystem->type=='zfs')
 				{
-					if(array_key_exists($zpools,$dfFileSystem->device))
+					if(array_key_exists($dfFileSystem->device,$zpools))
 					{
 						$hasOutput=true;
 						self::showLine($dfFileSystem);
