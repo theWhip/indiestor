@@ -25,7 +25,7 @@ dozer
 function sysquery_zpool_list()
 {
 	$zpools=array();
-	$result=ShellCommand::query("zpool list | tail -n +2 | awk '{ print $1 }",true);
+	$result=ShellCommand::query("zpool list | tail -n +2 | awk '{ print $1 }'",true);
 	if($result->returnCode!=0) return $zpools;
 	$lines=explode("\n",$result->stdout);
 	foreach($lines as $line)
